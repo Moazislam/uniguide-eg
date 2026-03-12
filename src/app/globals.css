@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap');
+
+:root {
+  --cream: #faf7f2;
+  --amber: #d4a843;
+  --amber-light: #e8c06a;
+  --amber-dark: #b8922a;
+  --blue: #1a3a5c;
+  --blue-light: #2a5a8c;
+  --blue-dark: #0f2438;
+  --charcoal: #2c2c2c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* RTL / bilingual utilities */
+[dir="rtl"] { direction: rtl; }
+[dir="ltr"] { direction: ltr; }
+
+.font-playfair { font-family: 'Playfair Display', serif; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--amber); border-radius: 3px; }
