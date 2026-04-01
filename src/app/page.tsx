@@ -1,7 +1,13 @@
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Search, GitCompareArrows, Sparkles, BookOpen, ChevronLeft } from "lucide-react";
+import {
+  Search,
+  GitCompareArrows,
+  Sparkles,
+  BookOpen,
+  ChevronLeft,
+} from "lucide-react";
 
 const features = [
   {
@@ -37,7 +43,11 @@ const features = [
 const stats = [
   { value: "+٤٠", label_ar: "جامعة مصرية", label_en: "Egyptian Universities" },
   { value: "٥٠٠ألف+", label_ar: "طالب سنوياً", label_en: "Students Annually" },
-  { value: "#١", label_ar: "منصة matching في مصر", label_en: "Matching Platform in Egypt" },
+  {
+    value: "#١",
+    label_ar: "منصة matching في مصر",
+    label_en: "Matching Platform in Egypt",
+  },
   { value: "صفر", label_ar: "منافس مماثل", label_en: "Comparable Rivals" },
 ];
 
@@ -45,8 +55,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#faf7f2]">
       <Navbar />
-
-      <main className="flex-1">
+      <main className="flex-1" style={{ inset: 1 }}>
         {/* ── Hero ────────────────────────────────────────────── */}
         <section className="relative overflow-hidden">
           {/* BG decoration */}
@@ -58,13 +67,16 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center relative">
             <div className="inline-flex items-center gap-2 bg-[#1a3a5c]/5 border border-[#1a3a5c]/10 rounded-full px-4 py-1.5 text-sm text-[#1a3a5c] font-cairo mb-6">
               <span className="w-2 h-2 bg-[#d4a843] rounded-full animate-pulse" />
-              يطلق قبل موسم نتائج الثانوية 2026 — Launching Before Thanaweya 2026
+              يطلق قبل موسم نتائج الثانوية 2026 — Launching Before Thanaweya
+              2026
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1a3a5c] leading-tight font-cairo mb-4">
               خليك{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 font-playfair italic text-[#d4a843]">واثق</span>
+                <span className="relative z-10 font-playfair italic text-[#d4a843]">
+                  واثق
+                </span>
                 <span className="absolute bottom-1 left-0 right-0 h-2 bg-[#d4a843]/15 rounded" />
               </span>
             </h1>
@@ -73,9 +85,13 @@ export default function HomePage() {
             </h2>
 
             <p className="max-w-2xl mx-auto text-base sm:text-lg text-gray-600 font-cairo leading-relaxed mb-8">
-              كل الجامعات المصرية في مكان واحد. ابحث، قارن، واختار التخصص الصح بناءً على درجاتك، اهتماماتك، وميزانيتك.
+              كل الجامعات المصرية في مكان واحد. ابحث، قارن، واختار التخصص الصح
+              بناءً على درجاتك، اهتماماتك، وميزانيتك.
               <br />
-              <span className="text-sm text-gray-400">Every Egyptian university. Search, compare, and find the right major for you.</span>
+              <span className="text-sm text-gray-400">
+                Every Egyptian university. Search, compare, and find the right
+                major for you.
+              </span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -102,9 +118,15 @@ export default function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {stats.map((s) => (
                 <div key={s.label_en}>
-                  <p className="text-2xl sm:text-3xl font-black text-[#d4a843] font-cairo">{s.value}</p>
-                  <p className="text-sm text-blue-200 font-cairo mt-1">{s.label_ar}</p>
-                  <p className="text-xs text-blue-300/60 font-cairo">{s.label_en}</p>
+                  <p className="text-2xl sm:text-3xl font-black text-[#d4a843] font-cairo">
+                    {s.value}
+                  </p>
+                  <p className="text-sm text-blue-200 font-cairo mt-1">
+                    {s.label_ar}
+                  </p>
+                  <p className="text-xs text-blue-300/60 font-cairo">
+                    {s.label_en}
+                  </p>
                 </div>
               ))}
             </div>
@@ -117,7 +139,9 @@ export default function HomePage() {
             <h2 className="text-2xl sm:text-3xl font-black text-[#1a3a5c] font-cairo">
               منصة متكاملة لاتخاذ القرار
             </h2>
-            <p className="text-gray-500 font-cairo mt-2 text-sm">A Complete Platform for Smart Decisions</p>
+            <p className="text-gray-500 font-cairo mt-2 text-sm">
+              A Complete Platform for Smart Decisions
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -130,9 +154,15 @@ export default function HomePage() {
                 <div className="w-10 h-10 rounded-xl bg-[#faf7f2] flex items-center justify-center mb-4 group-hover:bg-[#d4a843]/10 transition-colors">
                   {f.icon}
                 </div>
-                <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm">{f.title_ar}</h3>
-                <p className="text-[10px] text-gray-400 font-cairo mb-2">{f.title_en}</p>
-                <p className="text-xs text-gray-500 font-cairo leading-relaxed">{f.desc_ar}</p>
+                <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm">
+                  {f.title_ar}
+                </h3>
+                <p className="text-[10px] text-gray-400 font-cairo mb-2">
+                  {f.title_en}
+                </p>
+                <p className="text-xs text-gray-500 font-cairo leading-relaxed">
+                  {f.desc_ar}
+                </p>
               </Link>
             ))}
           </div>
