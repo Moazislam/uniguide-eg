@@ -189,7 +189,7 @@ const PillNav: React.FC<PillNavProps> = ({
             {items.map((item, i) => (
               <li key={item.href} role="none">
                 {isExternal(item.href) ? (
-                  
+                  <a
                     role="menuitem"
                     href={item.href}
                     className={`pill${activeHref === item.href ? ' is-active' : ''}`}
