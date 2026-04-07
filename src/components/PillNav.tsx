@@ -154,7 +154,7 @@ const PillNav: React.FC<PillNavProps> = ({
         gsap.set(menu, { visibility: 'visible' });
         gsap.fromTo(menu, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, ease, transformOrigin: 'top center' });
       } else {
-        gsap.to(menu, { opacity: 0, y: 10, duration: 0.2, ease, transformOrigin: 'top center', onComplete: () => gsap.set(menu, { visibility: 'hidden' }) });
+        gsap.to(menu, { opacity: 0, y: 10, duration: 0.2, ease, transformOrigin: 'top center', onComplete: () => { gsap.set(menu, { visibility: 'hidden' }); } });
       }
     }
 
