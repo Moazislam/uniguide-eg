@@ -14,6 +14,8 @@ create table if not exists universities (
   system          text not null default 'egyptian' check (system in ('egyptian','american','british','french')),
   location_ar     text not null,
   location_en     text not null,
+  governorate     text,
+  metro_area      text,
   logo_url        text,
   cover_url       text,
   founded_year    integer,
@@ -82,9 +84,14 @@ create table if not exists student_profiles (
   score               numeric(5,2),
   graduation_year     integer,
   governorate         text,
+  home_governorate    text,
+  preferred_locations text[],
+  mobility_preference text check (mobility_preference in ('same_city','nearby','anywhere')),
   budget_min          integer,
   budget_max          integer,
   preferred_language  text check (preferred_language in ('arabic','english','bilingual')),
+  preferred_university_types text[],
+  preferred_systems   text[],
   interests           text[],
   shortlist           text[],
   created_at          timestamptz default now(),
@@ -116,6 +123,32 @@ insert into universities (slug, name_ar, name_en, type, location_ar, location_en
   ('msa-university',      'جامعة مصر للعلوم والتكنولوجيا','MSA University', 'private', 'القاهرة الجديدة','New Cairo',  1996, 10, 80000,  160000,  6, 'جامعة خاصة رائدة في مصر الجديدة.', 'Leading private university in New Cairo.'),
   ('nile-university',     'جامعة النيل',           'Nile University',          'private', 'الشيخ زايد', 'Sheikh Zayed', 2006,  6, 90000,  180000,  7, 'جامعة بحثية خاصة متخصصة في التكنولوجيا.', 'Private research university specializing in technology.')
 on conflict (slug) do nothing;
+
+update universities
+set
+  governorate = case slug
+    when 'cairo-university' then 'Giza'
+    when 'ain-shams-university' then 'Cairo'
+    when 'alexandria-university' then 'Alexandria'
+    when 'guc' then 'Cairo'
+    when 'auc' then 'Cairo'
+    when 'msa-university' then 'Cairo'
+    when 'nile-university' then 'Giza'
+    else governorate
+  end,
+  metro_area = case slug
+    when 'alexandria-university' then 'alexandria'
+    else 'greater-cairo'
+  end
+where slug in (
+  'cairo-university',
+  'ain-shams-university',
+  'alexandria-university',
+  'guc',
+  'auc',
+  'msa-university',
+  'nile-university'
+);
 
 insert into majors (slug, name_ar, name_en, category, duration_years, career_paths, required_tracks) values
   ('medicine',           'الطب البشري',        'Medicine',              'medicine',         6,  array['طبيب','جراح','أخصائي','أستاذ جامعي'], array['science']),

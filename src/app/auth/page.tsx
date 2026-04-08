@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { buildStudentProfilePayload } from "@/lib/student-profile";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -47,10 +48,11 @@ export default function AuthPage() {
     if (data.user) {
       await supabase.from("student_profiles").upsert({
         user_id: data.user.id,
-        track: form.track || null,
-        score: form.score ? parseFloat(form.score) : null,
-        updated_at: new Date().toISOString(),
-      });
+        ...buildStudentProfilePayload({
+          track: form.track,
+          score: form.score,
+        }),
+      }, { onConflict: "user_id" });
     }
     setSuccess("تم إنشاء حسابك! ✅ تحقق من بريدك الإلكتروني لتأكيد الحساب.");
     setLoading(false);

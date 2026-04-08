@@ -1,6 +1,23 @@
-// ─── University ──────────────────────────────────────────────────
 export type UniversityType = "public" | "private" | "international";
 export type UniversitySystem = "egyptian" | "american" | "british" | "french";
+export type MajorCategory =
+  | "medicine"
+  | "engineering"
+  | "business"
+  | "arts"
+  | "science"
+  | "law"
+  | "pharmacy"
+  | "dentistry"
+  | "vet"
+  | "education"
+  | "media"
+  | "computer_science"
+  | "architecture"
+  | "other";
+export type StudentTrack = "science" | "math" | "arts" | "ig" | "american" | "french";
+export type StudyLanguage = "arabic" | "english" | "bilingual";
+export type MobilityPreference = "same_city" | "nearby" | "anywhere";
 
 export interface University {
   id: string;
@@ -11,6 +28,8 @@ export interface University {
   system: UniversitySystem;
   location_ar: string;
   location_en: string;
+  governorate?: string;
+  metro_area?: string;
   logo_url?: string;
   cover_url?: string;
   founded_year?: number;
@@ -27,23 +46,6 @@ export interface University {
   created_at: string;
 }
 
-// ─── Major / Faculty ─────────────────────────────────────────────
-export type MajorCategory =
-  | "medicine"
-  | "engineering"
-  | "business"
-  | "arts"
-  | "science"
-  | "law"
-  | "pharmacy"
-  | "dentistry"
-  | "vet"
-  | "education"
-  | "media"
-  | "computer_science"
-  | "architecture"
-  | "other";
-
 export interface Major {
   id: string;
   slug: string;
@@ -54,11 +56,10 @@ export interface Major {
   description_en?: string;
   duration_years: number;
   career_paths?: string[];
-  required_tracks?: string[]; // e.g. ["science", "math"]
+  required_tracks?: string[];
   created_at: string;
 }
 
-// ─── University Major (join) ──────────────────────────────────────
 export interface UniversityMajor {
   id: string;
   university_id: string;
@@ -67,15 +68,12 @@ export interface UniversityMajor {
   major?: Major;
   tuition_per_year?: number;
   currency?: string;
-  min_score?: number;           // تنسيق score
+  min_score?: number;
   available_seats?: number;
-  language: "arabic" | "english" | "bilingual";
+  language: StudyLanguage;
   admission_requirements?: string[];
   created_at: string;
 }
-
-// ─── Student Profile ──────────────────────────────────────────────
-export type StudentTrack = "science" | "math" | "arts" | "ig" | "american" | "french";
 
 export interface StudentProfile {
   id: string;
@@ -83,26 +81,71 @@ export interface StudentProfile {
   name_ar?: string;
   name_en?: string;
   track: StudentTrack;
-  score?: number;              // Thanaweya Amma score %
+  score?: number;
   graduation_year?: number;
+  city?: string;
   governorate?: string;
+  home_governorate?: string;
+  preferred_locations?: string[];
+  mobility_preference?: MobilityPreference;
   budget_min?: number;
   budget_max?: number;
-  preferred_language?: "arabic" | "english" | "bilingual";
+  preferred_language?: StudyLanguage;
+  preferred_university_types?: UniversityType[];
+  preferred_systems?: UniversitySystem[];
   interests?: MajorCategory[];
-  shortlist?: string[];        // university_major IDs
+  shortlist?: string[];
   created_at: string;
   updated_at: string;
 }
 
-// ─── Comparison ───────────────────────────────────────────────────
+export interface MatchProfile {
+  track?: StudentTrack;
+  score?: number;
+  budget?: string;
+  interests?: MajorCategory[];
+  search?: string;
+  preferredLocation?: string;
+  mobilityPreference?: MobilityPreference;
+  preferredLanguage?: StudyLanguage;
+  preferredType?: UniversityType;
+  preferredSystem?: UniversitySystem;
+}
+
+export interface MatchBreakdown {
+  track: number;
+  score: number;
+  interests: number;
+  budget: number;
+  location: number;
+  language: number;
+  type: number;
+  system: number;
+  ranking: number;
+}
+
+export interface MatchMajorRecommendation {
+  major: Major;
+  universityMajor: UniversityMajor;
+  matchScore: number;
+  reasons: string[];
+  breakdown: MatchBreakdown;
+}
+
+export interface MatchRecommendation {
+  university: University;
+  overallScore: number;
+  topMajors: MatchMajorRecommendation[];
+  matchedMajorsCount: number;
+  reasons: string[];
+}
+
 export interface ComparisonItem {
   university: University;
   major?: Major;
   universityMajor?: UniversityMajor;
 }
 
-// ─── Search & Filter ─────────────────────────────────────────────
 export interface UniversityFilters {
   type?: UniversityType[];
   location?: string[];
@@ -119,7 +162,6 @@ export interface MajorFilters {
   search?: string;
 }
 
-// ─── API Response ─────────────────────────────────────────────────
 export interface PaginatedResponse<T> {
   data: T[];
   count: number;
