@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CompareButton from "@/components/compare/CompareButton";
 import { getUniversityBySlug } from "@/lib/universities";
 import { getUniversityMajors } from "@/lib/majors";
 import { MapPin, Globe, GraduationCap, Users, BookOpen, BadgeCheck } from "lucide-react";
@@ -67,6 +68,9 @@ export default async function UniversityPage({
                     <Globe size={14} />الموقع الرسمي
                   </a>
                 )}
+              </div>
+              <div className="mt-4">
+                <CompareButton universityId={university.id} />
               </div>
             </div>
           </div>

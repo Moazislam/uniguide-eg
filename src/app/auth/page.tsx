@@ -1,197 +1,308 @@
 "use client";
-import { useState } from "react";
+
+import { useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { buildStudentProfilePayload } from "@/lib/student-profile";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, ChevronLeft, ChevronRight } from "lucide-react";
+import { Eye, EyeOff, GraduationCap, LogIn, Sparkles, UserPlus } from "lucide-react";
 
 type Mode = "signin" | "signup";
-type Step = 1 | 2;
 
 const tracks = [
-  { id: "science", label: "علمي", emoji: "🔬" },
-  { id: "math",    label: "رياضي", emoji: "📐" },
-  { id: "arts",    label: "أدبي",  emoji: "📚" },
-  { id: "ig",      label: "دولي IG", emoji: "🌍" },
-  { id: "american",label: "أمريكي", emoji: "🇺🇸" },
-  { id: "french",  label: "فرنسي",  emoji: "🇫🇷" },
+  { id: "science", label: "علمي" },
+  { id: "math", label: "رياضي" },
+  { id: "arts", label: "أدبي" },
+  { id: "ig", label: "IG" },
+  { id: "american", label: "أمريكي" },
+  { id: "french", label: "فرنسي" },
 ];
 
 export default function AuthPage() {
   const supabase = createClient();
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("signin");
-  const [step, setStep] = useState<Step>(1);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [form, setForm] = useState({ email: "", password: "", phone: "", name: "", track: "", score: "" });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    phone: "",
+    name: "",
+    track: "",
+    score: "",
+  });
 
-  const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+  const title = useMemo(
+    () =>
+      mode === "signin"
+        ? "ادخل وكمّل رحلتك الجامعية"
+        : "أنشئ حسابك وابدأ ملف المطابقة",
+    [mode]
+  );
+
+  const set = (key: keyof typeof form, value: string) =>
+    setForm((current) => ({ ...current, [key]: value }));
 
   const handleSignIn = async () => {
-    setLoading(true); setError("");
-    const { error } = await supabase.auth.signInWithPassword({ email: form.email, password: form.password });
-    if (error) setError(error.message);
-    else router.push("/profile");
+    setLoading(true);
+    setError("");
+    setSuccess("");
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: form.email,
+      password: form.password,
+    });
+    if (signInError) {
+      setError(signInError.message);
+    } else {
+      router.push("/profile");
+    }
     setLoading(false);
   };
 
   const handleSignUp = async () => {
-    setLoading(true); setError("");
-    const { data, error } = await supabase.auth.signUp({
-      email: form.email, password: form.password,
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
       options: { data: { full_name: form.name, phone: form.phone } },
     });
-    if (error) { setError(error.message); setLoading(false); return; }
-    if (data.user) {
-      await supabase.from("student_profiles").upsert({
-        user_id: data.user.id,
-        ...buildStudentProfilePayload({
-          track: form.track,
-          score: form.score,
-        }),
-      }, { onConflict: "user_id" });
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
     }
-    setSuccess("تم إنشاء حسابك! ✅ تحقق من بريدك الإلكتروني لتأكيد الحساب.");
+
+    if (data.user) {
+      await supabase.from("student_profiles").upsert(
+        {
+          user_id: data.user.id,
+          ...buildStudentProfilePayload({
+            track: form.track,
+            score: form.score,
+          }),
+        },
+        { onConflict: "user_id" }
+      );
+    }
+
+    setSuccess("تم إنشاء حسابك. راجع بريدك الإلكتروني لتأكيد الحساب ثم ارجع لإكمال ملفك.");
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-[#1a3a5c] flex items-center justify-center mx-auto mb-3">
-            <span className="text-[#d4a843] font-bold text-xl font-cairo">U</span>
+    <div className="min-h-screen bg-[#f6f1e8]">
+      <div className="mx-auto grid min-h-screen max-w-7xl items-stretch px-4 py-6 lg:grid-cols-[1.05fr,0.95fr] lg:px-6">
+        <section className="relative hidden overflow-hidden rounded-[32px] bg-[#173754] p-10 text-white lg:flex lg:flex-col lg:justify-between">
+          <div className="absolute inset-0">
+            <div className="absolute -top-20 -left-10 h-56 w-56 rounded-full bg-[#d4a843]/18 blur-2xl" />
+            <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-white/8 blur-3xl" />
           </div>
-          <h1 className="text-2xl font-black text-[#1a3a5c] font-cairo">UniGuide</h1>
-          <p className="text-sm text-gray-500 font-cairo mt-1">
-            {mode === "signin" ? "سجّل دخولك وابدأ رحلتك" : "إنشاء حساب جديد"}
-          </p>
-        </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
-            {(["signin", "signup"] as Mode[]).map((m) => (
-              <button key={m} onClick={() => { setMode(m); setStep(1); setError(""); setSuccess(""); }}
-                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all font-cairo ${mode === m ? "bg-white text-[#1a3a5c] shadow-sm" : "text-gray-400"}`}>
-                {m === "signin" ? "تسجيل الدخول" : "حساب جديد"}
-              </button>
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
+              <Sparkles size={14} className="text-[#d4a843]" />
+              UniGuide Egypt
+            </div>
+            <h1 className="mt-8 max-w-md text-5xl font-black leading-tight font-cairo">
+              الجامعة المناسبة
+              <span className="block text-[#d4a843]">تبدأ من قرار أوضح</span>
+            </h1>
+            <p className="mt-6 max-w-lg text-base leading-7 text-white/78 font-cairo">
+              ابحث، طابق، وقارن في تجربة واحدة أبسط. ملفك الشخصي هو نقطة البداية التي تخلّي النتائج
+              أقرب لدرجاتك وميزانيتك واهتماماتك.
+            </p>
+          </div>
+
+          <div className="relative z-10 grid gap-3">
+            {[
+              "ابنِ ملفًا شخصيًا يحفظ تفضيلاتك",
+              "احصل على نتائج مخصصة حسب الدرجة والمكان والميزانية",
+              "قارن بين الجامعات قبل اتخاذ القرار النهائي",
+            ].map((item) => (
+              <div key={item} className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3 text-sm text-white/85 font-cairo">
+                {item}
+              </div>
             ))}
           </div>
+        </section>
 
-          {success && <div className="bg-green-50 border border-green-100 text-green-700 text-sm font-cairo rounded-xl p-3 mb-4 text-center">{success}</div>}
-          {error && <div className="bg-red-50 border border-red-100 text-red-600 text-sm font-cairo rounded-xl p-3 mb-4 text-center">{error}</div>}
-
-          {mode === "signin" && (
-            <div className="space-y-4">
+        <section className="flex items-center justify-center py-8 lg:py-0">
+          <div className="w-full max-w-xl rounded-[32px] border border-white/80 bg-white/92 p-6 shadow-[0_30px_80px_rgba(14,30,52,0.12)] backdrop-blur">
+            <div className="mb-6 flex items-start justify-between gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-1.5">البريد الإلكتروني *</label>
-                <input type="email" value={form.email} onChange={(e) => set("email", e.target.value)}
-                  placeholder="example@email.com"
-                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] bg-[#faf7f2] font-cairo" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1a3a5c] text-white shadow-sm">
+                  <GraduationCap size={22} />
+                </div>
+                <h2 className="mt-4 text-2xl font-black text-[#1a3a5c] font-cairo">{title}</h2>
+                <p className="mt-2 text-sm text-gray-500 font-cairo">
+                  {mode === "signin"
+                    ? "سجّل الدخول للوصول إلى ملفك الشخصي ونتائجك المحفوظة."
+                    : "أنشئ حسابًا واحدًا فقط ثم عدّل ملف المطابقة وقتما تريد."}
+                </p>
               </div>
+
+              <div className="rounded-2xl bg-[#faf7f2] p-1">
+                {(["signin", "signup"] as Mode[]).map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      setMode(item);
+                      setError("");
+                      setSuccess("");
+                    }}
+                    className={`rounded-xl px-4 py-2 text-sm font-bold transition-all ${
+                      mode === item
+                        ? "bg-[#1a3a5c] text-white shadow-sm"
+                        : "text-gray-500 hover:text-[#1a3a5c]"
+                    }`}
+                  >
+                    {item === "signin" ? "دخول" : "حساب جديد"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {success && (
+              <div className="mb-4 rounded-2xl border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-700 font-cairo">
+                {success}
+              </div>
+            )}
+            {error && (
+              <div className="mb-4 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600 font-cairo">
+                {error}
+              </div>
+            )}
+
+            <div className="grid gap-4">
+              {mode === "signup" && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">الاسم</label>
+                    <input
+                      type="text"
+                      value={form.name}
+                      onChange={(event) => set("name", event.target.value)}
+                      placeholder="محمد أحمد"
+                      className="w-full rounded-2xl border border-gray-200 bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">رقم الهاتف</label>
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(event) => set("phone", event.target.value)}
+                      placeholder="01xxxxxxxxx"
+                      className="w-full rounded-2xl border border-gray-200 bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none"
+                    />
+                  </div>
+                </div>
+              )}
+
               <div>
-                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-1.5">كلمة المرور *</label>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">البريد الإلكتروني</label>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(event) => set("email", event.target.value)}
+                  placeholder="example@email.com"
+                  className="w-full rounded-2xl border border-gray-200 bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">كلمة المرور</label>
                 <div className="relative">
-                  <input type={showPassword ? "text" : "password"} value={form.password} onChange={(e) => set("password", e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] bg-[#faf7f2] font-cairo" />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={form.password}
+                    onChange={(event) => set("password", event.target.value)}
+                    placeholder={mode === "signup" ? "6 أحرف على الأقل" : "••••••••"}
+                    className="w-full rounded-2xl border border-gray-200 bg-[#faf7f2] px-4 py-3 pl-11 text-sm focus:border-[#d4a843] focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
               </div>
-              <button onClick={handleSignIn} disabled={loading || !form.email || !form.password}
-                className="w-full bg-[#1a3a5c] text-white font-bold py-3 rounded-xl hover:bg-[#2a5a8c] transition-colors disabled:opacity-50 font-cairo">
-                {loading ? "جاري الدخول..." : "تسجيل الدخول ←"}
-              </button>
-            </div>
-          )}
 
-          {mode === "signup" && step === 1 && (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-1.5">البريد الإلكتروني *</label>
-                <input type="email" value={form.email} onChange={(e) => set("email", e.target.value)}
-                  placeholder="example@email.com"
-                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] bg-[#faf7f2] font-cairo" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-1.5">كلمة المرور *</label>
-                <div className="relative">
-                  <input type={showPassword ? "text" : "password"} value={form.password} onChange={(e) => set("password", e.target.value)}
-                    placeholder="٦ أحرف على الأقل"
-                    className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] bg-[#faf7f2] font-cairo" />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
+              {mode === "signup" && (
+                <div className="grid gap-4 sm:grid-cols-[1fr,0.8fr]">
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">المسار الدراسي</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {tracks.map((track) => (
+                        <button
+                          key={track.id}
+                          type="button"
+                          onClick={() => set("track", form.track === track.id ? "" : track.id)}
+                          className={`rounded-2xl border px-3 py-3 text-xs font-bold transition-all ${
+                            form.track === track.id
+                              ? "border-[#d4a843] bg-[#fff7e7] text-[#1a3a5c]"
+                              : "border-gray-200 bg-[#faf7f2] text-gray-500 hover:border-[#d4a843]/50"
+                          }`}
+                        >
+                          {track.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">الدرجة الحالية</label>
+                    <div className="rounded-[24px] border border-gray-200 bg-[#faf7f2] p-3">
+                      <div className="flex items-end justify-between gap-3">
+                        <div>
+                          <p className="text-xs text-gray-400">Academic score</p>
+                          <p className="text-2xl font-black text-[#1a3a5c]">{form.score || "—"}</p>
+                        </div>
+                        <span className="text-xs text-[#d4a843] font-semibold">%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="40"
+                        max="100"
+                        step="0.5"
+                        value={form.score || "70"}
+                        onChange={(event) => set("score", event.target.value)}
+                        className="mt-3 w-full accent-[#d4a843]"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-1.5">
-                  رقم الهاتف <span className="text-gray-400 font-normal">(اختياري)</span>
-                </label>
-                <input type="tel" value={form.phone} onChange={(e) => set("phone", e.target.value)}
-                  placeholder="01xxxxxxxxx"
-                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] bg-[#faf7f2] font-cairo" />
-              </div>
-              <button onClick={() => setStep(2)} disabled={!form.email || form.password.length < 6}
-                className="w-full bg-[#1a3a5c] text-white font-bold py-3 rounded-xl hover:bg-[#2a5a8c] transition-colors disabled:opacity-50 font-cairo flex items-center justify-center gap-2">
-                التالي <ChevronLeft size={16} />
+              )}
+
+              <button
+                onClick={mode === "signin" ? handleSignIn : handleSignUp}
+                disabled={
+                  loading ||
+                  !form.email ||
+                  !form.password ||
+                  (mode === "signup" && form.password.length < 6)
+                }
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#1a3a5c] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#2a5a8c] disabled:opacity-50"
+              >
+                {mode === "signin" ? <LogIn size={16} /> : <UserPlus size={16} />}
+                {loading ? "جارٍ التنفيذ..." : mode === "signin" ? "تسجيل الدخول" : "إنشاء الحساب"}
               </button>
             </div>
-          )}
 
-          {mode === "signup" && step === 2 && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 mb-2">
-                <button onClick={() => setStep(1)} className="text-gray-400 hover:text-[#1a3a5c]"><ChevronRight size={18} /></button>
-                <div className="flex-1 h-1 bg-gray-100 rounded-full"><div className="h-full w-full bg-[#d4a843] rounded-full" /></div>
-                <span className="text-xs text-gray-400 font-cairo">٢/٢</span>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-1.5">
-                  الاسم الكامل <span className="text-gray-400 font-normal">(اختياري)</span>
-                </label>
-                <input type="text" value={form.name} onChange={(e) => set("name", e.target.value)}
-                  placeholder="محمد أحمد..."
-                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] bg-[#faf7f2] font-cairo" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-2">
-                  قسمك الدراسي <span className="text-gray-400 font-normal">(اختياري)</span>
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {tracks.map((t) => (
-                    <button key={t.id} onClick={() => set("track", form.track === t.id ? "" : t.id)}
-                      className={`p-2 rounded-xl border text-center transition-all font-cairo text-xs ${form.track === t.id ? "border-[#d4a843] bg-[#d4a843]/5 text-[#1a3a5c] font-bold" : "border-gray-100 hover:border-[#d4a843]/40 text-gray-500"}`}>
-                      <div className="text-lg mb-0.5">{t.emoji}</div>
-                      <div>{t.label}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 font-cairo mb-1.5">
-                  درجة الثانوية % <span className="text-gray-400 font-normal">(اختياري)</span>
-                </label>
-                <input type="number" min="0" max="100" value={form.score} onChange={(e) => set("score", e.target.value)}
-                  placeholder="مثال: 85.5"
-                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] bg-[#faf7f2] font-cairo" />
-              </div>
-              <button onClick={handleSignUp} disabled={loading}
-                className="w-full bg-[#d4a843] text-white font-bold py-3 rounded-xl hover:bg-[#b8922a] transition-colors disabled:opacity-50 font-cairo">
-                {loading ? "جاري الإنشاء..." : "إنشاء الحساب ✓"}
-              </button>
+            <div className="mt-6 rounded-2xl bg-[#faf7f2] px-4 py-3 text-xs text-gray-500 font-cairo">
+              {mode === "signin"
+                ? "بمجرد الدخول ستجد ملفك الشخصي ونتائج المطابقة محفوظة كما تركتها."
+                : "لسنا بحاجة إلى خطوات إضافية هنا. الحساب يُنشأ من شاشة واحدة ثم يمكنك إكمال التفاصيل من ملفك الشخصي."}
             </div>
-          )}
-        </div>
-
-        <p className="text-center text-xs text-gray-400 font-cairo mt-4">
-          بتسجيلك، بتوافق على شروط الاستخدام وسياسة الخصوصية
-        </p>
+          </div>
+        </section>
       </div>
     </div>
   );

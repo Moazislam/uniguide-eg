@@ -147,6 +147,11 @@ export default function OnboardingPage() {
   const progress = (stepIndex / (STEPS.length - 1)) * 100;
 
   const queryString = useMemo(() => buildRecommendationQuery(form), [form]);
+  const scoreValue = Number.parseFloat(form.score || "70");
+  const boundedScore = Number.isFinite(scoreValue) ? Math.max(0, Math.min(100, scoreValue)) : 70;
+  const scoreMeterStyle = {
+    background: `conic-gradient(#d4a843 0deg ${boundedScore * 3.6}deg, rgba(26,58,92,0.1) ${boundedScore * 3.6}deg 360deg)`,
+  };
 
   const next = () => setStep(STEPS[stepIndex + 1]);
   const prev = () => setStep(STEPS[stepIndex - 1]);
@@ -253,17 +258,74 @@ export default function OnboardingPage() {
               <div>
                 <span className="text-3xl mb-4 block">Score</span>
                 <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">ما درجتك الحالية أو المتوقعة؟</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">The closer your score is to the cutoff, the more personalized the ranking becomes.</p>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={form.score}
-                  onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
-                  placeholder="Example: 85.5"
-                  className="w-full text-center text-3xl font-black text-[#1a3a5c] border-b-2 border-[#d4a843] bg-transparent py-3 focus:outline-none font-cairo"
-                />
-                <p className="text-xs text-gray-400 font-cairo text-center mt-2">Percentage %</p>
+                <p className="text-sm text-gray-400 font-cairo mb-6">The meter reacts instantly so you can feel where your score sits before we rank universities.</p>
+
+                <div className="grid gap-6 md:grid-cols-[0.9fr,1.1fr] md:items-center">
+                  <div className="flex justify-center">
+                    <div className="relative">
+                      <div
+                        className="h-44 w-44 rounded-full transition-all duration-700 ease-out"
+                        style={scoreMeterStyle}
+                      />
+                      <div className="absolute inset-[10px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner">
+                        <span className="text-xs uppercase tracking-[0.25em] text-gray-400">Score</span>
+                        <span className="text-4xl font-black text-[#1a3a5c]">{form.score || "70"}</span>
+                        <span className="text-xs text-[#d4a843] font-semibold">Percent</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-[28px] border border-gray-100 bg-[#faf7f2] p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <p className="text-sm font-bold text-[#1a3a5c] font-cairo">Academic score meter</p>
+                        <p className="text-xs text-gray-400 font-cairo">Adjust it manually or drag the slider.</p>
+                      </div>
+                      <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#1a3a5c] shadow-sm">
+                        {boundedScore >= 90 ? "Top range" : boundedScore >= 80 ? "Strong range" : boundedScore >= 70 ? "Competitive" : "Building"}
+                      </span>
+                    </div>
+
+                    <input
+                      type="range"
+                      min="40"
+                      max="100"
+                      step="0.5"
+                      value={form.score || "70"}
+                      onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
+                      className="w-full accent-[#d4a843]"
+                    />
+
+                    <div className="mt-4 flex items-center gap-3">
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="0.5"
+                        value={form.score}
+                        onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
+                        placeholder="Example: 85.5"
+                        className="w-32 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-center text-lg font-black text-[#1a3a5c] focus:border-[#d4a843] focus:outline-none"
+                      />
+                      <span className="text-sm text-gray-400 font-cairo">%</span>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                      <div className="rounded-2xl bg-white p-3">
+                        <p className="text-[11px] text-gray-400">Safer</p>
+                        <p className="text-sm font-bold text-[#1a3a5c]">&lt; 75</p>
+                      </div>
+                      <div className="rounded-2xl bg-white p-3">
+                        <p className="text-[11px] text-gray-400">Competitive</p>
+                        <p className="text-sm font-bold text-[#1a3a5c]">75 - 89</p>
+                      </div>
+                      <div className="rounded-2xl bg-white p-3">
+                        <p className="text-[11px] text-gray-400">Stretch+</p>
+                        <p className="text-sm font-bold text-[#1a3a5c]">90+</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 

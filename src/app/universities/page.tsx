@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import { CompareTray } from "@/components/compare/CompareButton";
 import UniversityCard from "@/components/universities/UniversityCard";
 import UniversitySearchBar from "@/components/universities/UniversitySearchBar";
 import {
@@ -184,6 +185,7 @@ export default async function UniversitiesPage({
         </Suspense>
       </main>
 
+      <CompareTray />
       <Footer />
     </div>
   );

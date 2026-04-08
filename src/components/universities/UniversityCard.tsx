@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BadgeCheck, GraduationCap, MapPin } from "lucide-react";
+import CompareButton from "@/components/compare/CompareButton";
 import type { MatchRecommendation, University } from "@/types";
 
 interface Props {
@@ -86,6 +87,13 @@ export default function UniversityCard({ university, recommendation }: Props) {
               </span>
             </div>
           )}
+        </div>
+
+        <div className="mt-4 flex items-center gap-2">
+          <CompareButton universityId={university.id} compact />
+          <span className="text-[11px] text-gray-400 font-cairo">
+            قارن مع جامعات أخرى بسهولة
+          </span>
         </div>
 
         {recommendation && (
