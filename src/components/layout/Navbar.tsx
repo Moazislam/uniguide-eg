@@ -119,18 +119,18 @@ export default function Navbar() {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <LanguageToggle />
             {user ? (
-              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.profile")}>
-                <User size={15} /> <span className="hidden sm:inline">{t("nav.profile")}</span>
+              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.profile")}>
+                <User size={15} /> <span className="hidden xs:inline">{t("nav.profile")}</span>
               </Link>
             ) : (
               <>
-                <Link href="/auth" className="hidden sm:flex items-center gap-1 text-sm text-[#1a3a5c] font-semibold hover:text-[#d4a843] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] rounded px-1" aria-label={t("nav.login")}>
+                <Link href="/auth" className="hidden xs:flex items-center gap-1 text-xs sm:text-sm text-[#1a3a5c] font-semibold hover:text-[#d4a843] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] rounded px-1" aria-label={t("nav.login")}>
                   <LogIn size={15} /> {t("nav.login")}
                 </Link>
-                <Link href="/onboarding" className="bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.start")}>
+                <Link href="/onboarding" className="bg-[#1a3a5c] text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.start")}>
                   {t("nav.start")}
                 </Link>
               </>
