@@ -37,21 +37,53 @@ export default function AuthPage() {
     track: "",
     score: "",
   });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const errors: Record<string, string> = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!form.email) errors.email = isAr ? "البريد الإلكتروني مطلوب" : "Email is required";
+    else if (!emailRegex.test(form.email)) errors.email = isAr ? "البريد الإلكتروني غير صحيح" : "Invalid email format";
+    
+    if (!form.password) errors.password = isAr ? "كلمة المرور مطلوبة" : "Password is required";
+    else if (form.password.length < 6) errors.password = isAr ? "يجب أن تكون كلمة المرور 6 أحرف على الأقل" : "Password must be at least 6 characters";
+
+    if (mode === "signup") {
+      if (!form.name) errors.name = isAr ? "الاسم مطلوب" : "Name is required";
+      if (!form.phone) errors.phone = isAr ? "رقم الهاتف مطلوب" : "Phone is required";
+      else if (!/^01[0125][0-9]{8}$/.test(form.phone)) errors.phone = isAr ? "رقم الهاتف غير صحيح" : "Invalid Egyptian phone number";
+      
+      if (!form.track) errors.track = isAr ? "يجب اختيار المسار الدراسي" : "Please select an academic track";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const title = useMemo(
     () => mode === "signin" ? t("auth.signinTitle") : t("auth.signupTitle"),
     [mode, t]
   );
 
-  const set = (key: keyof typeof form, value: string) =>
+  const set = (key: keyof typeof form, value: string) => {
     setForm((current) => ({ ...current, [key]: value }));
+    if (validationErrors[key]) {
+      setValidationErrors(prev => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+    }
+  };
 
   const handleSignIn = async () => {
+    if (!validate()) return;
     setLoading(true);
     setError("");
     setSuccess("");
     const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: form.email,
+      email: form.email.trim(),
       password: form.password,
     });
     if (signInError) {
@@ -63,12 +95,13 @@ export default function AuthPage() {
   };
 
   const handleSignUp = async () => {
+    if (!validate()) return;
     setLoading(true);
     setError("");
     setSuccess("");
 
     const { data, error: signUpError } = await supabase.auth.signUp({
-      email: form.email,
+      email: form.email.trim(),
       password: form.password,
       options: { data: { full_name: form.name, phone: form.phone } },
     });
@@ -149,6 +182,7 @@ export default function AuthPage() {
                       setMode(item);
                       setError("");
                       setSuccess("");
+                      setValidationErrors({});
                     }}
                     className={`rounded-xl px-4 py-2 text-sm font-bold transition-all ${
                       mode === item
@@ -183,8 +217,9 @@ export default function AuthPage() {
                       value={form.name}
                       onChange={(event) => set("name", event.target.value)}
                       placeholder={t("auth.namePlaceholder")}
-                      className={`w-full rounded-2xl border border-gray-200 bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
+                      className={`w-full rounded-2xl border ${validationErrors.name ? 'border-red-300 ring-4 ring-red-50' : 'border-gray-200'} bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none transition-all ${isRtl ? 'text-right' : 'text-left'}`}
                     />
+                    {validationErrors.name && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.name}</p>}
                   </div>
                   <div className={isRtl ? 'text-right' : 'text-left'}>
                     <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">{t("auth.phone")}</label>
@@ -193,8 +228,9 @@ export default function AuthPage() {
                       value={form.phone}
                       onChange={(event) => set("phone", event.target.value)}
                       placeholder="01xxxxxxxxx"
-                      className={`w-full rounded-2xl border border-gray-200 bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
+                      className={`w-full rounded-2xl border ${validationErrors.phone ? 'border-red-300 ring-4 ring-red-50' : 'border-gray-200'} bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none transition-all ${isRtl ? 'text-right' : 'text-left'}`}
                     />
+                    {validationErrors.phone && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.phone}</p>}
                   </div>
                 </div>
               )}
@@ -206,8 +242,9 @@ export default function AuthPage() {
                   value={form.email}
                   onChange={(event) => set("email", event.target.value)}
                   placeholder="example@email.com"
-                  className={`w-full rounded-2xl border border-gray-200 bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
+                  className={`w-full rounded-2xl border ${validationErrors.email ? 'border-red-300 ring-4 ring-red-50' : 'border-gray-200'} bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none transition-all ${isRtl ? 'text-right' : 'text-left'}`}
                 />
+                {validationErrors.email && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.email}</p>}
               </div>
 
               <div className={isRtl ? 'text-right' : 'text-left'}>
@@ -218,7 +255,7 @@ export default function AuthPage() {
                     value={form.password}
                     onChange={(event) => set("password", event.target.value)}
                     placeholder={mode === "signup" ? t("auth.passwordHint") : "••••••••"}
-                    className={`w-full rounded-2xl border border-gray-200 bg-[#faf7f2] px-4 py-3 ${isRtl ? 'pr-4 pl-11 text-right' : 'pl-4 pr-11 text-left'} text-sm focus:border-[#d4a843] focus:outline-none`}
+                    className={`w-full rounded-2xl border ${validationErrors.password ? 'border-red-300 ring-4 ring-red-50' : 'border-gray-200'} bg-[#faf7f2] px-4 py-3 ${isRtl ? 'pr-4 pl-11 text-right' : 'pl-4 pr-11 text-left'} text-sm focus:border-[#d4a843] focus:outline-none transition-all`}
                   />
                   <button
                     type="button"
@@ -228,6 +265,7 @@ export default function AuthPage() {
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
+                {validationErrors.password && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.password}</p>}
               </div>
 
               {mode === "signup" && (
@@ -243,13 +281,14 @@ export default function AuthPage() {
                           className={`rounded-2xl border px-1 py-3 text-[10px] font-bold transition-all ${
                             form.track === track.id
                               ? "border-[#d4a843] bg-[#fff7e7] text-[#1a3a5c]"
-                              : "border-gray-200 bg-[#faf7f2] text-gray-500 hover:border-[#d4a843]/50"
+                              : validationErrors.track ? "border-red-200 bg-red-50/30 text-gray-500" : "border-gray-200 bg-[#faf7f2] text-gray-500 hover:border-[#d4a843]/50"
                           }`}
                         >
                           {isAr ? track.labelAr : track.labelEn}
                         </button>
                       ))}
                     </div>
+                    {validationErrors.track && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.track}</p>}
                   </div>
                   <div className={isRtl ? 'text-right' : 'text-left'}>
                     <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">{t("auth.score")}</label>
@@ -277,12 +316,7 @@ export default function AuthPage() {
 
               <button
                 onClick={mode === "signin" ? handleSignIn : handleSignUp}
-                disabled={
-                  loading ||
-                  !form.email ||
-                  !form.password ||
-                  (mode === "signup" && form.password.length < 6)
-                }
+                disabled={loading}
                 className={`mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#1a3a5c] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#2a5a8c] disabled:opacity-50 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
               >
                 {mode === "signin" ? <LogIn size={16} /> : <UserPlus size={16} />}

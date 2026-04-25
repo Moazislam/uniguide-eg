@@ -154,7 +154,7 @@ export default function OnboardingPage() {
   const scoreValue = Number.parseFloat(form.score || "70");
   const boundedScore = Number.isFinite(scoreValue) ? Math.max(0, Math.min(100, scoreValue)) : 70;
   const scoreMeterStyle = {
-    background: `conic-gradient(#d4a843 0deg ${boundedScore * 3.6}deg, rgba(26,58,92,0.1) ${boundedScore * 3.6}deg 360deg)`,
+    background: `conic-gradient(#d4a843) 0deg ${boundedScore * 3.6}deg, rgba(26,58,92,0.1) ${boundedScore * 3.6}deg 360deg)`,
   };
 
   const next = () => setStep(STEPS[stepIndex + 1]);
@@ -171,11 +171,18 @@ export default function OnboardingPage() {
 
   const nextDisabled =
     (step === "track" && !form.track) ||
+    (step === "score" && (!form.score || Number.parseFloat(form.score) < 0 || Number.parseFloat(form.score) > 100)) ||
     (step === "interests" && form.interests.length === 0) ||
     (step === "budget" && !form.budget) ||
     (step === "location" && !form.preferredLocation);
 
   async function handleShowResults() {
+    // Final validation before submission
+    if (!form.track || !form.score || form.interests.length === 0 || !form.budget || !form.preferredLocation) {
+       setStatusMessage(isAr ? "يرجى إكمال جميع الحقول الأساسية قبل المتابعة" : "Please complete all required fields before proceeding");
+       return;
+    }
+
     setSaving(true);
     setStatusMessage("");
 
