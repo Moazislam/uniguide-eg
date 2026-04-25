@@ -112,24 +112,45 @@ export default async function UniversityPage({
               </section>
 
               {/* Admission */}
-              {(university.admission_requirements_ar ||
-                university.admission_requirements_en) && (
+              {(university.admission_national || university.admission_ig || university.admission_american || university.admission_french || university.admission_german) && (
                 <section className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
                   <div className="flex items-center gap-3 mb-6 text-[#1a3a5c]">
                     <BadgeCheck size={22} className="text-[#d4a843]" />
                     <LocalizedHeading tKey="details.admission" className="text-xl font-bold font-cairo" />
                   </div>
-                  <div className="space-y-6">
-                     {university.admission_requirements_ar && (
-                       <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
-                         {university.admission_requirements_ar}
-                       </p>
-                     )}
-                     {university.admission_requirements_en && (
-                       <p className="text-gray-400 font-cairo text-xs leading-relaxed whitespace-pre-line border-t pt-4">
-                         {university.admission_requirements_en}
-                       </p>
-                     )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {university.admission_national && (
+                      <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100/50">
+                        <h4 className="font-bold text-[#1a3a5c] text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.thanaweya" /></h4>
+                        <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                          {university.admission_national}
+                        </p>
+                      </div>
+                    )}
+                    {university.admission_ig && (
+                      <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-100/50">
+                        <h4 className="font-bold text-[#1a3a5c] text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.ig" /></h4>
+                        <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                          {university.admission_ig}
+                        </p>
+                      </div>
+                    )}
+                    {university.admission_american && (
+                      <div className="p-4 rounded-2xl bg-purple-50/50 border border-purple-100/50">
+                        <h4 className="font-bold text-[#1a3a5c] text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.american" /></h4>
+                        <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                          {university.admission_american}
+                        </p>
+                      </div>
+                    )}
+                    {(university.admission_french || university.admission_german) && (
+                      <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                        <h4 className="font-bold text-[#1a3a5c] text-xs uppercase tracking-wider mb-2 font-cairo">Other Diplomas / شهادات أخرى</h4>
+                        <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                          {[university.admission_french, university.admission_german].filter(Boolean).join('\n\n')}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </section>
               )}
