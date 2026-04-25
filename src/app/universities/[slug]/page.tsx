@@ -252,7 +252,7 @@ export default async function UniversityPage({
               </div>
 
               {/* Faculties Section */}
-              <FacultiesSection faculties={faculties} />
+              <FacultiesSection faculties={faculties} universityMajors={majors} />
 
               {/* Majors List */}
               {majors.length > 0 && (
