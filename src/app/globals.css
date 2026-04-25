@@ -13,6 +13,16 @@
   --blue-light: #2a5a8c;
   --blue-dark: #0f2438;
   --charcoal: #2c2c2c;
+  --card-bg: #ffffff;
+  --border: #f3f4f6;
+}
+
+.dark {
+  --cream: #0a1120;
+  --charcoal: #f3f4f6;
+  --card-bg: #111b2d;
+  --border: #1e293b;
+  --blue-light: #334155;
 }
 
 * {
@@ -27,6 +37,7 @@ body {
   font-family: 'Cairo', sans-serif;
   background-color: var(--cream);
   color: var(--charcoal);
+  transition: background-color 0.3s ease, color 0.3s ease;
   -webkit-font-smoothing: antialiased;
 }
 

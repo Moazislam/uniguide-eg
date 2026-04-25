@@ -7,6 +7,7 @@ import { Menu, X, User, LogIn } from "lucide-react";
 import { gsap } from "gsap";
 import { createClient } from "@/lib/supabase/client";
 import LanguageToggle from "./LanguageToggle";
+import ThemeToggle from "./ThemeToggle";
 import { useLanguage } from "@/lib/LanguageContext";
 
 const navLinks = [
@@ -78,16 +79,16 @@ export default function Navbar() {
   const handleMouseLeave = (i: number) => tlRefs.current[i]?.reverse();
 
   return (
-    <header className="sticky top-0 z-50 bg-[#faf7f2]/95 backdrop-blur border-b border-[#d4a843]/20">
+    <header className="sticky top-0 z-50 bg-[#faf7f2]/95 dark:bg-[#0a1120]/95 backdrop-blur border-b border-[#d4a843]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-[#1a3a5c] flex items-center justify-center transition-transform group-hover:scale-110">
-              <span className="text-[#d4a843] font-bold text-sm font-cairo">U</span>
+            <div className="w-8 h-8 rounded-lg bg-[#1a3a5c] dark:bg-[#d4a843] flex items-center justify-center transition-transform group-hover:scale-110">
+              <span className="text-[#d4a843] dark:text-[#1a3a5c] font-bold text-sm font-cairo">U</span>
             </div>
-            <span className="font-bold text-[#1a3a5c] text-lg font-cairo">UniGuide</span>
+            <span className="font-bold text-[#1a3a5c] dark:text-white text-lg font-cairo">UniGuide</span>
           </Link>
 
           {/* Desktop Nav - Animated Pills */}
@@ -99,18 +100,18 @@ export default function Navbar() {
                 onMouseEnter={() => handleMouseEnter(i)}
                 onMouseLeave={() => handleMouseLeave(i)}
                 className={`relative overflow-hidden px-4 py-2 rounded-full transition-colors font-cairo text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843]
-                  ${pathname === link.href ? "bg-[#1a3a5c] text-white" : "text-[#2c2c2c]"}`}
+                  ${pathname === link.href ? "bg-[#1a3a5c] text-white" : "text-[#2c2c2c] dark:text-gray-300 hover:text-[#1a3a5c] dark:hover:text-white"}`}
                 aria-label={t(link.key)}
               >
                 <span
                   ref={(el) => { circleRefs.current[i] = el; }}
-                  className="absolute left-1/2 bg-[#1a3a5c] rounded-full pointer-events-none z-0"
+                  className="absolute left-1/2 bg-[#1a3a5c] dark:bg-[#d4a843] rounded-full pointer-events-none z-0"
                 />
                 <span className="relative z-10 flex flex-col items-center">
                   <span className="pill-label block">
                     {t(link.key)}
                   </span>
-                  <span className="pill-label-hover absolute inset-0 flex items-center justify-center opacity-0 text-[#d4a843] translate-y-4">
+                  <span className="pill-label-hover absolute inset-0 flex items-center justify-center opacity-0 text-[#d4a843] dark:text-[#1a3a5c] translate-y-4">
                     {t(link.key)}
                   </span>
                 </span>
@@ -120,17 +121,18 @@ export default function Navbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
             <LanguageToggle />
             {user ? (
-              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.profile")}>
+              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] dark:bg-[#d4a843] text-white dark:text-[#1a3a5c] text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-[#2a5a8c] dark:hover:bg-[#b8922a] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.profile")}>
                 <User size={15} /> <span className="hidden xs:inline">{t("nav.profile")}</span>
               </Link>
             ) : (
               <>
-                <Link href="/auth" className="hidden xs:flex items-center gap-1 text-xs sm:text-sm text-[#1a3a5c] font-semibold hover:text-[#d4a843] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] rounded px-1" aria-label={t("nav.login")}>
+                <Link href="/auth" className="hidden xs:flex items-center gap-1 text-xs sm:text-sm text-[#1a3a5c] dark:text-[#d4a843] font-semibold hover:text-[#d4a843] dark:hover:text-white transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] rounded px-1" aria-label={t("nav.login")}>
                   <LogIn size={15} /> {t("nav.login")}
                 </Link>
-                <Link href="/onboarding" className="bg-[#1a3a5c] text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.start")}>
+                <Link href="/onboarding" className="bg-[#1a3a5c] dark:bg-[#d4a843] text-white dark:text-[#1a3a5c] text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-[#2a5a8c] dark:hover:bg-[#b8922a] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.start")}>
                   {t("nav.start")}
                 </Link>
               </>

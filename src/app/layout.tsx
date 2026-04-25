@@ -3,6 +3,7 @@ import "./globals.css";
 
 import BottomNav from "@/components/layout/BottomNav";
 import { LanguageProvider } from "@/lib/LanguageContext";
+import { ThemeProvider } from "@/components/layout/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "UniGuide — منصة قرارات الجامعة في مصر",
@@ -15,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -25,10 +26,12 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-cream font-cairo min-h-screen pb-16 md:pb-0">
-        <LanguageProvider>
-          {children}
-          <BottomNav />
-        </LanguageProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <LanguageProvider>
+            {children}
+            <BottomNav />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
