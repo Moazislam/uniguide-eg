@@ -36,7 +36,7 @@ async function MajorsGrid({ category, search }: { category?: string; search?: st
 
   return (
     <div>
-      <p className="text-sm text-gray-500 font-cairo mb-4">{count} تخصص / {count} majors</p>
+      <p className="text-sm text-text-secondary font-cairo mb-4">{count} تخصص / {count} majors</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {majors.map((major) => {
           const cat = categoryLabels[major.category] ?? categoryLabels.other;
@@ -44,20 +44,20 @@ async function MajorsGrid({ category, search }: { category?: string; search?: st
             <Link
               key={major.id}
               href={`/majors/${major.slug}`}
-              className="group bg-white rounded-2xl p-5 border border-gray-100 hover:border-[#d4a843]/40 hover:shadow-md transition-all duration-200"
+              className="group bg-card-bg rounded-2xl p-5 border border-border hover:border-amber/40 hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-start justify-between mb-3">
                 <span className="text-2xl">{cat.emoji}</span>
-                <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-cairo">
+                <span className="text-xs bg-cream dark:bg-blue/20 text-text-secondary px-2 py-0.5 rounded-full font-cairo">
                   {cat.ar}
                 </span>
               </div>
-              <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm group-hover:text-[#d4a843] transition-colors">
+              <h3 className="font-bold text-blue dark:text-text-primary font-cairo text-sm group-hover:text-amber transition-colors">
                 {major.name_ar}
               </h3>
-              <p className="text-xs text-gray-400 font-cairo mb-2">{major.name_en}</p>
+              <p className="text-xs text-text-secondary font-cairo mb-2">{major.name_en}</p>
 
-              <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-50 text-xs text-gray-500 font-cairo">
+              <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border text-xs text-text-secondary font-cairo">
                 <span className="flex items-center gap-1">
                   <Clock size={11} />
                   {major.duration_years} سنوات
@@ -68,7 +68,7 @@ async function MajorsGrid({ category, search }: { category?: string; search?: st
                     {major.career_paths.length} مسار مهني
                   </span>
                 ) : null}
-                <ChevronLeft size={12} className="mr-auto text-[#d4a843]" />
+                <ChevronLeft size={12} className="mr-auto text-amber" />
               </div>
             </Link>
           );
@@ -86,13 +86,13 @@ export default async function MajorsPage({
   const params = await searchParams;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf7f2]">
+    <div className="min-h-screen flex flex-col bg-cream transition-colors duration-300">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         <div className="mb-8">
-          <LocalizedHeading tKey="major.title" className="text-2xl font-black text-[#1a3a5c] font-cairo" />
-          <LocalizedParagraph tKey="major.subtitle" className="text-gray-500 font-cairo text-sm" />
+          <LocalizedHeading tKey="major.title" className="text-2xl font-black text-blue dark:text-text-primary font-cairo" />
+          <LocalizedParagraph tKey="major.subtitle" className="text-text-secondary font-cairo text-sm" />
         </div>
 
         {/* Search + Category filter */}
@@ -106,11 +106,11 @@ export default async function MajorsPage({
               name="search"
               defaultValue={params.search ?? ""}
               placeholder="ابحث عن تخصص... / Search majors"
-              className="w-full h-11 rounded-2xl border border-gray-200 bg-white px-4 pr-10 text-sm font-cairo focus:border-[#d4a843] focus:outline-none"
+              className="w-full h-11 rounded-2xl border border-border bg-card-bg px-4 pr-10 text-sm font-cairo focus:border-amber focus:outline-none text-text-primary placeholder:text-text-secondary/50"
             />
             <button
               type="submit"
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#d4a843]"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-amber"
               aria-label="Search"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -123,7 +123,7 @@ export default async function MajorsPage({
         <Suspense fallback={
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 9 }).map((_, i) => (
-              <div key={i} className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
+              <div key={i} className="h-40 bg-card-bg/50 dark:bg-card-bg/20 border border-border rounded-2xl animate-pulse" />
             ))}
           </div>
         }>

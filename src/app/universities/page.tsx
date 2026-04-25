@@ -122,10 +122,10 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
             <a
               key={p}
               href={`?page=${p}${searchParams.search ? `&search=${searchParams.search}` : ""}${searchParams.type ? `&type=${searchParams.type}` : ""}`}
-              className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-cairo ${
+              className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-cairo transition-colors ${
                 p === page
-                  ? "bg-[#1a3a5c] text-white"
-                  : "bg-white border border-gray-200 text-gray-600 hover:border-[#d4a843]"
+                  ? "bg-blue dark:bg-amber text-white dark:text-blue-dark"
+                  : "bg-card-bg border border-border text-text-secondary hover:border-amber dark:hover:text-amber-light"
               }`}
             >
               {p}
@@ -146,18 +146,18 @@ export default async function UniversitiesPage({
   const matchingMode = isMatchingMode(params);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf7f2]">
+    <div className="min-h-screen flex flex-col bg-cream transition-colors duration-300">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         <div className="mb-8">
           <LocalizedHeading 
             tKey={matchingMode ? "uni.matchTitle" : "uni.title"} 
-            className="text-2xl font-black text-[#1a3a5c] font-cairo" 
+            className="text-2xl font-black text-blue dark:text-text-primary font-cairo" 
           />
           <LocalizedParagraph 
             tKey={matchingMode ? "uni.matchSubtitle" : "uni.subtitle"} 
-            className="text-gray-500 font-cairo text-sm" 
+            className="text-text-secondary font-cairo text-sm" 
           />
         </div>
 
@@ -171,7 +171,7 @@ export default async function UniversitiesPage({
           fallback={
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
               {Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="h-72 bg-gray-100 rounded-2xl animate-pulse" />
+                <div key={index} className="h-72 bg-card-bg/50 dark:bg-card-bg/20 border border-border rounded-2xl animate-pulse" />
               ))}
             </div>
           }

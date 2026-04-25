@@ -99,21 +99,21 @@ export default function ComparePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf7f2]">
+    <div className="min-h-screen flex flex-col bg-cream transition-colors duration-300">
       <Navbar />
 
       <main className={`flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full ${isRtl ? 'text-right' : 'text-left'}`}>
         <div className={`mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
           <div className={isRtl ? 'text-right' : 'text-left'}>
-            <div className={`inline-flex items-center gap-2 rounded-full bg-[#1a3a5c]/6 px-4 py-1.5 text-xs font-semibold text-[#1a3a5c] mb-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-              <ArrowLeftRight size={14} className="text-[#d4a843]" />
+            <div className={`inline-flex items-center gap-2 rounded-full bg-blue/6 dark:bg-amber/10 px-4 py-1.5 text-xs font-semibold text-blue dark:text-amber mb-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+              <ArrowLeftRight size={14} className="text-amber" />
               {t("compare.badge")}
             </div>
-            <h1 className={`text-3xl font-black text-[#1a3a5c] font-cairo flex items-center gap-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-              <GitCompareArrows className="text-[#d4a843]" />
+            <h1 className={`text-3xl font-black text-blue dark:text-text-primary font-cairo flex items-center gap-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+              <GitCompareArrows className="text-amber" />
               {t("compare.title")}
             </h1>
-            <p className="text-gray-500 font-cairo text-sm mt-2">
+            <p className="text-text-secondary font-cairo text-sm mt-2">
               {t("compare.subtitle")}
             </p>
           </div>
@@ -122,14 +122,14 @@ export default function ComparePage() {
             <div className={`flex items-center gap-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
               <button
                 onClick={clearAll}
-                className={`inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-500 transition-colors hover:border-red-200 hover:text-red-500 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+                className={`inline-flex items-center gap-2 rounded-xl border border-border bg-card-bg px-4 py-2.5 text-sm font-semibold text-text-secondary transition-colors hover:border-red-200 hover:text-red-500 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
               >
                 <Trash2 size={14} />
                 {t("compare.clearAll")}
               </button>
               <Link
                 href="/universities"
-                className={`inline-flex items-center gap-2 rounded-xl bg-[#1a3a5c] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#2a5a8c] ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+                className={`inline-flex items-center gap-2 rounded-xl bg-blue dark:bg-amber px-4 py-2.5 text-sm font-semibold text-white dark:text-blue-dark transition-colors hover:bg-blue-light dark:hover:bg-amber-dark ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
               >
                 <Plus size={14} />
                 {t("compare.addUni")}
@@ -139,56 +139,56 @@ export default function ComparePage() {
         </div>
 
         {ids.length === 0 ? (
-          <div className="rounded-[28px] border border-dashed border-gray-200 bg-white py-20 text-center">
-            <GitCompareArrows size={44} className="text-gray-200 mx-auto mb-4" />
-            <p className="font-bold text-[#1a3a5c] font-cairo mb-2">{t("compare.emptyTitle")}</p>
-            <p className="text-sm text-gray-400 font-cairo mb-6">{t("compare.emptyDesc")}</p>
+          <div className="rounded-[28px] border border-dashed border-border bg-card-bg/50 dark:bg-card-bg/20 py-20 text-center">
+            <GitCompareArrows size={44} className="text-text-secondary/20 mx-auto mb-4" />
+            <p className="font-bold text-blue dark:text-text-primary font-cairo mb-2">{t("compare.emptyTitle")}</p>
+            <p className="text-sm text-text-secondary font-cairo mb-6">{t("compare.emptyDesc")}</p>
             <Link
               href="/universities"
-              className="inline-flex items-center gap-2 bg-[#1a3a5c] text-white text-sm font-semibold px-5 py-3 rounded-xl hover:bg-[#2a5a8c] transition-colors font-cairo"
+              className="inline-flex items-center gap-2 bg-blue dark:bg-amber text-white dark:text-blue-dark text-sm font-semibold px-5 py-3 rounded-xl hover:bg-blue-light transition-colors font-cairo"
             >
               <Plus size={16} />
               {t("hero.ctaBrowse")}
             </Link>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-sm">
-            <div className="border-b border-gray-100 bg-[#faf7f2] px-5 py-4">
-              <p className="text-sm font-semibold text-[#1a3a5c] font-cairo">
+          <div className="overflow-hidden rounded-[28px] border border-border bg-card-bg shadow-sm">
+            <div className="border-b border-border bg-cream dark:bg-blue-dark/50 px-5 py-4">
+              <p className="text-sm font-semibold text-blue dark:text-amber font-cairo">
                 {t("compare.selected")} {ids.length} {ids.length === 1 ? t("compare.uni") : t("compare.unis")}
               </p>
             </div>
 
             <div className="overflow-x-auto">
               <div className={`grid min-w-[760px] font-cairo ${isRtl ? 'dir-rtl' : 'dir-ltr'}`} style={{ gridTemplateColumns: gridTemplate }}>
-                <div className={`p-5 border-b ${isRtl ? 'border-l' : 'border-r'} border-gray-100 bg-white`} />
+                <div className={`p-5 border-b ${isRtl ? 'border-l' : 'border-r'} border-border bg-card-bg`} />
                 {loading
                   ? ids.map((id) => (
-                      <div key={id} className={`p-5 border-b ${isRtl ? 'border-l' : 'border-r'} border-gray-100 last:border-r-0 last:border-l-0`}>
-                        <div className="h-20 rounded-2xl bg-gray-100 animate-pulse" />
+                      <div key={id} className={`p-5 border-b ${isRtl ? 'border-l' : 'border-r'} border-border last:border-r-0 last:border-l-0`}>
+                        <div className="h-20 rounded-2xl bg-cream dark:bg-blue/10 animate-pulse" />
                       </div>
                     ))
                   : universities.map((university) => (
-                      <div key={university.id} className={`p-5 border-b ${isRtl ? 'border-l' : 'border-r'} border-gray-100 last:border-r-0 last:border-l-0 bg-white`}>
+                      <div key={university.id} className={`p-5 border-b ${isRtl ? 'border-l' : 'border-r'} border-border last:border-r-0 last:border-l-0 bg-card-bg`}>
                         <div className={`flex items-start justify-between gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                           <div className={isRtl ? 'text-right' : 'text-left'}>
-                            <div className="w-11 h-11 rounded-2xl bg-[#1a3a5c]/5 flex items-center justify-center mb-3 overflow-hidden">
+                            <div className="w-11 h-11 rounded-2xl bg-blue/5 dark:bg-amber/10 flex items-center justify-center mb-3 overflow-hidden">
                               {university.logo_url ? (
                                 <img src={university.logo_url} alt={isAr ? university.name_ar : university.name_en} className="w-9 h-9 object-contain" />
                               ) : (
-                                <GraduationCap size={18} className="text-[#1a3a5c]" />
+                                <GraduationCap size={18} className="text-blue dark:text-amber" />
                               )}
                             </div>
-                            <p className="font-bold text-[#1a3a5c] text-sm">{isAr ? university.name_ar : university.name_en}</p>
-                            <p className="text-xs text-gray-400">{isAr ? university.name_en : university.name_ar}</p>
-                            <p className="text-xs text-gray-400 flex items-center gap-1 mt-2">
+                            <p className="font-bold text-blue dark:text-text-primary text-sm">{isAr ? university.name_ar : university.name_en}</p>
+                            <p className="text-xs text-text-secondary">{isAr ? university.name_en : university.name_ar}</p>
+                            <p className="text-xs text-text-secondary flex items-center gap-1 mt-2">
                               <MapPin size={10} />
                               {isAr ? university.location_ar : university.location_en}
                             </p>
                           </div>
                           <button
                             onClick={() => remove(university.id)}
-                            className="rounded-full p-1 text-gray-300 transition-colors hover:bg-red-50 hover:text-red-400"
+                            className="rounded-full p-1 text-text-secondary/50 transition-colors hover:bg-red-50 hover:text-red-400"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -201,16 +201,16 @@ export default function ComparePage() {
                     key={row.key}
                     className="contents"
                   >
-                    <div className={`p-4 ${isRtl ? 'border-l' : 'border-r'} border-b border-gray-100 ${index % 2 === 0 ? "bg-[#faf7f2]" : "bg-white"} ${isRtl ? 'text-right' : 'text-left'}`}>
-                      <p className="text-xs font-semibold text-[#1a3a5c]">{isAr ? row.label_ar : row.label_en}</p>
-                      <p className="text-[10px] text-gray-400">{isAr ? row.label_en : row.label_ar}</p>
+                    <div className={`p-4 ${isRtl ? 'border-l' : 'border-r'} border-b border-border ${index % 2 === 0 ? "bg-cream dark:bg-blue-dark/30" : "bg-card-bg"} ${isRtl ? 'text-right' : 'text-left'}`}>
+                      <p className="text-xs font-semibold text-blue dark:text-text-primary">{isAr ? row.label_ar : row.label_en}</p>
+                      <p className="text-[10px] text-text-secondary">{isAr ? row.label_en : row.label_ar}</p>
                     </div>
                     {universities.map((university) => (
                       <div
                         key={`${row.key}-${university.id}`}
-                        className={`p-4 ${isRtl ? 'border-l' : 'border-r'} border-b border-gray-100 last:border-r-0 last:border-l-0 ${index % 2 === 0 ? "bg-[#fffdfa]" : "bg-white"} ${isRtl ? 'text-right' : 'text-left'}`}
+                        className={`p-4 ${isRtl ? 'border-l' : 'border-r'} border-b border-border last:border-r-0 last:border-l-0 ${index % 2 === 0 ? "bg-cream/50 dark:bg-blue-dark/20" : "bg-card-bg"} ${isRtl ? 'text-right' : 'text-left'}`}
                       >
-                        <p className={`text-sm font-semibold ${row.key === "tuition_min" ? "text-[#d4a843]" : "text-[#1a3a5c]"}`}>
+                        <p className={`text-sm font-semibold ${row.key === "tuition_min" ? "text-amber" : "text-blue dark:text-text-primary"}`}>
                           {formatValue(row.key, university[row.key as keyof University])}
                         </p>
                       </div>

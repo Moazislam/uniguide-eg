@@ -79,16 +79,16 @@ export default function Navbar() {
   const handleMouseLeave = (i: number) => tlRefs.current[i]?.reverse();
 
   return (
-    <header className="sticky top-0 z-50 bg-[#faf7f2]/95 dark:bg-[#0a1120]/95 backdrop-blur border-b border-[#d4a843]/20">
+    <header className="sticky top-0 z-50 bg-nav-bg backdrop-blur border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-[#1a3a5c] dark:bg-[#d4a843] flex items-center justify-center transition-transform group-hover:scale-110">
-              <span className="text-[#d4a843] dark:text-[#1a3a5c] font-bold text-sm font-cairo">U</span>
+            <div className="w-8 h-8 rounded-lg bg-blue dark:bg-amber flex items-center justify-center transition-transform group-hover:scale-110">
+              <span className="text-amber dark:text-blue font-bold text-sm font-cairo">U</span>
             </div>
-            <span className="font-bold text-[#1a3a5c] dark:text-white text-lg font-cairo">UniGuide</span>
+            <span className="font-bold text-blue dark:text-text-primary text-lg font-cairo">UniGuide</span>
           </Link>
 
           {/* Desktop Nav - Animated Pills */}
@@ -99,19 +99,19 @@ export default function Navbar() {
                 href={link.href}
                 onMouseEnter={() => handleMouseEnter(i)}
                 onMouseLeave={() => handleMouseLeave(i)}
-                className={`relative overflow-hidden px-4 py-2 rounded-full transition-colors font-cairo text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843]
-                  ${pathname === link.href ? "bg-[#1a3a5c] text-white" : "text-[#2c2c2c] dark:text-gray-300 hover:text-[#1a3a5c] dark:hover:text-white"}`}
+                className={`relative overflow-hidden px-4 py-2 rounded-full transition-colors font-cairo text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber
+                  ${pathname === link.href ? "bg-blue text-white dark:bg-amber dark:text-blue-dark" : "text-text-primary dark:text-text-secondary hover:text-blue dark:hover:text-text-primary"}`}
                 aria-label={t(link.key)}
               >
                 <span
                   ref={(el) => { circleRefs.current[i] = el; }}
-                  className="absolute left-1/2 bg-[#1a3a5c] dark:bg-[#d4a843] rounded-full pointer-events-none z-0"
+                  className="absolute left-1/2 bg-blue dark:bg-amber rounded-full pointer-events-none z-0"
                 />
                 <span className="relative z-10 flex flex-col items-center">
                   <span className="pill-label block">
                     {t(link.key)}
                   </span>
-                  <span className="pill-label-hover absolute inset-0 flex items-center justify-center opacity-0 text-[#d4a843] dark:text-[#1a3a5c] translate-y-4">
+                  <span className="pill-label-hover absolute inset-0 flex items-center justify-center opacity-0 text-amber dark:text-blue-dark translate-y-4">
                     {t(link.key)}
                   </span>
                 </span>
@@ -124,15 +124,15 @@ export default function Navbar() {
             <ThemeToggle />
             <LanguageToggle />
             {user ? (
-              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] dark:bg-[#d4a843] text-white dark:text-[#1a3a5c] text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-[#2a5a8c] dark:hover:bg-[#b8922a] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.profile")}>
+              <Link href="/profile" className="flex items-center gap-2 bg-blue dark:bg-amber text-white dark:text-blue-dark text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-light dark:hover:bg-amber-dark transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber focus-visible:ring-offset-2" aria-label={t("nav.profile")}>
                 <User size={15} /> <span className="hidden xs:inline">{t("nav.profile")}</span>
               </Link>
             ) : (
               <>
-                <Link href="/auth" className="hidden xs:flex items-center gap-1 text-xs sm:text-sm text-[#1a3a5c] dark:text-[#d4a843] font-semibold hover:text-[#d4a843] dark:hover:text-white transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] rounded px-1" aria-label={t("nav.login")}>
+                <Link href="/auth" className="hidden xs:flex items-center gap-1 text-xs sm:text-sm text-blue dark:text-amber font-semibold hover:text-amber dark:hover:text-text-primary transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber rounded px-1" aria-label={t("nav.login")}>
                   <LogIn size={15} /> {t("nav.login")}
                 </Link>
-                <Link href="/onboarding" className="bg-[#1a3a5c] dark:bg-[#d4a843] text-white dark:text-[#1a3a5c] text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-[#2a5a8c] dark:hover:bg-[#b8922a] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.start")}>
+                <Link href="/onboarding" className="bg-blue dark:bg-amber text-white dark:text-blue-dark text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-light dark:hover:bg-amber-dark transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber focus-visible:ring-offset-2" aria-label={t("nav.start")}>
                   {t("nav.start")}
                 </Link>
               </>

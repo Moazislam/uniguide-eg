@@ -10,18 +10,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        cream: "#faf7f2",
+        cream: "var(--cream)",
         amber: {
-          DEFAULT: "#d4a843",
-          light: "#e8c06a",
-          dark: "#b8922a",
+          DEFAULT: "var(--amber)",
+          light: "var(--amber-light)",
+          dark: "var(--amber-dark)",
         },
         blue: {
-          DEFAULT: "#1a3a5c",
-          light: "#2a5a8c",
-          dark: "#0f2438",
+          DEFAULT: "var(--blue)",
+          light: "var(--blue-light)",
+          dark: "var(--blue-dark)",
         },
-        charcoal: "#2c2c2c",
+        charcoal: "var(--charcoal)",
+        "card-bg": "var(--card-bg)",
+        border: "var(--border)",
+        "text-primary": "var(--text-primary)",
+        "text-secondary": "var(--text-secondary)",
       },
       fontFamily: {
         cairo: ["Cairo", "sans-serif"],

@@ -130,22 +130,22 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f1e8]">
+    <div className="min-h-screen bg-cream transition-colors duration-300">
       <div className={`mx-auto grid min-h-screen max-w-7xl items-stretch px-4 py-6 lg:grid-cols-[1.05fr,0.95fr] lg:px-6 ${isRtl ? 'dir-rtl' : 'dir-ltr'}`}>
-        <section className={`relative hidden overflow-hidden rounded-[32px] bg-[#173754] p-10 text-white lg:flex lg:flex-col lg:justify-between ${isRtl ? 'order-1' : 'order-1'}`}>
+        <section className={`relative hidden overflow-hidden rounded-[32px] bg-blue dark:bg-blue-dark p-10 text-white lg:flex lg:flex-col lg:justify-between ${isRtl ? 'order-1' : 'order-1'}`}>
           <div className="absolute inset-0">
-            <div className={`absolute -top-20 ${isRtl ? '-right-10' : '-left-10'} h-56 w-56 rounded-full bg-[#d4a843]/18 blur-2xl`} />
+            <div className={`absolute -top-20 ${isRtl ? '-right-10' : '-left-10'} h-56 w-56 rounded-full bg-amber/18 blur-2xl`} />
             <div className={`absolute bottom-0 ${isRtl ? 'left-0' : 'right-0'} h-64 w-64 rounded-full bg-white/8 blur-3xl`} />
           </div>
 
           <div className={`relative z-10 ${isRtl ? 'text-right' : 'text-left'}`}>
             <div className={`inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-              <Sparkles size={14} className="text-[#d4a843]" />
+              <Sparkles size={14} className="text-amber" />
               UniGuide Egypt
             </div>
             <h1 className="mt-8 max-w-md text-5xl font-black leading-tight font-cairo">
               {t("auth.heroTitle")}
-              <span className="block text-[#d4a843]">{t("auth.heroHighlight")}</span>
+              <span className="block text-amber">{t("auth.heroHighlight")}</span>
             </h1>
             <p className="mt-6 max-w-lg text-base leading-7 text-white/78 font-cairo">
               {t("auth.heroDesc")}
@@ -162,19 +162,19 @@ export default function AuthPage() {
         </section>
 
         <section className="flex items-center justify-center py-8 lg:py-0">
-          <div className="w-full max-w-xl rounded-[32px] border border-white/80 bg-white/92 p-6 shadow-[0_30px_80px_rgba(14,30,52,0.12)] backdrop-blur">
+          <div className="w-full max-w-xl rounded-[32px] border border-border bg-card-bg/92 dark:bg-card-bg/80 p-6 shadow-[0_30px_80px_rgba(14,30,52,0.12)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.3)] backdrop-blur">
             <div className={`mb-6 flex items-start justify-between gap-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
               <div className={isRtl ? 'text-right' : 'text-left'}>
-                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1a3a5c] text-white shadow-sm ${isRtl ? 'mr-0' : 'ml-0'}`}>
+                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-blue dark:bg-amber text-white dark:text-blue-dark shadow-sm ${isRtl ? 'mr-0' : 'ml-0'}`}>
                   <GraduationCap size={22} />
                 </div>
-                <h2 className="mt-4 text-2xl font-black text-[#1a3a5c] font-cairo">{title}</h2>
-                <p className="mt-2 text-sm text-gray-500 font-cairo">
+                <h2 className="mt-4 text-2xl font-black text-blue dark:text-text-primary font-cairo">{title}</h2>
+                <p className="mt-2 text-sm text-text-secondary font-cairo">
                   {mode === "signin" ? t("auth.signinDesc") : t("auth.signupDesc")}
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-[#faf7f2] p-1 shrink-0">
+              <div className="rounded-2xl bg-cream dark:bg-blue/20 p-1 shrink-0">
                 {(["signin", "signup"] as Mode[]).map((item) => (
                   <button
                     key={item}
@@ -186,8 +186,8 @@ export default function AuthPage() {
                     }}
                     className={`rounded-xl px-4 py-2 text-sm font-bold transition-all ${
                       mode === item
-                        ? "bg-[#1a3a5c] text-white shadow-sm"
-                        : "text-gray-500 hover:text-[#1a3a5c]"
+                        ? "bg-blue dark:bg-amber text-white dark:text-blue-dark shadow-sm"
+                        : "text-text-secondary hover:text-blue dark:hover:text-amber"
                     }`}
                   >
                     {item === "signin" ? t("nav.login") : t("nav.signup")}
@@ -197,12 +197,12 @@ export default function AuthPage() {
             </div>
 
             {success && (
-              <div className={`mb-4 rounded-2xl border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-700 font-cairo ${isRtl ? 'text-right' : 'text-left'}`}>
+              <div className={`mb-4 rounded-2xl border border-green-100 bg-green-50/10 px-4 py-3 text-sm text-green-500 font-cairo ${isRtl ? 'text-right' : 'text-left'}`}>
                 {success}
               </div>
             )}
             {error && (
-              <div className={`mb-4 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600 font-cairo ${isRtl ? 'text-right' : 'text-left'}`}>
+              <div className={`mb-4 rounded-2xl border border-red-100/20 bg-red-50/10 px-4 py-3 text-sm text-red-500 font-cairo ${isRtl ? 'text-right' : 'text-left'}`}>
                 {error}
               </div>
             )}
@@ -211,24 +211,24 @@ export default function AuthPage() {
               {mode === "signup" && (
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className={isRtl ? 'text-right' : 'text-left'}>
-                    <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">{t("auth.name")}</label>
+                    <label className="mb-1.5 block text-xs font-semibold text-text-secondary font-cairo">{t("auth.name")}</label>
                     <input
                       type="text"
                       value={form.name}
                       onChange={(event) => set("name", event.target.value)}
                       placeholder={t("auth.namePlaceholder")}
-                      className={`w-full rounded-2xl border ${validationErrors.name ? 'border-red-300 ring-4 ring-red-50' : 'border-gray-200'} bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none transition-all ${isRtl ? 'text-right' : 'text-left'}`}
+                      className={`w-full rounded-2xl border ${validationErrors.name ? 'border-red-300 ring-4 ring-red-50/10' : 'border-border'} bg-cream dark:bg-blue/10 px-4 py-3 text-sm focus:border-amber focus:outline-none transition-all text-text-primary ${isRtl ? 'text-right' : 'text-left'}`}
                     />
                     {validationErrors.name && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.name}</p>}
                   </div>
                   <div className={isRtl ? 'text-right' : 'text-left'}>
-                    <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">{t("auth.phone")}</label>
+                    <label className="mb-1.5 block text-xs font-semibold text-text-secondary font-cairo">{t("auth.phone")}</label>
                     <input
                       type="tel"
                       value={form.phone}
                       onChange={(event) => set("phone", event.target.value)}
                       placeholder="01xxxxxxxxx"
-                      className={`w-full rounded-2xl border ${validationErrors.phone ? 'border-red-300 ring-4 ring-red-50' : 'border-gray-200'} bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none transition-all ${isRtl ? 'text-right' : 'text-left'}`}
+                      className={`w-full rounded-2xl border ${validationErrors.phone ? 'border-red-300 ring-4 ring-red-50/10' : 'border-border'} bg-cream dark:bg-blue/10 px-4 py-3 text-sm focus:border-amber focus:outline-none transition-all text-text-primary ${isRtl ? 'text-right' : 'text-left'}`}
                     />
                     {validationErrors.phone && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.phone}</p>}
                   </div>
@@ -236,31 +236,31 @@ export default function AuthPage() {
               )}
 
               <div className={isRtl ? 'text-right' : 'text-left'}>
-                <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">{t("auth.email")}</label>
+                <label className="mb-1.5 block text-xs font-semibold text-text-secondary font-cairo">{t("auth.email")}</label>
                 <input
                   type="email"
                   value={form.email}
                   onChange={(event) => set("email", event.target.value)}
                   placeholder="example@email.com"
-                  className={`w-full rounded-2xl border ${validationErrors.email ? 'border-red-300 ring-4 ring-red-50' : 'border-gray-200'} bg-[#faf7f2] px-4 py-3 text-sm focus:border-[#d4a843] focus:outline-none transition-all ${isRtl ? 'text-right' : 'text-left'}`}
+                  className={`w-full rounded-2xl border ${validationErrors.email ? 'border-red-300 ring-4 ring-red-50/10' : 'border-border'} bg-cream dark:bg-blue/10 px-4 py-3 text-sm focus:border-amber focus:outline-none transition-all text-text-primary ${isRtl ? 'text-right' : 'text-left'}`}
                 />
                 {validationErrors.email && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.email}</p>}
               </div>
 
               <div className={isRtl ? 'text-right' : 'text-left'}>
-                <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">{t("auth.password")}</label>
+                <label className="mb-1.5 block text-xs font-semibold text-text-secondary font-cairo">{t("auth.password")}</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
                     value={form.password}
                     onChange={(event) => set("password", event.target.value)}
                     placeholder={mode === "signup" ? t("auth.passwordHint") : "••••••••"}
-                    className={`w-full rounded-2xl border ${validationErrors.password ? 'border-red-300 ring-4 ring-red-50' : 'border-gray-200'} bg-[#faf7f2] px-4 py-3 ${isRtl ? 'pr-4 pl-11 text-right' : 'pl-4 pr-11 text-left'} text-sm focus:border-[#d4a843] focus:outline-none transition-all`}
+                    className={`w-full rounded-2xl border ${validationErrors.password ? 'border-red-300 ring-4 ring-red-50/10' : 'border-border'} bg-cream dark:bg-blue/10 px-4 py-3 ${isRtl ? 'pr-4 pl-11 text-right' : 'pl-4 pr-11 text-left'} text-sm focus:border-amber focus:outline-none transition-all text-text-primary`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((current) => !current)}
-                    className={`absolute ${isRtl ? 'left-3' : 'right-3'} top-1/2 -translate-y-1/2 text-gray-400`}
+                    className={`absolute ${isRtl ? 'left-3' : 'right-3'} top-1/2 -translate-y-1/2 text-text-secondary`}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -271,7 +271,7 @@ export default function AuthPage() {
               {mode === "signup" && (
                 <div className="grid gap-4 sm:grid-cols-[1fr,0.8fr]">
                   <div className={isRtl ? 'text-right' : 'text-left'}>
-                    <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">{t("auth.track")}</label>
+                    <label className="mb-1.5 block text-xs font-semibold text-text-secondary font-cairo">{t("auth.track")}</label>
                     <div className="grid grid-cols-3 gap-2">
                       {tracks.map((track) => (
                         <button
@@ -280,8 +280,8 @@ export default function AuthPage() {
                           onClick={() => set("track", form.track === track.id ? "" : track.id)}
                           className={`rounded-2xl border px-1 py-3 text-[10px] font-bold transition-all ${
                             form.track === track.id
-                              ? "border-[#d4a843] bg-[#fff7e7] text-[#1a3a5c]"
-                              : validationErrors.track ? "border-red-200 bg-red-50/30 text-gray-500" : "border-gray-200 bg-[#faf7f2] text-gray-500 hover:border-[#d4a843]/50"
+                              ? "border-amber bg-amber/10 text-blue dark:text-amber"
+                              : validationErrors.track ? "border-red-200 bg-red-50/10 text-text-secondary" : "border-border bg-cream dark:bg-blue/10 text-text-secondary hover:border-amber/50"
                           }`}
                         >
                           {isAr ? track.labelAr : track.labelEn}
@@ -291,14 +291,14 @@ export default function AuthPage() {
                     {validationErrors.track && <p className="mt-1 text-[10px] text-red-500 font-bold">{validationErrors.track}</p>}
                   </div>
                   <div className={isRtl ? 'text-right' : 'text-left'}>
-                    <label className="mb-1.5 block text-xs font-semibold text-gray-600 font-cairo">{t("auth.score")}</label>
-                    <div className="rounded-[24px] border border-gray-200 bg-[#faf7f2] p-3">
-                      <div className={`flex items-end justify-between gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                    <label className="mb-1.5 block text-xs font-semibold text-text-secondary font-cairo">{t("auth.score")}</label>
+                    <div className="rounded-[24px] border border-border bg-cream dark:bg-blue/10 p-3">
+                      <div className={`flex items-end justify-between gap-3 ${isRtl ? 'flex-row' : 'flex-row'}`}>
                         <div className={isRtl ? 'text-right' : 'text-left'}>
-                          <p className="text-[10px] text-gray-400">Academic score</p>
-                          <p className="text-2xl font-black text-[#1a3a5c]">{form.score || "—"}</p>
+                          <p className="text-[10px] text-text-secondary">Academic score</p>
+                          <p className="text-2xl font-black text-blue dark:text-amber">{form.score || "—"}</p>
                         </div>
-                        <span className="text-xs text-[#d4a843] font-semibold">%</span>
+                        <span className="text-xs text-amber font-semibold">%</span>
                       </div>
                       <input
                         type="range"
@@ -307,7 +307,7 @@ export default function AuthPage() {
                         step="0.5"
                         value={form.score || "70"}
                         onChange={(event) => set("score", event.target.value)}
-                        className="mt-3 w-full accent-[#d4a843]"
+                        className="mt-3 w-full accent-amber"
                       />
                     </div>
                   </div>
@@ -317,14 +317,14 @@ export default function AuthPage() {
               <button
                 onClick={mode === "signin" ? handleSignIn : handleSignUp}
                 disabled={loading}
-                className={`mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#1a3a5c] px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#2a5a8c] disabled:opacity-50 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+                className={`mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue dark:bg-amber px-5 py-3.5 text-sm font-bold text-white dark:text-blue-dark transition-colors hover:bg-blue-light dark:hover:bg-amber-dark disabled:opacity-50 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
               >
                 {mode === "signin" ? <LogIn size={16} /> : <UserPlus size={16} />}
                 {loading ? t("common.loading") : mode === "signin" ? t("auth.signinBtn") : t("auth.signupBtn")}
               </button>
             </div>
 
-            <div className={`mt-6 rounded-2xl bg-[#faf7f2] px-4 py-3 text-xs text-gray-500 font-cairo ${isRtl ? 'text-right' : 'text-left'}`}>
+            <div className={`mt-6 rounded-2xl bg-cream dark:bg-blue/10 px-4 py-3 text-xs text-text-secondary font-cairo ${isRtl ? 'text-right' : 'text-left'}`}>
               {mode === "signin" ? t("auth.switchSignin") : t("auth.switchSignup")}
             </div>
           </div>

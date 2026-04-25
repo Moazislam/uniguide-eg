@@ -31,9 +31,9 @@ export default function UniversityCard({ university, recommendation }: Props) {
   return (
     <Link
       href={`/universities/${university.slug}`}
-      className="group block bg-white dark:bg-[#111b2d] rounded-3xl border border-gray-100 dark:border-slate-800 hover:border-[#d4a843]/40 dark:hover:border-[#d4a843]/40 hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
+      className="group block bg-card-bg dark:bg-card-bg rounded-3xl border border-border hover:border-amber/40 hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
     >
-      <div className="h-32 bg-[#1a3a5c] relative overflow-hidden">
+      <div className="h-32 bg-blue relative overflow-hidden">
         {university.cover_url ? (
           <>
             <img
@@ -41,17 +41,17 @@ export default function UniversityCard({ university, recommendation }: Props) {
               alt={isAr ? university.name_ar : university.name_en}
               className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a3a5c] dark:from-[#0a1120] via-transparent to-transparent opacity-60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-blue dark:from-blue-dark via-transparent to-transparent opacity-60" />
           </>
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#1a3a5c] to-[#2a5a8c]" />
+          <div className="w-full h-full bg-gradient-to-br from-blue to-blue-light" />
         )}
         
-        <div className={`absolute -bottom-6 ${isRtl ? 'right-6' : 'left-6'} w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 shadow-xl border border-gray-100 dark:border-slate-800 flex items-center justify-center overflow-hidden z-10 group-hover:scale-105 transition-transform duration-300`}>
+        <div className={`absolute -bottom-6 ${isRtl ? 'right-6' : 'left-6'} w-16 h-16 rounded-2xl bg-card-bg shadow-xl border border-border flex items-center justify-center overflow-hidden z-10 group-hover:scale-105 transition-transform duration-300`}>
           {university.logo_url ? (
             <img src={university.logo_url} alt={isAr ? university.name_ar : university.name_en} className="w-12 h-12 object-contain" />
           ) : (
-            <GraduationCap size={28} className="text-[#1a3a5c] dark:text-[#d4a843]" />
+            <GraduationCap size={28} className="text-blue dark:text-amber" />
           )}
         </div>
         
@@ -60,7 +60,7 @@ export default function UniversityCard({ university, recommendation }: Props) {
             {isAr ? typeLabels[university.type]?.ar : typeLabels[university.type]?.en}
           </span>
           {recommendation && (
-            <span className="text-[10px] font-black px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 dark:border-white/10 shadow-lg font-cairo bg-white/90 dark:bg-slate-800/90 text-[#1a3a5c] dark:text-[#d4a843]">
+            <span className="text-[10px] font-black px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 dark:border-white/10 shadow-lg font-cairo bg-white/90 dark:bg-card-bg/90 text-blue dark:text-amber">
               {recommendation.overallScore}% {isAr ? "توافق" : "Match"}
             </span>
           )}
@@ -68,37 +68,37 @@ export default function UniversityCard({ university, recommendation }: Props) {
       </div>
 
       <div className={`p-6 ${isRtl ? 'pt-10' : 'pt-10 text-left'}`}>
-        <h3 className="font-bold text-[#1a3a5c] dark:text-white text-base leading-snug font-cairo group-hover:text-[#d4a843] transition-colors">
+        <h3 className="font-bold text-blue dark:text-text-primary text-base leading-snug font-cairo group-hover:text-amber transition-colors">
           {isAr ? university.name_ar : university.name_en}
         </h3>
-        <p className="text-xs text-gray-500 dark:text-gray-400 font-cairo mt-0.5">{isAr ? university.name_en : university.name_ar}</p>
+        <p className="text-xs text-text-secondary font-cairo mt-0.5">{isAr ? university.name_en : university.name_ar}</p>
 
-        <div className="flex items-center gap-1 mt-2 text-gray-500 dark:text-gray-400">
+        <div className="flex items-center gap-1 mt-2 text-text-secondary">
           <MapPin size={12} />
           <span className="text-xs font-cairo">{isAr ? university.location_ar : university.location_en}</span>
         </div>
 
-        <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100 dark:border-slate-800">
+        <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border">
           {university.faculties_count && (
             <div className="text-center">
-              <p className="text-xs font-bold text-[#1a3a5c] dark:text-[#d4a843] font-cairo">{university.faculties_count}</p>
-              <p className="text-[10px] text-gray-400 font-cairo">{isAr ? "كلية" : "Faculties"}</p>
+              <p className="text-xs font-bold text-blue dark:text-amber font-cairo">{university.faculties_count}</p>
+              <p className="text-[10px] text-text-secondary font-cairo">{isAr ? "كلية" : "Faculties"}</p>
             </div>
           )}
           {university.tuition_min != null && (
             <div className="text-center">
-              <p className="text-xs font-bold text-[#d4a843] font-cairo">
+              <p className="text-xs font-bold text-amber font-cairo">
                 {university.tuition_min === 0
                   ? (isAr ? "مجاني" : "Free")
                   : `${university.tuition_min.toLocaleString()} ${isAr ? "ج.م" : "EGP"}`}
               </p>
-              <p className="text-[10px] text-gray-400 font-cairo">{isAr ? "بداية من" : "Starting from"}</p>
+              <p className="text-[10px] text-text-secondary font-cairo">{isAr ? "بداية من" : "Starting from"}</p>
             </div>
           )}
           {university.ranking_egypt && (
             <div className={isRtl ? "mr-auto" : "ml-auto"}>
-              <span className="flex items-center gap-1 text-[10px] text-gray-400 dark:text-gray-500 font-cairo">
-                <BadgeCheck size={11} className="text-[#d4a843]" />
+              <span className="flex items-center gap-1 text-[10px] text-text-secondary font-cairo">
+                <BadgeCheck size={11} className="text-amber" />
                 #{university.ranking_egypt} {isAr ? "في مصر" : "in Egypt"}
               </span>
             </div>
@@ -112,23 +112,23 @@ export default function UniversityCard({ university, recommendation }: Props) {
 
         {recommendation && (
           <div className="mt-4 space-y-3">
-            <div className="rounded-xl bg-[#faf7f2] dark:bg-slate-900/50 p-3 border border-gray-100 dark:border-slate-800">
-              <p className="text-[11px] font-semibold text-[#1a3a5c] dark:text-[#d4a843] font-cairo mb-2">
+            <div className="rounded-xl bg-cream dark:bg-blue-dark/50 p-3 border border-border">
+              <p className="text-[11px] font-semibold text-blue dark:text-amber font-cairo mb-2">
                 {isAr ? "أفضل التخصصات المتوافقة" : "Top matching majors"} ({recommendation.matchedMajorsCount})
               </p>
               <div className="space-y-2">
                 {recommendation.topMajors.map((majorMatch) => (
                   <div key={majorMatch.universityMajor.id} className="flex items-start justify-between gap-3">
                     <div className={isRtl ? "" : "text-left"}>
-                      <p className="text-sm font-bold text-[#1a3a5c] dark:text-white font-cairo">{isAr ? majorMatch.major.name_ar : majorMatch.major.name_en}</p>
-                      <p className="text-[11px] text-gray-400 font-cairo">{isAr ? majorMatch.major.name_en : majorMatch.major.name_ar}</p>
+                      <p className="text-sm font-bold text-blue dark:text-text-primary font-cairo">{isAr ? majorMatch.major.name_ar : majorMatch.major.name_en}</p>
+                      <p className="text-[11px] text-text-secondary font-cairo">{isAr ? majorMatch.major.name_en : majorMatch.major.name_ar}</p>
                       {majorMatch.universityMajor.min_score != null && (
-                        <p className="text-[11px] text-gray-500 dark:text-gray-400 font-cairo">
+                        <p className="text-[11px] text-text-secondary font-cairo">
                           {isAr ? "تنسيق" : "Cutoff"}: {majorMatch.universityMajor.min_score}%
                         </p>
                       )}
                     </div>
-                    <span className="text-sm font-black text-[#d4a843] font-cairo">{majorMatch.matchScore}%</span>
+                    <span className="text-sm font-black text-amber font-cairo">{majorMatch.matchScore}%</span>
                   </div>
                 ))}
               </div>

@@ -154,7 +154,7 @@ export default function OnboardingPage() {
   const scoreValue = Number.parseFloat(form.score || "70");
   const boundedScore = Number.isFinite(scoreValue) ? Math.max(0, Math.min(100, scoreValue)) : 70;
   const scoreMeterStyle = {
-    background: `conic-gradient(#d4a843) 0deg ${boundedScore * 3.6}deg, rgba(26,58,92,0.1) ${boundedScore * 3.6}deg 360deg)`,
+    background: `conic-gradient(var(--amber)) 0deg ${boundedScore * 3.6}deg, var(--blue-light) ${boundedScore * 3.6}deg 360deg)`,
   };
 
   const next = () => setStep(STEPS[stepIndex + 1]);
@@ -211,11 +211,11 @@ export default function OnboardingPage() {
 
   if (loadingProfile) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#faf7f2]">
+      <div className="min-h-screen flex flex-col bg-cream transition-colors duration-300">
         <Navbar />
         <main className="flex-1 flex items-center justify-center px-4 py-12">
-          <div className="w-full max-w-2xl bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-            <div className="h-40 bg-gray-50 rounded-2xl animate-pulse" />
+          <div className="w-full max-w-2xl bg-card-bg rounded-2xl border border-border shadow-sm p-8">
+            <div className="h-40 bg-card-bg/50 rounded-2xl animate-pulse" />
           </div>
         </main>
         <Footer />
@@ -224,26 +224,26 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf7f2]">
+    <div className="min-h-screen flex flex-col bg-cream transition-colors duration-300">
       <Navbar />
 
       <main className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-2xl">
           <div className="mb-8">
-            <div className={`flex justify-between text-xs text-gray-400 font-cairo mb-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+            <div className={`flex justify-between text-xs text-text-secondary font-cairo mb-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
               <span>{t("onboard.step")} {stepIndex + 1} {t("onboard.of")} {STEPS.length}</span>
             </div>
-            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div className="h-full bg-[#d4a843] rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+            <div className="h-1.5 bg-blue-light/10 dark:bg-blue/20 rounded-full overflow-hidden">
+              <div className="h-full bg-amber rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
             </div>
           </div>
 
-          <div className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-8 ${isRtl ? 'text-right' : 'text-left'}`}>
+          <div className={`bg-card-bg rounded-2xl border border-border shadow-sm p-8 ${isRtl ? 'text-right' : 'text-left'}`}>
             {step === "track" && (
               <div>
-                <GraduationCap size={32} className={`text-[#d4a843] mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.trackTitle")}</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.trackDesc")}</p>
+                <GraduationCap size={32} className={`text-amber mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
+                <h2 className="text-xl font-black text-blue dark:text-text-primary font-cairo mb-1">{t("onboard.trackTitle")}</h2>
+                <p className="text-sm text-text-secondary font-cairo mb-6">{t("onboard.trackDesc")}</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {tracks.map((track) => (
                     <button
@@ -251,13 +251,13 @@ export default function OnboardingPage() {
                       onClick={() => setForm((current) => ({ ...current, track: track.id }))}
                       className={`p-3 rounded-xl border transition-all font-cairo ${isRtl ? 'text-right' : 'text-left'} ${
                         form.track === track.id
-                          ? "border-[#d4a843] bg-[#d4a843]/5"
-                          : "border-gray-100 hover:border-[#d4a843]/40"
+                          ? "border-amber bg-amber/5"
+                          : "border-border bg-card-bg/50 hover:border-amber/40"
                       }`}
                     >
-                      <span className="text-xs font-semibold text-[#d4a843]">{track.emoji}</span>
-                      <p className="text-sm font-semibold text-[#1a3a5c] mt-1">{isAr ? track.label_ar : track.label_en}</p>
-                      <p className="text-xs text-gray-400">{isAr ? track.label_en : track.label_ar}</p>
+                      <span className="text-xs font-semibold text-amber">{track.emoji}</span>
+                      <p className="text-sm font-semibold text-blue dark:text-text-primary mt-1">{isAr ? track.label_ar : track.label_en}</p>
+                      <p className="text-xs text-text-secondary">{isAr ? track.label_en : track.label_ar}</p>
                     </button>
                   ))}
                 </div>
@@ -267,8 +267,8 @@ export default function OnboardingPage() {
             {step === "score" && (
               <div>
                 <span className="text-3xl mb-4 block">Score</span>
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.scoreTitle")}</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.scoreDesc")}</p>
+                <h2 className="text-xl font-black text-blue dark:text-text-primary font-cairo mb-1">{t("onboard.scoreTitle")}</h2>
+                <p className="text-sm text-text-secondary font-cairo mb-6">{t("onboard.scoreDesc")}</p>
 
                 <div className="grid gap-6 md:grid-cols-[0.9fr,1.1fr] md:items-center">
                   <div className="flex justify-center">
@@ -277,21 +277,21 @@ export default function OnboardingPage() {
                         className="h-44 w-44 rounded-full transition-all duration-700 ease-out"
                         style={scoreMeterStyle}
                       />
-                      <div className="absolute inset-[10px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner">
-                        <span className="text-xs uppercase tracking-[0.25em] text-gray-400">Score</span>
-                        <span className="text-4xl font-black text-[#1a3a5c]">{form.score || "70"}</span>
-                        <span className="text-xs text-[#d4a843] font-semibold">Percent</span>
+                      <div className="absolute inset-[10px] flex flex-col items-center justify-center rounded-full bg-card-bg shadow-inner">
+                        <span className="text-xs uppercase tracking-[0.25em] text-text-secondary">Score</span>
+                        <span className="text-4xl font-black text-blue dark:text-text-primary">{form.score || "70"}</span>
+                        <span className="text-xs text-amber font-semibold">Percent</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="rounded-[28px] border border-gray-100 bg-[#faf7f2] p-5">
+                  <div className="rounded-[28px] border border-border bg-cream dark:bg-blue/10 p-5">
                     <div className={`flex items-center justify-between mb-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                       <div className={isRtl ? 'text-right' : 'text-left'}>
-                        <p className="text-sm font-bold text-[#1a3a5c] font-cairo">Academic score meter</p>
-                        <p className="text-xs text-gray-400 font-cairo">Adjust it manually or drag the slider.</p>
+                        <p className="text-sm font-bold text-blue dark:text-text-primary font-cairo">Academic score meter</p>
+                        <p className="text-xs text-text-secondary font-cairo">Adjust it manually or drag the slider.</p>
                       </div>
-                      <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#1a3a5c] shadow-sm">
+                      <span className="rounded-full bg-card-bg px-3 py-1 text-xs font-semibold text-blue dark:text-amber shadow-sm">
                         {boundedScore >= 90 ? "Top range" : boundedScore >= 80 ? "Strong range" : boundedScore >= 70 ? "Competitive" : "Building"}
                       </span>
                     </div>
@@ -303,7 +303,7 @@ export default function OnboardingPage() {
                       step="0.5"
                       value={form.score || "70"}
                       onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
-                      className="mt-4 w-full accent-[#d4a843]"
+                      className="mt-4 w-full accent-amber"
                     />
 
                     <div className={`mt-4 flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
@@ -315,23 +315,23 @@ export default function OnboardingPage() {
                         value={form.score}
                         onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
                         placeholder="Example: 85.5"
-                        className={`w-32 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-center text-lg font-black text-[#1a3a5c] focus:border-[#d4a843] focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
+                        className={`w-32 rounded-2xl border border-border bg-card-bg px-4 py-3 text-center text-lg font-black text-blue dark:text-text-primary focus:border-amber focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
                       />
-                      <span className="text-sm text-gray-400 font-cairo">%</span>
+                      <span className="text-sm text-text-secondary font-cairo">%</span>
                     </div>
 
                     <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                      <div className="rounded-2xl bg-white p-3">
-                        <p className="text-[11px] text-gray-400">Safer</p>
-                        <p className="text-sm font-bold text-[#1a3a5c]">&lt; 75</p>
+                      <div className="rounded-2xl bg-card-bg p-3">
+                        <p className="text-[11px] text-text-secondary">Safer</p>
+                        <p className="text-sm font-bold text-blue dark:text-text-primary">&lt; 75</p>
                       </div>
-                      <div className="rounded-2xl bg-white p-3">
-                        <p className="text-[11px] text-gray-400">Competitive</p>
-                        <p className="text-sm font-bold text-[#1a3a5c]">75 - 89</p>
+                      <div className="rounded-2xl bg-card-bg p-3">
+                        <p className="text-[11px] text-text-secondary">Competitive</p>
+                        <p className="text-sm font-bold text-blue dark:text-text-primary">75 - 89</p>
                       </div>
-                      <div className="rounded-2xl bg-white p-3">
-                        <p className="text-[11px] text-gray-400">Stretch+</p>
-                        <p className="text-sm font-bold text-[#1a3a5c]">90+</p>
+                      <div className="rounded-2xl bg-card-bg p-3">
+                        <p className="text-[11px] text-text-secondary">Stretch+</p>
+                        <p className="text-sm font-bold text-blue dark:text-text-primary">90+</p>
                       </div>
                     </div>
                   </div>
@@ -341,9 +341,9 @@ export default function OnboardingPage() {
 
             {step === "interests" && (
               <div>
-                <Sparkles size={32} className={`text-[#d4a843] mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.interestsTitle")}</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.interestsDesc")}</p>
+                <Sparkles size={32} className={`text-amber mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
+                <h2 className="text-xl font-black text-blue dark:text-text-primary font-cairo mb-1">{t("onboard.interestsTitle")}</h2>
+                <p className="text-sm text-text-secondary font-cairo mb-6">{t("onboard.interestsDesc")}</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {interests.map((interest) => (
                     <button
@@ -351,11 +351,11 @@ export default function OnboardingPage() {
                       onClick={() => toggleInterest(interest.id)}
                       className={`p-3 rounded-xl border transition-all font-cairo ${isRtl ? 'text-right' : 'text-left'} ${
                         form.interests.includes(interest.id)
-                          ? "border-[#d4a843] bg-[#d4a843]/5"
-                          : "border-gray-100 hover:border-[#d4a843]/40"
+                          ? "border-amber bg-amber/5"
+                          : "border-border bg-card-bg/50 hover:border-amber/40"
                       }`}
                     >
-                      <span className="text-sm font-semibold text-[#1a3a5c]">{isAr ? interest.label_ar : interest.label_en}</span>
+                      <span className="text-sm font-semibold text-blue dark:text-text-primary">{isAr ? interest.label_ar : interest.label_en}</span>
                     </button>
                   ))}
                 </div>
@@ -365,8 +365,8 @@ export default function OnboardingPage() {
             {step === "budget" && (
               <div>
                 <span className="text-3xl mb-4 block">Budget</span>
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.budgetTitle")}</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.budgetDesc")}</p>
+                <h2 className="text-xl font-black text-blue dark:text-text-primary font-cairo mb-1">{t("onboard.budgetTitle")}</h2>
+                <p className="text-sm text-text-secondary font-cairo mb-6">{t("onboard.budgetDesc")}</p>
                 <div className="space-y-3">
                   {budgets.map((budget) => (
                     <button
@@ -374,12 +374,12 @@ export default function OnboardingPage() {
                       onClick={() => setForm((current) => ({ ...current, budget: budget.val }))}
                       className={`w-full p-4 rounded-xl border transition-all font-cairo flex justify-between items-center ${isRtl ? 'flex-row' : 'flex-row-reverse'} ${
                         form.budget === budget.val
-                          ? "border-[#d4a843] bg-[#d4a843]/5"
-                          : "border-gray-100 hover:border-[#d4a843]/40"
+                          ? "border-amber bg-amber/5"
+                          : "border-border bg-card-bg/50 hover:border-amber/40"
                       }`}
                     >
-                      <span className="font-bold text-[#1a3a5c] text-sm">{isAr ? budget.label_ar : budget.label_en}</span>
-                      <span className="text-xs text-gray-400">{isAr ? budget.label_en : budget.label_ar}</span>
+                      <span className="font-bold text-blue dark:text-text-primary text-sm">{isAr ? budget.label_ar : budget.label_en}</span>
+                      <span className="text-xs text-text-secondary">{isAr ? budget.label_en : budget.label_ar}</span>
                     </button>
                   ))}
                 </div>
@@ -388,9 +388,9 @@ export default function OnboardingPage() {
 
             {step === "location" && (
               <div>
-                <MapPin size={32} className={`text-[#d4a843] mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.locationTitle")}</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.locationDesc")}</p>
+                <MapPin size={32} className={`text-amber mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
+                <h2 className="text-xl font-black text-blue dark:text-text-primary font-cairo mb-1">{t("onboard.locationTitle")}</h2>
+                <p className="text-sm text-text-secondary font-cairo mb-6">{t("onboard.locationDesc")}</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
                   {locations.map((location) => (
                     <button
@@ -398,11 +398,11 @@ export default function OnboardingPage() {
                       onClick={() => setForm((current) => ({ ...current, preferredLocation: location.id }))}
                       className={`p-3 rounded-xl border transition-all font-cairo ${isRtl ? 'text-right' : 'text-left'} ${
                         form.preferredLocation === location.id
-                          ? "border-[#d4a843] bg-[#d4a843]/5"
-                          : "border-gray-100 hover:border-[#d4a843]/40"
+                          ? "border-amber bg-amber/5"
+                          : "border-border bg-card-bg/50 hover:border-amber/40"
                       }`}
                     >
-                      <span className="text-sm font-semibold text-[#1a3a5c]">{isAr ? location.label_ar : location.label_en}</span>
+                      <span className="text-sm font-semibold text-blue dark:text-text-primary">{isAr ? location.label_ar : location.label_en}</span>
                     </button>
                   ))}
                 </div>
@@ -414,12 +414,12 @@ export default function OnboardingPage() {
                       onClick={() => setForm((current) => ({ ...current, mobilityPreference: option.id }))}
                       className={`w-full p-3 rounded-xl border transition-all font-cairo ${isRtl ? 'text-right' : 'text-left'} ${
                         form.mobilityPreference === option.id
-                          ? "border-[#d4a843] bg-[#d4a843]/5"
-                          : "border-gray-100 hover:border-[#d4a843]/40"
+                          ? "border-amber bg-amber/5"
+                          : "border-border bg-card-bg/50 hover:border-amber/40"
                       }`}
                     >
-                      <p className="text-sm font-semibold text-[#1a3a5c]">{isAr ? option.label_ar : option.label_en}</p>
-                      <p className="text-xs text-gray-400">{isAr ? option.label_en : option.label_ar}</p>
+                      <p className="text-sm font-semibold text-blue dark:text-text-primary">{isAr ? option.label_ar : option.label_en}</p>
+                      <p className="text-xs text-text-secondary">{isAr ? option.label_en : option.label_ar}</p>
                     </button>
                   ))}
                 </div>
@@ -428,13 +428,13 @@ export default function OnboardingPage() {
 
             {step === "preferences" && (
               <div>
-                <Sparkles size={32} className={`text-[#d4a843] mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.prefsTitle")}</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.prefsDesc")}</p>
+                <Sparkles size={32} className={`text-amber mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
+                <h2 className="text-xl font-black text-blue dark:text-text-primary font-cairo mb-1">{t("onboard.prefsTitle")}</h2>
+                <p className="text-sm text-text-secondary font-cairo mb-6">{t("onboard.prefsDesc")}</p>
 
                 <div className="space-y-5">
                   <div>
-                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">{t("details.language")}</p>
+                    <p className="text-sm font-semibold text-blue dark:text-text-primary font-cairo mb-2">{t("details.language")}</p>
                     <div className="grid grid-cols-3 gap-2">
                       {languageOptions.map((option) => (
                         <button
@@ -442,19 +442,19 @@ export default function OnboardingPage() {
                           onClick={() => setForm((current) => ({ ...current, preferredLanguage: option.id }))}
                           className={`p-3 rounded-xl border text-center transition-all font-cairo ${
                             form.preferredLanguage === option.id
-                              ? "border-[#d4a843] bg-[#d4a843]/5"
-                              : "border-gray-100 hover:border-[#d4a843]/40"
+                              ? "border-amber bg-amber/5"
+                              : "border-border bg-card-bg/50 hover:border-amber/40"
                           }`}
                         >
-                          <p className="text-sm font-semibold text-[#1a3a5c]">{isAr ? option.label_ar : option.label_en}</p>
-                          <p className="text-[11px] text-gray-400">{isAr ? option.label_en : option.label_ar}</p>
+                          <p className="text-sm font-semibold text-blue dark:text-text-primary">{isAr ? option.label_ar : option.label_en}</p>
+                          <p className="text-[11px] text-text-secondary">{isAr ? option.label_en : option.label_ar}</p>
                         </button>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">{isAr ? "نوع الجامعة" : "University Type"}</p>
+                    <p className="text-sm font-semibold text-blue dark:text-text-primary font-cairo mb-2">{isAr ? "نوع الجامعة" : "University Type"}</p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                       {typeOptions.map((option) => (
                         <button
@@ -462,19 +462,19 @@ export default function OnboardingPage() {
                           onClick={() => setForm((current) => ({ ...current, preferredType: option.id }))}
                           className={`p-3 rounded-xl border text-center transition-all font-cairo ${
                             form.preferredType === option.id
-                              ? "border-[#d4a843] bg-[#d4a843]/5"
-                              : "border-gray-100 hover:border-[#d4a843]/40"
+                              ? "border-amber bg-amber/5"
+                              : "border-border bg-card-bg/50 hover:border-amber/40"
                           }`}
                         >
-                          <p className="text-sm font-semibold text-[#1a3a5c]">{isAr ? option.label_ar : option.label_en}</p>
-                          <p className="text-[11px] text-gray-400">{isAr ? option.label_en : option.label_ar}</p>
+                          <p className="text-sm font-semibold text-blue dark:text-text-primary">{isAr ? option.label_ar : option.label_en}</p>
+                          <p className="text-[11px] text-text-secondary">{isAr ? option.label_en : option.label_ar}</p>
                         </button>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">{isAr ? "النظام التعليمي" : "Educational System"}</p>
+                    <p className="text-sm font-semibold text-blue dark:text-text-primary font-cairo mb-2">{isAr ? "النظام التعليمي" : "Educational System"}</p>
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                       {systemOptions.map((option) => (
                         <button
@@ -482,12 +482,12 @@ export default function OnboardingPage() {
                           onClick={() => setForm((current) => ({ ...current, preferredSystem: option.id }))}
                           className={`p-3 rounded-xl border text-center transition-all font-cairo ${
                             form.preferredSystem === option.id
-                              ? "border-[#d4a843] bg-[#d4a843]/5"
-                              : "border-gray-100 hover:border-[#d4a843]/40"
+                              ? "border-amber bg-amber/5"
+                              : "border-border bg-card-bg/50 hover:border-amber/40"
                           }`}
                         >
-                          <p className="text-sm font-semibold text-[#1a3a5c]">{isAr ? option.label_ar : option.label_en}</p>
-                          <p className="text-[11px] text-gray-400">{isAr ? option.label_en : option.label_ar}</p>
+                          <p className="text-sm font-semibold text-blue dark:text-text-primary">{isAr ? option.label_ar : option.label_en}</p>
+                          <p className="text-[11px] text-text-secondary">{isAr ? option.label_en : option.label_ar}</p>
                         </button>
                       ))}
                     </div>
@@ -498,21 +498,21 @@ export default function OnboardingPage() {
 
             {step === "result" && (
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[#d4a843]/10 flex items-center justify-center mx-auto mb-4">
-                  <Sparkles size={32} className="text-[#d4a843]" />
+                <div className="w-16 h-16 rounded-full bg-amber/10 flex items-center justify-center mx-auto mb-4">
+                  <Sparkles size={32} className="text-amber" />
                 </div>
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-2">{t("onboard.resultTitle")}</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">
+                <h2 className="text-xl font-black text-blue dark:text-text-primary font-cairo mb-2">{t("onboard.resultTitle")}</h2>
+                <p className="text-sm text-text-secondary font-cairo mb-6">
                   {t("onboard.resultDesc")}
                 </p>
-                <div className={`bg-gray-50 rounded-xl p-4 mb-6 space-y-2 ${isRtl ? 'text-right' : 'text-left'}`}>
-                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "النظام الدراسي" : "Track"}: <strong>{isAr ? tracks.find((track) => track.id === form.track)?.label_ar : tracks.find((track) => track.id === form.track)?.label_en}</strong></p>
-                  {form.score && <p className="text-xs text-gray-500 font-cairo">{isAr ? "الدرجة" : "Score"}: <strong>{form.score}%</strong></p>}
-                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "الاهتمامات" : "Interests"}: <strong>{form.interests.length} {isAr ? "مجالات" : "fields"}</strong></p>
-                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "الميزانية" : "Budget"}: <strong>{isAr ? budgets.find((budget) => budget.val === form.budget)?.label_ar : budgets.find((budget) => budget.val === form.budget)?.label_en}</strong></p>
-                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "المكان" : "Location"}: <strong>{isAr ? locations.find((location) => location.id === form.preferredLocation)?.label_ar : locations.find((location) => location.id === form.preferredLocation)?.label_en}</strong></p>
-                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "الحركة" : "Mobility"}: <strong>{isAr ? mobilityOptions.find((option) => option.id === form.mobilityPreference)?.label_ar : mobilityOptions.find((option) => option.id === form.mobilityPreference)?.label_en}</strong></p>
-                  {form.preferredLanguage && <p className="text-xs text-gray-500 font-cairo">{isAr ? "لغة الدراسة" : "Language"}: <strong>{isAr ? languageOptions.find((option) => option.id === form.preferredLanguage)?.label_ar : languageOptions.find((option) => option.id === form.preferredLanguage)?.label_en}</strong></p>}
+                <div className={`bg-cream dark:bg-blue/10 rounded-xl p-4 mb-6 space-y-2 ${isRtl ? 'text-right' : 'text-left'}`}>
+                  <p className="text-xs text-text-secondary font-cairo">{isAr ? "النظام الدراسي" : "Track"}: <strong className="text-blue dark:text-text-primary">{isAr ? tracks.find((track) => track.id === form.track)?.label_ar : tracks.find((track) => track.id === form.track)?.label_en}</strong></p>
+                  {form.score && <p className="text-xs text-text-secondary font-cairo">{isAr ? "الدرجة" : "Score"}: <strong className="text-blue dark:text-text-primary">{form.score}%</strong></p>}
+                  <p className="text-xs text-text-secondary font-cairo">{isAr ? "الاهتمامات" : "Interests"}: <strong className="text-blue dark:text-text-primary">{form.interests.length} {isAr ? "مجالات" : "fields"}</strong></p>
+                  <p className="text-xs text-text-secondary font-cairo">{isAr ? "الميزانية" : "Budget"}: <strong className="text-blue dark:text-text-primary">{isAr ? budgets.find((budget) => budget.val === form.budget)?.label_ar : budgets.find((budget) => budget.val === form.budget)?.label_en}</strong></p>
+                  <p className="text-xs text-text-secondary font-cairo">{isAr ? "المكان" : "Location"}: <strong className="text-blue dark:text-text-primary">{isAr ? locations.find((location) => location.id === form.preferredLocation)?.label_ar : locations.find((location) => location.id === form.preferredLocation)?.label_en}</strong></p>
+                  <p className="text-xs text-text-secondary font-cairo">{isAr ? "الحركة" : "Mobility"}: <strong className="text-blue dark:text-text-primary">{isAr ? mobilityOptions.find((option) => option.id === form.mobilityPreference)?.label_ar : mobilityOptions.find((option) => option.id === form.mobilityPreference)?.label_en}</strong></p>
+                  {form.preferredLanguage && <p className="text-xs text-text-secondary font-cairo">{isAr ? "لغة الدراسة" : "Language"}: <strong className="text-blue dark:text-text-primary">{isAr ? languageOptions.find((option) => option.id === form.preferredLanguage)?.label_ar : languageOptions.find((option) => option.id === form.preferredLanguage)?.label_en}</strong></p>}
                 </div>
                 {statusMessage && (
                   <p className="text-sm text-red-500 font-cairo mb-3">{statusMessage}</p>
@@ -521,7 +521,7 @@ export default function OnboardingPage() {
                   type="button"
                   onClick={handleShowResults}
                   disabled={saving}
-                  className="block w-full bg-[#1a3a5c] text-white font-bold py-3 rounded-xl hover:bg-[#2a5a8c] transition-colors font-cairo disabled:opacity-50"
+                  className="block w-full bg-blue dark:bg-amber text-white dark:text-blue-dark font-bold py-3 rounded-xl hover:bg-blue-light dark:hover:bg-amber-dark transition-colors font-cairo disabled:opacity-50"
                 >
                   {saving ? t("onboard.saving") : `${t("onboard.showResults")} ←`}
                 </button>
@@ -529,11 +529,11 @@ export default function OnboardingPage() {
             )}
 
             {step !== "result" && (
-              <div className={`flex justify-between mt-8 pt-6 border-t border-gray-100 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className={`flex justify-between mt-8 pt-6 border-t border-border ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                 {stepIndex > 0 ? (
                   <button
                     onClick={prev}
-                    className={`flex items-center gap-1 text-sm text-gray-400 hover:text-[#1a3a5c] transition-colors font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+                    className={`flex items-center gap-1 text-sm text-text-secondary hover:text-blue dark:hover:text-amber transition-colors font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
                   >
                     {isRtl ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
                     {t("common.prev")}
@@ -545,7 +545,7 @@ export default function OnboardingPage() {
                 <button
                   onClick={next}
                   disabled={nextDisabled}
-                  className={`flex items-center gap-1 bg-[#d4a843] text-white font-bold px-6 py-2.5 rounded-xl hover:bg-[#b8922a] transition-colors disabled:opacity-40 disabled:cursor-not-allowed font-cairo text-sm ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+                  className={`flex items-center gap-1 bg-amber text-white dark:text-blue-dark font-bold px-6 py-2.5 rounded-xl hover:bg-amber-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed font-cairo text-sm ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
                 >
                   {t("common.next")}
                   {isRtl ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}

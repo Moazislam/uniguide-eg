@@ -53,7 +53,7 @@ export default function UniversitySearchBar() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t("search.placeholder")}
-          className={`w-full ${isAr ? 'pr-9 pl-4' : 'pl-9 pr-4'} py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] focus:ring-2 focus:ring-[#d4a843]/10 bg-white font-cairo transition-all`}
+          className={`w-full ${isAr ? 'pr-9 pl-4' : 'pl-9 pr-4'} py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:border-amber focus:ring-2 focus:ring-amber/10 bg-card-bg text-text-primary font-cairo transition-all placeholder:text-text-secondary/50`}
           aria-label="Search universities"
         />
       </div>
@@ -65,13 +65,13 @@ export default function UniversitySearchBar() {
           setType(e.target.value); 
           updateParams("type", e.target.value); 
         }}
-        className="px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-[#d4a843] focus:ring-2 focus:ring-[#d4a843]/10 bg-white font-cairo text-gray-600 transition-all cursor-pointer"
+        className="px-3 py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:border-amber focus:ring-2 focus:ring-amber/10 bg-card-bg font-cairo text-text-primary transition-all cursor-pointer"
         aria-label="Filter by university type"
       >
-        <option value="">{isAr ? "الكل" : "All Types"}</option>
-        <option value="public">{isAr ? "حكومية" : "Public"}</option>
-        <option value="private">{isAr ? "خاصة" : "Private"}</option>
-        <option value="international">{isAr ? "دولية" : "International"}</option>
+        <option value="" className="bg-card-bg">{isAr ? "الكل" : "All Types"}</option>
+        <option value="public" className="bg-card-bg">{isAr ? "حكومية" : "Public"}</option>
+        <option value="private" className="bg-card-bg">{isAr ? "خاصة" : "Private"}</option>
+        <option value="international" className="bg-card-bg">{isAr ? "دولية" : "International"}</option>
       </select>
     </div>
   );

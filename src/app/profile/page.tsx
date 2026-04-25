@@ -134,12 +134,12 @@ function SelectionCard({
         "rounded-2xl border px-4 py-3 transition-all duration-300 transform active:scale-95",
         isRtl ? "text-right" : "text-left",
         active
-          ? "border-[#d4a843] bg-[#fffaf0] shadow-[0_4px_12px_rgba(212,168,67,0.12)] scale-[1.02]"
-          : "border-gray-100 bg-white hover:border-[#d4a843]/40 hover:bg-[#faf7f2] hover:shadow-sm"
+          ? "border-amber bg-amber/5 shadow-[0_4px_12px_rgba(212,168,67,0.12)] scale-[1.02]"
+          : "border-border bg-card-bg hover:border-amber/40 hover:bg-cream dark:hover:bg-blue/10 hover:shadow-sm"
       )}
     >
-      <p className={classNames("text-sm font-bold font-cairo", active ? "text-[#b8922a]" : "text-[#1a3a5c]")}>{title}</p>
-      {subtitle && <p className="text-[11px] text-gray-400 font-cairo mt-1">{subtitle}</p>}
+      <p className={classNames("text-sm font-bold font-cairo", active ? "text-amber" : "text-blue dark:text-text-primary")}>{title}</p>
+      {subtitle && <p className="text-[11px] text-text-secondary font-cairo mt-1">{subtitle}</p>}
     </button>
   );
 }
@@ -160,8 +160,8 @@ function Chip({
       className={classNames(
         "rounded-full border px-4 py-2 text-sm font-bold font-cairo transition-all duration-300",
         active
-          ? "border-[#d4a843] bg-[#d4a843] text-white shadow-md scale-105"
-          : "border-gray-200 bg-white text-[#1a3a5c] hover:border-[#d4a843]/50 hover:bg-[#faf7f2]"
+          ? "border-amber bg-amber text-white dark:text-blue-dark shadow-md scale-105"
+          : "border-border bg-card-bg text-blue dark:text-text-primary hover:border-amber/50 hover:bg-cream dark:hover:bg-blue/10"
       )}
     >
       {label}
@@ -173,7 +173,7 @@ function SummaryPill({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl bg-white/5 border border-white/10 px-4 py-3 backdrop-blur-sm">
       <p className="text-[10px] uppercase tracking-wider text-white/50 mb-0.5">{label}</p>
-      <p className="text-sm font-black text-[#d4a843] font-cairo truncate">{value || "—"}</p>
+      <p className="text-sm font-black text-amber font-cairo truncate">{value || "—"}</p>
     </div>
   );
 }
@@ -364,30 +364,30 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f6f1e8]">
+    <div className="min-h-screen flex flex-col bg-cream transition-colors duration-300">
       <Navbar />
       
       {/* Dynamic Header */}
-      <div className="bg-[#1a3a5c] text-white pt-10 pb-20 relative overflow-hidden">
+      <div className="bg-blue dark:bg-blue-dark text-white pt-10 pb-20 relative overflow-hidden">
          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[150%] bg-[#d4a843]/10 rotate-[15deg] blur-3xl" />
-            <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[120%] bg-blue-400/5 rotate-[-10deg] blur-3xl" />
+            <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[150%] bg-amber/10 rotate-[15deg] blur-3xl" />
+            <div className="absolute bottom-[-20%] left-[-10%] w-[40%] h-[120%] bg-blue-light/5 rotate-[-10deg] blur-3xl" />
          </div>
 
          <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className={`flex flex-col md:flex-row items-center justify-between gap-6 ${isRtl ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                <div className={`flex items-center gap-5 ${isRtl ? 'flex-row' : 'flex-row-reverse text-left'}`}>
                   <div className="relative">
-                    <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border border-white/20 flex items-center justify-center shadow-xl backdrop-blur-md">
-                      <User size={36} className="text-[#d4a843]" />
+                    <div className="w-20 h-20 rounded-3xl bg-white/10 dark:bg-card-bg/20 border border-white/20 flex items-center justify-center shadow-xl backdrop-blur-md">
+                      <User size={36} className="text-amber" />
                     </div>
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-green-500 border-2 border-[#1a3a5c] flex items-center justify-center shadow-lg">
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-green-500 border-2 border-blue dark:border-blue-dark flex items-center justify-center shadow-lg">
                        <CheckCircle2 size={12} className="text-white" />
                     </div>
                   </div>
                   <div>
                     <h1 className="text-2xl font-black font-cairo tracking-tight">{t("profile.title")}</h1>
-                    <p className="text-blue-200/60 font-cairo text-sm">{user?.email ?? ""}</p>
+                    <p className="text-blue-100/60 font-cairo text-sm">{user?.email ?? ""}</p>
                   </div>
                </div>
                
@@ -409,22 +409,22 @@ export default function ProfilePage() {
           
           <div className="space-y-8">
             {/* Desktop Tabs */}
-            <div className={`flex gap-4 p-1.5 bg-white/60 backdrop-blur rounded-[24px] border border-white shadow-sm w-fit ${isRtl ? 'ml-auto' : 'mr-auto'}`}>
+            <div className={`flex gap-4 p-1.5 bg-card-bg/60 dark:bg-card-bg/80 backdrop-blur rounded-[24px] border border-border shadow-sm w-fit ${isRtl ? 'ml-auto' : 'mr-auto'}`}>
                <button 
                  onClick={() => setActiveTab("matching")}
-                 className={`flex items-center gap-2 px-6 py-2.5 rounded-[20px] text-sm font-black font-cairo transition-all duration-300 ${activeTab === "matching" ? 'bg-[#1a3a5c] text-white shadow-lg' : 'text-gray-500 hover:text-[#1a3a5c]'}`}
+                 className={`flex items-center gap-2 px-6 py-2.5 rounded-[20px] text-sm font-black font-cairo transition-all duration-300 ${activeTab === "matching" ? 'bg-blue dark:bg-amber text-white dark:text-blue-dark shadow-lg' : 'text-text-secondary hover:text-blue dark:hover:text-amber'}`}
                >
                  <Settings2 size={16} />
                  {t("profile.matchingProfile")}
                </button>
                <button 
                  onClick={() => setActiveTab("shortlist")}
-                 className={`flex items-center gap-2 px-6 py-2.5 rounded-[20px] text-sm font-black font-cairo transition-all duration-300 ${activeTab === "shortlist" ? 'bg-[#1a3a5c] text-white shadow-lg' : 'text-gray-500 hover:text-[#1a3a5c]'}`}
+                 className={`flex items-center gap-2 px-6 py-2.5 rounded-[20px] text-sm font-black font-cairo transition-all duration-300 ${activeTab === "shortlist" ? 'bg-blue dark:bg-amber text-white dark:text-blue-dark shadow-lg' : 'text-text-secondary hover:text-blue dark:hover:text-amber'}`}
                >
                  <Heart size={16} />
                  {t("profile.shortlist")}
                  {universities.length > 0 && (
-                   <span className={`px-2 py-0.5 rounded-full text-[10px] ${activeTab === "shortlist" ? 'bg-white/20' : 'bg-gray-100 text-gray-400'}`}>
+                   <span className={`px-2 py-0.5 rounded-full text-[10px] ${activeTab === "shortlist" ? 'bg-white/20' : 'bg-cream dark:bg-blue/20 text-text-secondary'}`}>
                      {universities.length}
                    </span>
                  )}
@@ -432,12 +432,12 @@ export default function ProfilePage() {
             </div>
 
             {activeTab === "matching" && (
-              <div className="profile-animate overflow-hidden rounded-[32px] border border-gray-100 bg-white shadow-xl shadow-[#1a3a5c]/5">
-                <div className="border-b border-gray-100 bg-gradient-to-r from-[#1a3a5c] via-[#21486f] to-[#d4a843] p-8 text-white relative">
+              <div className="profile-animate overflow-hidden rounded-[32px] border border-border bg-card-bg shadow-xl shadow-blue/5">
+                <div className="border-b border-border bg-gradient-to-r from-blue via-blue-light to-amber p-8 text-white relative">
                   <div className={`flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between ${isRtl ? 'text-right' : 'text-left'}`}>
                     <div className="relative z-10">
                       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur border border-white/10 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80 mb-3">
-                         <BrainCircuit size={12} className="text-[#d4a843]" />
+                         <BrainCircuit size={12} className="text-amber" />
                          Matching System V2.1
                       </div>
                       <h2 className="text-3xl font-black font-cairo tracking-tight">{t("profile.customize")}</h2>
@@ -448,11 +448,11 @@ export default function ProfilePage() {
                     <div className="min-w-[200px] rounded-3xl bg-white/10 px-5 py-4 backdrop-blur-md border border-white/10 shadow-lg">
                       <div className={`flex items-center justify-between text-xs font-bold text-white/80 mb-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                         <span>{t("profile.completion")}</span>
-                        <span className="text-[#d4a843] text-lg font-black">{profileCompletion}%</span>
+                        <span className="text-amber text-lg font-black">{profileCompletion}%</span>
                       </div>
                       <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-[#d4a843] to-white transition-all duration-1000 ease-out"
+                          className="h-full rounded-full bg-gradient-to-r from-amber to-white transition-all duration-1000 ease-out"
                           style={{ width: `${profileCompletion}%` }}
                         />
                       </div>
@@ -462,18 +462,18 @@ export default function ProfilePage() {
 
                 <div className="p-8">
                   <div className={`mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-                    <div className={`flex items-center gap-3 p-3 rounded-2xl bg-[#faf7f2] border border-gray-100 ${isRtl ? 'flex-row' : 'flex-row-reverse text-left'}`}>
-                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                         <Sparkles size={18} className="text-[#d4a843]" />
+                    <div className={`flex items-center gap-3 p-3 rounded-2xl bg-cream dark:bg-blue/10 border border-border ${isRtl ? 'flex-row' : 'flex-row-reverse text-left'}`}>
+                      <div className="w-10 h-10 rounded-xl bg-card-bg flex items-center justify-center shadow-sm">
+                         <Sparkles size={18} className="text-amber" />
                       </div>
                       <div>
-                        <p className="text-[#1a3a5c] font-black text-sm font-cairo">Auto-Personalization Active</p>
-                        <p className="text-[11px] text-gray-400 font-cairo">We adjust results as you type.</p>
+                        <p className="text-blue dark:text-text-primary font-black text-sm font-cairo">Auto-Personalization Active</p>
+                        <p className="text-[11px] text-text-secondary font-cairo">We adjust results as you type.</p>
                       </div>
                     </div>
                     <div className={`flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                       {isDirty && (
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-600 text-[11px] font-bold border border-amber-100 animate-pulse">
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber/10 text-amber text-[11px] font-bold border border-amber/20 animate-pulse">
                           <TrendingUp size={12} />
                           {t("profile.unsaved")}
                         </div>
@@ -481,7 +481,7 @@ export default function ProfilePage() {
                       <button
                         onClick={saveProfile}
                         disabled={saving || loading || !isDirty}
-                        className={`inline-flex items-center gap-2 rounded-2xl bg-[#1a3a5c] px-6 py-3 text-sm font-black text-white shadow-xl shadow-[#1a3a5c]/20 transition-all duration-300 hover:bg-[#2a5a8c] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:translate-y-0 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+                        className={`inline-flex items-center gap-2 rounded-2xl bg-blue dark:bg-amber px-6 py-3 text-sm font-black text-white dark:text-blue-dark shadow-xl shadow-blue/20 dark:shadow-amber/10 transition-all duration-300 hover:bg-blue-light dark:hover:bg-amber-dark hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:translate-y-0 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
                       >
                         <Save size={16} />
                         {saving ? t("profile.saving") : t("profile.save")}
@@ -492,10 +492,10 @@ export default function ProfilePage() {
                   <div className="space-y-12">
                     <section className={isRtl ? 'text-right' : 'text-left'}>
                       <div className="mb-5 flex items-center gap-3">
-                         <div className="w-1.5 h-6 bg-[#d4a843] rounded-full" />
+                         <div className="w-1.5 h-6 bg-amber rounded-full" />
                          <div>
-                            <h3 className="text-lg font-black text-[#1a3a5c] font-cairo leading-none">{t("profile.academic")}</h3>
-                            <p className="text-xs text-gray-400 font-cairo mt-1">{t("profile.academicDesc")}</p>
+                            <h3 className="text-lg font-black text-blue dark:text-text-primary font-cairo leading-none">{t("profile.academic")}</h3>
+                            <p className="text-xs text-text-secondary font-cairo mt-1">{t("profile.academicDesc")}</p>
                          </div>
                       </div>
                       <div className="grid gap-6 md:grid-cols-[1.2fr,0.8fr]">
@@ -511,15 +511,15 @@ export default function ProfilePage() {
                             />
                           ))}
                         </div>
-                        <div className="rounded-3xl border border-gray-100 bg-[#faf7f2]/50 p-6 flex flex-col justify-between">
+                        <div className="rounded-3xl border border-border bg-cream dark:bg-blue/10 p-6 flex flex-col justify-between">
                           <div className={`flex items-start justify-between gap-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                             <div className={isRtl ? 'text-right' : 'text-left'}>
-                              <p className="text-xs font-black text-[#1a3a5c] font-cairo uppercase tracking-widest">{t("profile.score")}</p>
-                              <p className="text-[11px] text-gray-400 font-cairo mt-0.5">{t("profile.scoreDesc")}</p>
+                              <p className="text-xs font-black text-blue dark:text-text-primary font-cairo uppercase tracking-widest">{t("profile.score")}</p>
+                              <p className="text-[11px] text-text-secondary font-cairo mt-0.5">{t("profile.scoreDesc")}</p>
                             </div>
                             <div className="flex items-baseline gap-1">
-                               <span className="text-4xl font-black text-[#1a3a5c] tracking-tighter">{form.score || "—"}</span>
-                               <span className="text-xs font-black text-[#d4a843]">%</span>
+                               <span className="text-4xl font-black text-blue dark:text-text-primary tracking-tighter">{form.score || "—"}</span>
+                               <span className="text-xs font-black text-amber">%</span>
                             </div>
                           </div>
                           <div className="mt-8 relative pt-2">
@@ -530,9 +530,9 @@ export default function ProfilePage() {
                                 step="0.5"
                                 value={form.score || "70"}
                                 onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
-                                className="w-full accent-[#d4a843] cursor-pointer"
+                                className="w-full accent-amber cursor-pointer"
                              />
-                             <div className="flex justify-between mt-2 text-[10px] text-gray-300 font-bold px-1">
+                             <div className="flex justify-between mt-2 text-[10px] text-text-secondary/50 font-bold px-1">
                                 <span>40%</span>
                                 <span>70%</span>
                                 <span>100%</span>
@@ -544,10 +544,10 @@ export default function ProfilePage() {
 
                     <section className={isRtl ? 'text-right' : 'text-left'}>
                       <div className="mb-5 flex items-center gap-3">
-                         <div className="w-1.5 h-6 bg-[#d4a843] rounded-full" />
+                         <div className="w-1.5 h-6 bg-amber rounded-full" />
                          <div>
-                            <h3 className="text-lg font-black text-[#1a3a5c] font-cairo leading-none">{t("profile.interests")}</h3>
-                            <p className="text-xs text-gray-400 font-cairo mt-1">{t("profile.interestsDesc")}</p>
+                            <h3 className="text-lg font-black text-blue dark:text-text-primary font-cairo leading-none">{t("profile.interests")}</h3>
+                            <p className="text-xs text-text-secondary font-cairo mt-1">{t("profile.interestsDesc")}</p>
                          </div>
                       </div>
                       <div className={`flex flex-wrap gap-2.5 ${isRtl ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
@@ -564,15 +564,15 @@ export default function ProfilePage() {
 
                     <section className={isRtl ? 'text-right' : 'text-left'}>
                       <div className="mb-5 flex items-center gap-3">
-                         <div className="w-1.5 h-6 bg-[#d4a843] rounded-full" />
+                         <div className="w-1.5 h-6 bg-amber rounded-full" />
                          <div>
-                            <h3 className="text-lg font-black text-[#1a3a5c] font-cairo leading-none">{t("profile.budgetLocation")}</h3>
-                            <p className="text-xs text-gray-400 font-cairo mt-1">{t("profile.budgetLocationDesc")}</p>
+                            <h3 className="text-lg font-black text-blue dark:text-text-primary font-cairo leading-none">{t("profile.budgetLocation")}</h3>
+                            <p className="text-xs text-text-secondary font-cairo mt-1">{t("profile.budgetLocationDesc")}</p>
                          </div>
                       </div>
                       <div className="grid gap-8 lg:grid-cols-2">
-                        <div className="p-6 rounded-3xl bg-gray-50/50 border border-gray-100">
-                          <p className="mb-4 text-[11px] font-black text-[#1a3a5c] uppercase tracking-widest">{t("profile.budget")}</p>
+                        <div className="p-6 rounded-3xl bg-cream dark:bg-blue/10 border border-border">
+                          <p className="mb-4 text-[11px] font-black text-blue dark:text-text-primary uppercase tracking-widest">{t("profile.budget")}</p>
                           <div className="grid grid-cols-2 gap-3">
                             {budgets.map((budget) => (
                               <SelectionCard
@@ -586,8 +586,8 @@ export default function ProfilePage() {
                           </div>
                         </div>
                         <div className="space-y-6">
-                          <div className="p-6 rounded-3xl bg-gray-50/50 border border-gray-100">
-                            <p className="mb-4 text-[11px] font-black text-[#1a3a5c] uppercase tracking-widest">{t("profile.location")}</p>
+                          <div className="p-6 rounded-3xl bg-cream dark:bg-blue/10 border border-border">
+                            <p className="mb-4 text-[11px] font-black text-blue dark:text-text-primary uppercase tracking-widest">{t("profile.location")}</p>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                               {locations.map((location) => (
                                 <SelectionCard
@@ -600,8 +600,8 @@ export default function ProfilePage() {
                               ))}
                             </div>
                           </div>
-                          <div className="p-6 rounded-3xl bg-[#faf7f2] border border-gray-100">
-                            <p className="mb-4 text-[11px] font-black text-[#1a3a5c] uppercase tracking-widest">{t("profile.mobility")}</p>
+                          <div className="p-6 rounded-3xl bg-cream dark:bg-blue/10 border border-border">
+                            <p className="mb-4 text-[11px] font-black text-blue dark:text-text-primary uppercase tracking-widest">{t("profile.mobility")}</p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                               {mobilityOptions.map((option) => (
                                 <SelectionCard
@@ -620,15 +620,15 @@ export default function ProfilePage() {
 
                     <section className={isRtl ? 'text-right' : 'text-left'}>
                       <div className="mb-5 flex items-center gap-3">
-                         <div className="w-1.5 h-6 bg-[#d4a843] rounded-full" />
+                         <div className="w-1.5 h-6 bg-amber rounded-full" />
                          <div>
-                            <h3 className="text-lg font-black text-[#1a3a5c] font-cairo leading-none">{t("profile.studyPrefs")}</h3>
-                            <p className="text-xs text-gray-400 font-cairo mt-1">{t("profile.studyPrefsDesc")}</p>
+                            <h3 className="text-lg font-black text-blue dark:text-text-primary font-cairo leading-none">{t("profile.studyPrefs")}</h3>
+                            <p className="text-xs text-text-secondary font-cairo mt-1">{t("profile.studyPrefsDesc")}</p>
                          </div>
                       </div>
                       <div className="grid gap-6 lg:grid-cols-3">
                         <div className="space-y-3">
-                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">{t("details.language")}</p>
+                          <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">{t("details.language")}</p>
                           <div className="grid grid-cols-1 gap-2.5">
                             {languageOptions.map((option) => (
                               <SelectionCard
@@ -642,7 +642,7 @@ export default function ProfilePage() {
                           </div>
                         </div>
                         <div className="space-y-3">
-                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">{t("profile.type")}</p>
+                          <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">{t("profile.type")}</p>
                           <div className="grid grid-cols-1 gap-2.5">
                             {typeOptions.map((option) => (
                               <SelectionCard
@@ -656,7 +656,7 @@ export default function ProfilePage() {
                           </div>
                         </div>
                         <div className="space-y-3">
-                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">{t("profile.system")}</p>
+                          <p className="text-[10px] font-black text-text-secondary uppercase tracking-widest px-2">{t("profile.system")}</p>
                           <div className="grid grid-cols-1 gap-2.5">
                             {systemOptions.map((option) => (
                               <SelectionCard
@@ -673,7 +673,7 @@ export default function ProfilePage() {
                     </section>
 
                     {message && (
-                      <div className={`profile-animate fixed bottom-24 ${isRtl ? 'right-1/2 translate-x-1/2' : 'left-1/2 -translate-x-1/2'} z-[60] flex items-center gap-3 rounded-full border border-green-200 bg-white px-6 py-4 shadow-2xl text-sm text-green-700 animate-in fade-in slide-in-from-bottom-10 duration-500 font-bold ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                      <div className={`profile-animate fixed bottom-24 ${isRtl ? 'right-1/2 translate-x-1/2' : 'left-1/2 -translate-x-1/2'} z-[60] flex items-center gap-3 rounded-full border border-green-200 bg-card-bg px-6 py-4 shadow-2xl text-sm text-green-700 animate-in fade-in slide-in-from-bottom-10 duration-500 font-bold ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                         <CheckCircle2 size={20} className="text-green-500" />
                         <span className="font-cairo">{message}</span>
                       </div>
@@ -685,18 +685,18 @@ export default function ProfilePage() {
 
             {activeTab === "shortlist" && (
               <div className="profile-animate space-y-6">
-                <div className={`rounded-[32px] border border-gray-100 bg-white p-10 shadow-xl shadow-[#1a3a5c]/5 ${isRtl ? 'text-right' : 'text-left'}`}>
+                <div className={`rounded-[32px] border border-border bg-card-bg p-10 shadow-xl shadow-blue/5 ${isRtl ? 'text-right' : 'text-left'}`}>
                   <div className={`mb-10 flex items-center justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                     <div>
-                      <h2 className={`flex items-center gap-3 text-2xl font-black text-[#1a3a5c] font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-                        <GraduationCap size={28} className="text-[#d4a843]" />
+                      <h2 className={`flex items-center gap-3 text-2xl font-black text-blue dark:text-text-primary font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                        <GraduationCap size={28} className="text-amber" />
                         {t("profile.shortlist")}
                       </h2>
-                      <p className="text-sm text-gray-400 font-cairo mt-2">Access your saved favorites anytime for quick comparison.</p>
+                      <p className="text-sm text-text-secondary font-cairo mt-2">Access your saved favorites anytime for quick comparison.</p>
                     </div>
                     <Link
                        href="/universities"
-                       className="px-5 py-2.5 rounded-xl border border-[#1a3a5c]/10 text-[#1a3a5c] text-xs font-black font-cairo hover:bg-[#faf7f2] transition-colors"
+                       className="px-5 py-2.5 rounded-xl border border-border text-blue dark:text-amber text-xs font-black font-cairo hover:bg-cream dark:hover:bg-blue/10 transition-colors"
                     >
                        {t("hero.ctaBrowse")}
                     </Link>
@@ -705,19 +705,19 @@ export default function ProfilePage() {
                   {loading ? (
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {Array.from({ length: 4 }).map((_, i) => (
-                           <div key={i} className="h-28 rounded-3xl bg-gray-50 animate-pulse" />
+                           <div key={i} className="h-28 rounded-3xl bg-cream dark:bg-blue/10 animate-pulse" />
                         ))}
                      </div>
                   ) : universities.length === 0 ? (
-                    <div className="rounded-[40px] border border-dashed border-gray-200 bg-[#faf7f2]/50 py-20 text-center">
-                      <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                         <GraduationCap size={40} className="text-gray-200" />
+                    <div className="rounded-[40px] border border-dashed border-border bg-cream/50 dark:bg-blue/10 py-20 text-center">
+                      <div className="w-20 h-20 bg-card-bg rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                         <GraduationCap size={40} className="text-text-secondary/20" />
                       </div>
-                      <p className="mb-4 text-lg font-black text-[#1a3a5c] font-cairo">{t("profile.noShortlist")}</p>
-                      <p className="text-sm text-gray-400 font-cairo mb-8 max-w-sm mx-auto">Explore all Egyptian universities and add your favorites to this list to compare them side-by-side.</p>
+                      <p className="mb-4 text-lg font-black text-blue dark:text-text-primary font-cairo">{t("profile.noShortlist")}</p>
+                      <p className="text-sm text-text-secondary font-cairo mb-8 max-w-sm mx-auto">Explore all Egyptian universities and add your favorites to this list to compare them side-by-side.</p>
                       <Link
                         href="/universities"
-                        className="inline-flex items-center gap-2 rounded-2xl bg-[#1a3a5c] px-8 py-3.5 text-sm font-black text-white shadow-lg shadow-[#1a3a5c]/20 hover:bg-[#2a5a8c] transition-all"
+                        className="inline-flex items-center gap-2 rounded-2xl bg-blue dark:bg-amber px-8 py-3.5 text-sm font-black text-white dark:text-blue-dark shadow-lg shadow-blue/20 dark:shadow-amber/10 hover:bg-blue-light dark:hover:bg-amber-dark transition-all"
                       >
                         {t("hero.ctaBrowse")}
                         {isRtl ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
@@ -728,32 +728,32 @@ export default function ProfilePage() {
                       {universities.map((university) => (
                         <div
                           key={university.id}
-                          className={`group flex items-center justify-between rounded-[28px] border border-gray-100 p-5 transition-all duration-300 hover:border-[#d4a843]/40 hover:shadow-lg hover:bg-[#fffdf9] ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+                          className={`group flex items-center justify-between rounded-[28px] border border-border p-5 transition-all duration-300 hover:border-amber/40 hover:shadow-lg hover:bg-cream/50 dark:hover:bg-blue/10 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
                         >
                           <div className={`flex items-center gap-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white border border-gray-50 shadow-sm overflow-hidden group-hover:scale-110 transition-transform">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-card-bg border border-border shadow-sm overflow-hidden group-hover:scale-110 transition-transform">
                                {university.logo_url ? (
                                   <img src={university.logo_url} alt={university.name_en} className="w-10 h-10 object-contain" />
                                ) : (
-                                  <GraduationCap size={24} className="text-[#1a3a5c]" />
+                                  <GraduationCap size={24} className="text-blue dark:text-amber" />
                                )}
                             </div>
                             <div className={isRtl ? 'text-right' : 'text-left'}>
                               <Link
                                 href={`/universities/${university.slug}`}
-                                className="text-base font-black text-[#1a3a5c] font-cairo group-hover:text-[#d4a843] transition-colors"
+                                className="text-base font-black text-blue dark:text-text-primary font-cairo group-hover:text-amber transition-colors"
                               >
                                 {isAr ? university.name_ar : university.name_en}
                               </Link>
-                              <p className={`flex items-center gap-1 text-xs text-gray-400 font-cairo mt-1 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-                                <MapPin size={10} className="text-[#d4a843]" />
+                              <p className={`flex items-center gap-1 text-xs text-text-secondary font-cairo mt-1 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                                <MapPin size={10} className="text-amber" />
                                 {isAr ? university.location_ar : university.location_en}
                               </p>
                             </div>
                           </div>
                           <button
                             onClick={() => removeFromShortlist(university.id)}
-                            className="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 transition-all duration-300 hover:bg-red-50 hover:text-red-500 active:scale-90"
+                            className="w-10 h-10 rounded-full flex items-center justify-center text-text-secondary/30 transition-all duration-300 hover:bg-red-50 hover:text-red-500 active:scale-90"
                           >
                             <BookmarkX size={18} />
                           </button>
@@ -768,8 +768,8 @@ export default function ProfilePage() {
 
           <div className="space-y-8">
             {/* Recommendation Engine Sidebar Card */}
-            <div className={`profile-animate rounded-[32px] bg-[#1a3a5c] p-8 text-white shadow-2xl shadow-[#1a3a5c]/30 relative overflow-hidden ${isRtl ? 'text-right' : 'text-left'}`}>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#d4a843]/10 rounded-full translate-x-1/2 -translate-y-1/2 blur-2xl" />
+            <div className={`profile-animate rounded-[32px] bg-blue dark:bg-blue-dark p-8 text-white shadow-2xl shadow-blue/30 relative overflow-hidden ${isRtl ? 'text-right' : 'text-left'}`}>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber/10 rounded-full translate-x-1/2 -translate-y-1/2 blur-2xl" />
               <div className={`relative z-10 flex items-start justify-between gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/40">{t("profile.engine")}</p>
@@ -781,7 +781,7 @@ export default function ProfilePage() {
                   </p>
                 </div>
                 <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md">
-                   <BadgeCheck size={24} className="text-[#d4a843] shrink-0" />
+                   <BadgeCheck size={24} className="text-amber shrink-0" />
                 </div>
               </div>
 
@@ -795,7 +795,7 @@ export default function ProfilePage() {
               <div className="mt-8 space-y-3 relative z-10">
                  <Link
                    href={`/universities?${recommendationQuery}`}
-                   className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#d4a843] px-6 py-4 text-sm font-black text-white shadow-xl shadow-[#d4a843]/20 transition-all duration-300 hover:bg-[#b8922a] hover:scale-[1.02]"
+                   className="flex w-full items-center justify-center gap-2 rounded-2xl bg-amber px-6 py-4 text-sm font-black text-white dark:text-blue-dark shadow-xl shadow-amber/20 transition-all duration-300 hover:bg-amber-dark hover:scale-[1.02]"
                  >
                    {t("profile.showResults")}
                    {isRtl ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
@@ -810,42 +810,42 @@ export default function ProfilePage() {
             </div>
 
             {/* Snapshot Sidebar Card */}
-            <div className={`profile-animate rounded-[32px] border border-gray-100 bg-white p-8 shadow-xl shadow-[#1a3a5c]/5 ${isRtl ? 'text-right' : 'text-left'}`}>
+            <div className={`profile-animate rounded-[32px] border border-border bg-card-bg p-8 shadow-xl shadow-blue/5 ${isRtl ? 'text-right' : 'text-left'}`}>
               <div className="flex items-center gap-3 mb-6">
-                 <div className="w-10 h-10 rounded-2xl bg-[#faf7f2] flex items-center justify-center">
-                    <TrendingUp size={20} className="text-[#1a3a5c]" />
+                 <div className="w-10 h-10 rounded-2xl bg-cream dark:bg-blue/10 flex items-center justify-center">
+                    <TrendingUp size={20} className="text-blue dark:text-amber" />
                  </div>
-                 <h2 className="text-lg font-black text-[#1a3a5c] font-cairo">{t("profile.snapshot")}</h2>
+                 <h2 className="text-lg font-black text-blue dark:text-text-primary font-cairo">{t("profile.snapshot")}</h2>
               </div>
-              <div className="space-y-4 text-sm text-gray-500 font-cairo">
-                <div className={`flex items-center justify-between pb-3 border-b border-gray-50 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className="space-y-4 text-sm text-text-secondary font-cairo">
+                <div className={`flex items-center justify-between pb-3 border-b border-border ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                   <span className="font-bold">{t("profile.score")}</span>
                   <div className="flex items-baseline gap-1">
-                    <strong className="text-[#1a3a5c] text-lg font-black">{form.score || "—"}</strong>
-                    <span className="text-[10px] font-bold text-[#d4a843]">%</span>
+                    <strong className="text-blue dark:text-text-primary text-lg font-black">{form.score || "—"}</strong>
+                    <span className="text-[10px] font-bold text-amber">%</span>
                   </div>
                 </div>
-                <div className={`flex items-center justify-between pb-3 border-b border-gray-50 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                <div className={`flex items-center justify-between pb-3 border-b border-border ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                   <span className="font-bold">{t("profile.mobility")}</span>
-                  <strong className="text-[#1a3a5c] font-black">
+                  <strong className="text-blue dark:text-text-primary font-black">
                     {isAr ? (mobilityOptions.find((item) => item.id === form.mobilityPreference)?.labelAr || "—") : (mobilityOptions.find((item) => item.id === form.mobilityPreference)?.labelEn || "—")}
                   </strong>
                 </div>
-                <div className={`flex items-center justify-between pb-3 border-b border-gray-50 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                <div className={`flex items-center justify-between pb-3 border-b border-border ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                   <span className="font-bold">{t("details.language")}</span>
-                  <strong className="text-[#1a3a5c] font-black">
+                  <strong className="text-blue dark:text-text-primary font-black">
                     {isAr ? (languageOptions.find((item) => item.id === form.preferredLanguage)?.labelAr || "—") : (languageOptions.find((item) => item.id === form.preferredLanguage)?.labelEn || "—")}
                   </strong>
                 </div>
-                <div className={`flex items-center justify-between pb-3 border-b border-gray-50 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                <div className={`flex items-center justify-between pb-3 border-b border-border ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                   <span className="font-bold">{isAr ? "النوع" : "Type"}</span>
-                  <strong className="text-[#1a3a5c] font-black">
+                  <strong className="text-blue dark:text-text-primary font-black">
                     {isAr ? (typeOptions.find((item) => item.id === form.preferredType)?.labelAr || "—") : (typeOptions.find((item) => item.id === form.preferredType)?.labelEn || "—")}
                   </strong>
                 </div>
                 <div className={`flex items-center justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                   <span className="font-bold">{isAr ? "النظام" : "System"}</span>
-                  <strong className="text-[#1a3a5c] font-black">
+                  <strong className="text-blue dark:text-text-primary font-black">
                     {isAr ? (systemOptions.find((item) => item.id === form.preferredSystem)?.labelAr || "—") : (systemOptions.find((item) => item.id === form.preferredSystem)?.labelEn || "—")}
                   </strong>
                 </div>

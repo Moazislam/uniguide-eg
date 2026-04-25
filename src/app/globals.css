@@ -15,14 +15,20 @@
   --charcoal: #2c2c2c;
   --card-bg: #ffffff;
   --border: #f3f4f6;
+  --text-primary: #2c2c2c;
+  --text-secondary: #6b7280;
+  --nav-bg: rgba(250, 247, 242, 0.8);
 }
 
 .dark {
-  --cream: #0a1120;
+  --cream: #0a0f1a;
   --charcoal: #f3f4f6;
-  --card-bg: #111b2d;
+  --card-bg: #151f33;
   --border: #1e293b;
-  --blue-light: #334155;
+  --blue-light: #1e293b;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --nav-bg: rgba(10, 15, 26, 0.8);
 }
 
 * {
@@ -36,7 +42,7 @@ html {
 body {
   font-family: 'Cairo', sans-serif;
   background-color: var(--cream);
-  color: var(--charcoal);
+  color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
   -webkit-font-smoothing: antialiased;
 }
