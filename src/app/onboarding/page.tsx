@@ -12,6 +12,7 @@ import {
 import type { StudentProfile } from "@/types";
 import { ChevronLeft, ChevronRight, GraduationCap, MapPin, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/lib/LanguageContext";
 
 type Step = "track" | "score" | "interests" | "budget" | "location" | "preferences" | "result";
 
@@ -19,22 +20,22 @@ const tracks = [
   { id: "science", label_ar: "علمي", label_en: "Science", emoji: "Lab" },
   { id: "math", label_ar: "رياضي", label_en: "Math", emoji: "Math" },
   { id: "arts", label_ar: "أدبي", label_en: "Arts", emoji: "Arts" },
-  { id: "ig", label_ar: "IG", label_en: "International", emoji: "IG" },
+  { id: "ig", label_ar: "IG", label_en: "IG", emoji: "IG" },
   { id: "american", label_ar: "أمريكي", label_en: "American", emoji: "US" },
   { id: "french", label_ar: "فرنسي", label_en: "French", emoji: "FR" },
 ];
 
 const interests = [
-  { id: "medicine", label_ar: "طب" },
-  { id: "engineering", label_ar: "هندسة" },
-  { id: "computer_science", label_ar: "علوم حاسب" },
-  { id: "business", label_ar: "إدارة وأعمال" },
-  { id: "arts", label_ar: "آداب وفنون" },
-  { id: "law", label_ar: "حقوق" },
-  { id: "pharmacy", label_ar: "صيدلة" },
-  { id: "architecture", label_ar: "عمارة" },
-  { id: "media", label_ar: "إعلام" },
-  { id: "science", label_ar: "علوم" },
+  { id: "medicine", label_ar: "طب", label_en: "Medicine" },
+  { id: "engineering", label_ar: "هندسة", label_en: "Engineering" },
+  { id: "computer_science", label_ar: "علوم حاسب", label_en: "CS" },
+  { id: "business", label_ar: "إدارة وأعمال", label_en: "Business" },
+  { id: "arts", label_ar: "آداب وفنون", label_en: "Arts" },
+  { id: "law", label_ar: "حقوق", label_en: "Law" },
+  { id: "pharmacy", label_ar: "صيدلة", label_en: "Pharmacy" },
+  { id: "architecture", label_ar: "عمارة", label_en: "Architecture" },
+  { id: "media", label_ar: "إعلام", label_en: "Media" },
+  { id: "science", label_ar: "علوم", label_en: "Science" },
 ];
 
 const budgets = [
@@ -45,11 +46,11 @@ const budgets = [
 ];
 
 const locations = [
-  { id: "Cairo", label_ar: "القاهرة" },
-  { id: "Giza", label_ar: "الجيزة" },
-  { id: "New Cairo", label_ar: "القاهرة الجديدة" },
-  { id: "Sheikh Zayed", label_ar: "الشيخ زايد" },
-  { id: "Alexandria", label_ar: "الإسكندرية" },
+  { id: "Cairo", label_ar: "القاهرة", label_en: "Cairo" },
+  { id: "Giza", label_ar: "الجيزة", label_en: "Giza" },
+  { id: "New Cairo", label_ar: "القاهرة الجديدة", label_en: "New Cairo" },
+  { id: "Sheikh Zayed", label_ar: "الشيخ زايد", label_en: "Sheikh Zayed" },
+  { id: "Alexandria", label_ar: "الإسكندرية", label_en: "Alexandria" },
 ];
 
 const mobilityOptions = [
@@ -108,6 +109,9 @@ const STEPS: Step[] = ["track", "score", "interests", "budget", "location", "pre
 export default function OnboardingPage() {
   const supabase = createClient();
   const router = useRouter();
+  const { t, isRtl, language } = useLanguage();
+  const isAr = language === "ar";
+  
   const [step, setStep] = useState<Step>("track");
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -219,35 +223,34 @@ export default function OnboardingPage() {
       <main className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-2xl">
           <div className="mb-8">
-            <div className="flex justify-between text-xs text-gray-400 font-cairo mb-2">
-              <span>الخطوة {stepIndex + 1} من {STEPS.length}</span>
-              <span>Step {stepIndex + 1} of {STEPS.length}</span>
+            <div className={`flex justify-between text-xs text-gray-400 font-cairo mb-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+              <span>{t("onboard.step")} {stepIndex + 1} {t("onboard.of")} {STEPS.length}</span>
             </div>
             <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div className="h-full bg-[#d4a843] rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+          <div className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-8 ${isRtl ? 'text-right' : 'text-left'}`}>
             {step === "track" && (
               <div>
-                <GraduationCap size={32} className="text-[#d4a843] mb-4" />
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">ما هو نظامك الدراسي؟</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">We use this to remove majors that do not fit your academic path.</p>
+                <GraduationCap size={32} className={`text-[#d4a843] mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
+                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.trackTitle")}</h2>
+                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.trackDesc")}</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {tracks.map((track) => (
                     <button
                       key={track.id}
                       onClick={() => setForm((current) => ({ ...current, track: track.id }))}
-                      className={`p-3 rounded-xl border text-right transition-all font-cairo ${
+                      className={`p-3 rounded-xl border transition-all font-cairo ${isRtl ? 'text-right' : 'text-left'} ${
                         form.track === track.id
                           ? "border-[#d4a843] bg-[#d4a843]/5"
                           : "border-gray-100 hover:border-[#d4a843]/40"
                       }`}
                     >
                       <span className="text-xs font-semibold text-[#d4a843]">{track.emoji}</span>
-                      <p className="text-sm font-semibold text-[#1a3a5c] mt-1">{track.label_ar}</p>
-                      <p className="text-xs text-gray-400">{track.label_en}</p>
+                      <p className="text-sm font-semibold text-[#1a3a5c] mt-1">{isAr ? track.label_ar : track.label_en}</p>
+                      <p className="text-xs text-gray-400">{isAr ? track.label_en : track.label_ar}</p>
                     </button>
                   ))}
                 </div>
@@ -257,8 +260,8 @@ export default function OnboardingPage() {
             {step === "score" && (
               <div>
                 <span className="text-3xl mb-4 block">Score</span>
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">ما درجتك الحالية أو المتوقعة؟</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">The meter reacts instantly so you can feel where your score sits before we rank universities.</p>
+                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.scoreTitle")}</h2>
+                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.scoreDesc")}</p>
 
                 <div className="grid gap-6 md:grid-cols-[0.9fr,1.1fr] md:items-center">
                   <div className="flex justify-center">
@@ -276,8 +279,8 @@ export default function OnboardingPage() {
                   </div>
 
                   <div className="rounded-[28px] border border-gray-100 bg-[#faf7f2] p-5">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
+                    <div className={`flex items-center justify-between mb-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                      <div className={isRtl ? 'text-right' : 'text-left'}>
                         <p className="text-sm font-bold text-[#1a3a5c] font-cairo">Academic score meter</p>
                         <p className="text-xs text-gray-400 font-cairo">Adjust it manually or drag the slider.</p>
                       </div>
@@ -293,10 +296,10 @@ export default function OnboardingPage() {
                       step="0.5"
                       value={form.score || "70"}
                       onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
-                      className="w-full accent-[#d4a843]"
+                      className="mt-4 w-full accent-[#d4a843]"
                     />
 
-                    <div className="mt-4 flex items-center gap-3">
+                    <div className={`mt-4 flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                       <input
                         type="number"
                         min="0"
@@ -305,7 +308,7 @@ export default function OnboardingPage() {
                         value={form.score}
                         onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
                         placeholder="Example: 85.5"
-                        className="w-32 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-center text-lg font-black text-[#1a3a5c] focus:border-[#d4a843] focus:outline-none"
+                        className={`w-32 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-center text-lg font-black text-[#1a3a5c] focus:border-[#d4a843] focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
                       />
                       <span className="text-sm text-gray-400 font-cairo">%</span>
                     </div>
@@ -331,21 +334,21 @@ export default function OnboardingPage() {
 
             {step === "interests" && (
               <div>
-                <Sparkles size={32} className="text-[#d4a843] mb-4" />
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">ما المجالات التي تريدها؟</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">Choose more than one so the recommendations stay flexible.</p>
+                <Sparkles size={32} className={`text-[#d4a843] mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
+                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.interestsTitle")}</h2>
+                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.interestsDesc")}</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {interests.map((interest) => (
                     <button
                       key={interest.id}
                       onClick={() => toggleInterest(interest.id)}
-                      className={`p-3 rounded-xl border text-right transition-all font-cairo ${
+                      className={`p-3 rounded-xl border transition-all font-cairo ${isRtl ? 'text-right' : 'text-left'} ${
                         form.interests.includes(interest.id)
                           ? "border-[#d4a843] bg-[#d4a843]/5"
                           : "border-gray-100 hover:border-[#d4a843]/40"
                       }`}
                     >
-                      <span className="text-sm font-semibold text-[#1a3a5c]">{interest.label_ar}</span>
+                      <span className="text-sm font-semibold text-[#1a3a5c]">{isAr ? interest.label_ar : interest.label_en}</span>
                     </button>
                   ))}
                 </div>
@@ -355,21 +358,21 @@ export default function OnboardingPage() {
             {step === "budget" && (
               <div>
                 <span className="text-3xl mb-4 block">Budget</span>
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">ما ميزانيتك السنوية؟</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">This helps us avoid universities that are clearly outside your range.</p>
+                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.budgetTitle")}</h2>
+                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.budgetDesc")}</p>
                 <div className="space-y-3">
                   {budgets.map((budget) => (
                     <button
                       key={budget.val}
                       onClick={() => setForm((current) => ({ ...current, budget: budget.val }))}
-                      className={`w-full p-4 rounded-xl border text-right transition-all font-cairo flex justify-between items-center ${
+                      className={`w-full p-4 rounded-xl border transition-all font-cairo flex justify-between items-center ${isRtl ? 'flex-row' : 'flex-row-reverse'} ${
                         form.budget === budget.val
                           ? "border-[#d4a843] bg-[#d4a843]/5"
                           : "border-gray-100 hover:border-[#d4a843]/40"
                       }`}
                     >
-                      <span className="font-bold text-[#1a3a5c] text-sm">{budget.label_ar}</span>
-                      <span className="text-xs text-gray-400">{budget.label_en}</span>
+                      <span className="font-bold text-[#1a3a5c] text-sm">{isAr ? budget.label_ar : budget.label_en}</span>
+                      <span className="text-xs text-gray-400">{isAr ? budget.label_en : budget.label_ar}</span>
                     </button>
                   ))}
                 </div>
@@ -378,21 +381,21 @@ export default function OnboardingPage() {
 
             {step === "location" && (
               <div>
-                <MapPin size={32} className="text-[#d4a843] mb-4" />
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">أين تفضل الدراسة؟</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">Location should change the output for every student, not just score and budget.</p>
+                <MapPin size={32} className={`text-[#d4a843] mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
+                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.locationTitle")}</h2>
+                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.locationDesc")}</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
                   {locations.map((location) => (
                     <button
                       key={location.id}
                       onClick={() => setForm((current) => ({ ...current, preferredLocation: location.id }))}
-                      className={`p-3 rounded-xl border text-right transition-all font-cairo ${
+                      className={`p-3 rounded-xl border transition-all font-cairo ${isRtl ? 'text-right' : 'text-left'} ${
                         form.preferredLocation === location.id
                           ? "border-[#d4a843] bg-[#d4a843]/5"
                           : "border-gray-100 hover:border-[#d4a843]/40"
                       }`}
                     >
-                      <span className="text-sm font-semibold text-[#1a3a5c]">{location.label_ar}</span>
+                      <span className="text-sm font-semibold text-[#1a3a5c]">{isAr ? location.label_ar : location.label_en}</span>
                     </button>
                   ))}
                 </div>
@@ -402,14 +405,14 @@ export default function OnboardingPage() {
                     <button
                       key={option.id}
                       onClick={() => setForm((current) => ({ ...current, mobilityPreference: option.id }))}
-                      className={`w-full p-3 rounded-xl border text-right transition-all font-cairo ${
+                      className={`w-full p-3 rounded-xl border transition-all font-cairo ${isRtl ? 'text-right' : 'text-left'} ${
                         form.mobilityPreference === option.id
                           ? "border-[#d4a843] bg-[#d4a843]/5"
                           : "border-gray-100 hover:border-[#d4a843]/40"
                       }`}
                     >
-                      <p className="text-sm font-semibold text-[#1a3a5c]">{option.label_ar}</p>
-                      <p className="text-xs text-gray-400">{option.label_en}</p>
+                      <p className="text-sm font-semibold text-[#1a3a5c]">{isAr ? option.label_ar : option.label_en}</p>
+                      <p className="text-xs text-gray-400">{isAr ? option.label_en : option.label_ar}</p>
                     </button>
                   ))}
                 </div>
@@ -418,13 +421,13 @@ export default function OnboardingPage() {
 
             {step === "preferences" && (
               <div>
-                <Sparkles size={32} className="text-[#d4a843] mb-4" />
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">ما تفضيلاتك الإضافية؟</h2>
-                <p className="text-sm text-gray-400 font-cairo mb-6">These fields help tailor the output for each student instead of showing the same list to everyone.</p>
+                <Sparkles size={32} className={`text-[#d4a843] mb-4 ${isRtl ? 'mr-0' : 'ml-0'}`} />
+                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-1">{t("onboard.prefsTitle")}</h2>
+                <p className="text-sm text-gray-400 font-cairo mb-6">{t("onboard.prefsDesc")}</p>
 
                 <div className="space-y-5">
                   <div>
-                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">لغة الدراسة المفضلة</p>
+                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">{t("details.language")}</p>
                     <div className="grid grid-cols-3 gap-2">
                       {languageOptions.map((option) => (
                         <button
@@ -436,15 +439,15 @@ export default function OnboardingPage() {
                               : "border-gray-100 hover:border-[#d4a843]/40"
                           }`}
                         >
-                          <p className="text-sm font-semibold text-[#1a3a5c]">{option.label_ar}</p>
-                          <p className="text-[11px] text-gray-400">{option.label_en}</p>
+                          <p className="text-sm font-semibold text-[#1a3a5c]">{isAr ? option.label_ar : option.label_en}</p>
+                          <p className="text-[11px] text-gray-400">{isAr ? option.label_en : option.label_ar}</p>
                         </button>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">نوع الجامعة</p>
+                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">{isAr ? "نوع الجامعة" : "University Type"}</p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                       {typeOptions.map((option) => (
                         <button
@@ -456,15 +459,15 @@ export default function OnboardingPage() {
                               : "border-gray-100 hover:border-[#d4a843]/40"
                           }`}
                         >
-                          <p className="text-sm font-semibold text-[#1a3a5c]">{option.label_ar}</p>
-                          <p className="text-[11px] text-gray-400">{option.label_en}</p>
+                          <p className="text-sm font-semibold text-[#1a3a5c]">{isAr ? option.label_ar : option.label_en}</p>
+                          <p className="text-[11px] text-gray-400">{isAr ? option.label_en : option.label_ar}</p>
                         </button>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">النظام التعليمي</p>
+                    <p className="text-sm font-semibold text-[#1a3a5c] font-cairo mb-2">{isAr ? "النظام التعليمي" : "Educational System"}</p>
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                       {systemOptions.map((option) => (
                         <button
@@ -476,8 +479,8 @@ export default function OnboardingPage() {
                               : "border-gray-100 hover:border-[#d4a843]/40"
                           }`}
                         >
-                          <p className="text-sm font-semibold text-[#1a3a5c]">{option.label_ar}</p>
-                          <p className="text-[11px] text-gray-400">{option.label_en}</p>
+                          <p className="text-sm font-semibold text-[#1a3a5c]">{isAr ? option.label_ar : option.label_en}</p>
+                          <p className="text-[11px] text-gray-400">{isAr ? option.label_en : option.label_ar}</p>
                         </button>
                       ))}
                     </div>
@@ -491,18 +494,18 @@ export default function OnboardingPage() {
                 <div className="w-16 h-16 rounded-full bg-[#d4a843]/10 flex items-center justify-center mx-auto mb-4">
                   <Sparkles size={32} className="text-[#d4a843]" />
                 </div>
-                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-2">النتائج أصبحت شخصية لكل طالب</h2>
+                <h2 className="text-xl font-black text-[#1a3a5c] font-cairo mb-2">{t("onboard.resultTitle")}</h2>
                 <p className="text-sm text-gray-400 font-cairo mb-6">
-                  We will save this profile and rank universities and majors around it.
+                  {t("onboard.resultDesc")}
                 </p>
-                <div className="bg-gray-50 rounded-xl p-4 text-right mb-6 space-y-2">
-                  <p className="text-xs text-gray-500 font-cairo">النظام الدراسي: <strong>{tracks.find((track) => track.id === form.track)?.label_ar}</strong></p>
-                  {form.score && <p className="text-xs text-gray-500 font-cairo">الدرجة: <strong>{form.score}%</strong></p>}
-                  <p className="text-xs text-gray-500 font-cairo">الاهتمامات: <strong>{form.interests.length} مجالات</strong></p>
-                  <p className="text-xs text-gray-500 font-cairo">الميزانية: <strong>{budgets.find((budget) => budget.val === form.budget)?.label_ar}</strong></p>
-                  <p className="text-xs text-gray-500 font-cairo">المكان: <strong>{locations.find((location) => location.id === form.preferredLocation)?.label_ar}</strong></p>
-                  <p className="text-xs text-gray-500 font-cairo">الحركة: <strong>{mobilityOptions.find((option) => option.id === form.mobilityPreference)?.label_ar}</strong></p>
-                  {form.preferredLanguage && <p className="text-xs text-gray-500 font-cairo">لغة الدراسة: <strong>{languageOptions.find((option) => option.id === form.preferredLanguage)?.label_ar}</strong></p>}
+                <div className={`bg-gray-50 rounded-xl p-4 mb-6 space-y-2 ${isRtl ? 'text-right' : 'text-left'}`}>
+                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "النظام الدراسي" : "Track"}: <strong>{isAr ? tracks.find((track) => track.id === form.track)?.label_ar : tracks.find((track) => track.id === form.track)?.label_en}</strong></p>
+                  {form.score && <p className="text-xs text-gray-500 font-cairo">{isAr ? "الدرجة" : "Score"}: <strong>{form.score}%</strong></p>}
+                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "الاهتمامات" : "Interests"}: <strong>{form.interests.length} {isAr ? "مجالات" : "fields"}</strong></p>
+                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "الميزانية" : "Budget"}: <strong>{isAr ? budgets.find((budget) => budget.val === form.budget)?.label_ar : budgets.find((budget) => budget.val === form.budget)?.label_en}</strong></p>
+                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "المكان" : "Location"}: <strong>{isAr ? locations.find((location) => location.id === form.preferredLocation)?.label_ar : locations.find((location) => location.id === form.preferredLocation)?.label_en}</strong></p>
+                  <p className="text-xs text-gray-500 font-cairo">{isAr ? "الحركة" : "Mobility"}: <strong>{isAr ? mobilityOptions.find((option) => option.id === form.mobilityPreference)?.label_ar : mobilityOptions.find((option) => option.id === form.mobilityPreference)?.label_en}</strong></p>
+                  {form.preferredLanguage && <p className="text-xs text-gray-500 font-cairo">{isAr ? "لغة الدراسة" : "Language"}: <strong>{isAr ? languageOptions.find((option) => option.id === form.preferredLanguage)?.label_ar : languageOptions.find((option) => option.id === form.preferredLanguage)?.label_en}</strong></p>}
                 </div>
                 {statusMessage && (
                   <p className="text-sm text-red-500 font-cairo mb-3">{statusMessage}</p>
@@ -513,21 +516,20 @@ export default function OnboardingPage() {
                   disabled={saving}
                   className="block w-full bg-[#1a3a5c] text-white font-bold py-3 rounded-xl hover:bg-[#2a5a8c] transition-colors font-cairo disabled:opacity-50"
                 >
-                  {saving ? "جارٍ حفظ الملف..." : "احفظ الملف واعرض النتائج الشخصية ←"}
+                  {saving ? t("onboard.saving") : `${t("onboard.showResults")} ←`}
                 </button>
-                <p className="text-xs text-gray-400 font-cairo mt-2">Save the profile and show personalized recommendations</p>
               </div>
             )}
 
             {step !== "result" && (
-              <div className="flex justify-between mt-8 pt-6 border-t border-gray-100">
+              <div className={`flex justify-between mt-8 pt-6 border-t border-gray-100 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                 {stepIndex > 0 ? (
                   <button
                     onClick={prev}
-                    className="flex items-center gap-1 text-sm text-gray-400 hover:text-[#1a3a5c] transition-colors font-cairo"
+                    className={`flex items-center gap-1 text-sm text-gray-400 hover:text-[#1a3a5c] transition-colors font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
                   >
-                    <ChevronRight size={16} />
-                    رجوع
+                    {isRtl ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+                    {t("common.prev")}
                   </button>
                 ) : (
                   <div />
@@ -536,10 +538,10 @@ export default function OnboardingPage() {
                 <button
                   onClick={next}
                   disabled={nextDisabled}
-                  className="flex items-center gap-1 bg-[#d4a843] text-white font-bold px-6 py-2.5 rounded-xl hover:bg-[#b8922a] transition-colors disabled:opacity-40 disabled:cursor-not-allowed font-cairo text-sm"
+                  className={`flex items-center gap-1 bg-[#d4a843] text-white font-bold px-6 py-2.5 rounded-xl hover:bg-[#b8922a] transition-colors disabled:opacity-40 disabled:cursor-not-allowed font-cairo text-sm ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
                 >
-                  التالي
-                  <ChevronLeft size={16} />
+                  {t("common.next")}
+                  {isRtl ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
                 </button>
               </div>
             )}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Check, GitCompareArrows, X } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 interface Props {
   universityId: string;
@@ -75,6 +76,7 @@ export function useCompare() {
 
 export default function CompareButton({ universityId, compact = false }: Props) {
   const { ids, toggle, max } = useCompare();
+  const { t } = useLanguage();
   const isAdded = ids.includes(universityId);
   const isFull = ids.length >= max && !isAdded;
 
@@ -99,47 +101,48 @@ export default function CompareButton({ universityId, compact = false }: Props) 
       }`}
     >
       {isAdded ? <Check size={14} /> : <GitCompareArrows size={14} />}
-      {isAdded ? "في المقارنة" : isFull ? "القائمة ممتلئة" : "أضف للمقارنة"}
+      {isAdded ? t("compare.inCompare") : isFull ? t("compare.full") : t("compare.addCompare")}
     </button>
   );
 }
 
 export function CompareTray() {
   const { ids, clear } = useCompare();
+  const { t, isRtl } = useLanguage();
 
   if (!ids.length) return null;
 
   return (
-    <div className="fixed bottom-5 left-1/2 z-40 w-[min(94vw,700px)] -translate-x-1/2 rounded-2xl border border-[#1a3a5c]/10 bg-white/95 p-3 shadow-2xl backdrop-blur">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
+    <div className={`fixed bottom-5 left-1/2 z-40 w-[min(94vw,700px)] -translate-x-1/2 rounded-2xl border border-[#1a3a5c]/10 bg-white/95 p-3 shadow-2xl backdrop-blur ${isRtl ? 'dir-rtl' : 'dir-ltr'}`}>
+      <div className={`flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+        <div className={`flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#1a3a5c] text-white">
             <GitCompareArrows size={18} />
           </div>
-          <div>
+          <div className={isRtl ? 'text-right' : 'text-left'}>
             <p className="text-sm font-bold text-[#1a3a5c] font-cairo">
-              {ids.length} جامعة جاهزة للمقارنة
+              {ids.length} {t("compare.trayTitle")}
             </p>
             <p className="text-xs text-gray-500 font-cairo">
-              اختر حتى 3 جامعات ثم افتح المقارنة الجانبية
+              {t("compare.trayDesc")}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
           <button
             type="button"
             onClick={clear}
-            className="inline-flex items-center gap-1 rounded-xl border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-500 transition-colors hover:border-red-200 hover:text-red-500"
+            className={`inline-flex items-center gap-1 rounded-xl border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-500 transition-colors hover:border-red-200 hover:text-red-500 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
           >
             <X size={12} />
-            تفريغ
+            {t("compare.emptyTray")}
           </button>
           <Link
             href="/compare"
-            className="inline-flex items-center gap-2 rounded-xl bg-[#d4a843] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#b8922a]"
+            className={`inline-flex items-center gap-2 rounded-xl bg-[#d4a843] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#b8922a] ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
           >
-            افتح المقارنة
+            {t("compare.open")}
             <GitCompareArrows size={14} />
           </Link>
         </div>
