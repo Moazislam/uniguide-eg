@@ -52,14 +52,37 @@ export async function getUniversityMajors(universityId: string): Promise<Univers
   return data as UniversityMajor[];
 }
 
-export async function getMajorUniversities(majorId: string): Promise<UniversityMajor[]> {
+export async function getMajorUniversities(
+  majorId: string,
+  sortBy: "tuition" | "ranking" = "tuition"
+): Promise<UniversityMajor[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("university_majors")
     .select(`*, university:universities(*)`)
-    .eq("major_id", majorId)
-    .order("tuition_per_year", { ascending: true });
+    .eq("major_id", majorId);
+
+  if (sortBy === "tuition") {
+    query = query.order("tuition_per_year", { ascending: true });
+  } else {
+    // Note: We can't directly order by a related table's column in a single select easily in some Supabase versions 
+    // without using a join/view, but we can sort in JS if needed, or try the nested order if supported.
+    // For now, let's sort in JavaScript to ensure accuracy across all university fields.
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
-  return data as UniversityMajor[];
+  
+  const results = data as UniversityMajor[];
+
+  if (sortBy === "ranking") {
+    return results.sort((a, b) => {
+      const rankA = a.university?.ranking_egypt ?? 999;
+      const rankB = b.university?.ranking_egypt ?? 999;
+      return rankA - rankB;
+    });
+  }
+
+  return results;
 }
