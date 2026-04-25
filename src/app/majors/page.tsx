@@ -93,6 +93,29 @@ export default async function MajorsPage({
           <p className="text-gray-500 font-cairo text-sm">University Majors — استكشف كل التخصصات المتاحة</p>
         </div>
 
+        {/* Search + Category filter */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <form method="GET" action="/majors" className="flex-1 relative">
+            {params.category && (
+              <input type="hidden" name="category" value={params.category} />
+            )}
+            <input
+              type="search"
+              name="search"
+              defaultValue={params.search ?? ""}
+              placeholder="ابحث عن تخصص... / Search majors"
+              className="w-full h-11 rounded-2xl border border-gray-200 bg-white px-4 pr-10 text-sm font-cairo focus:border-[#d4a843] focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#d4a843]"
+              aria-label="Search"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </button>
+          </form>
+        </div>
+
         {/* Category filter pills */}
         <div className="flex flex-wrap gap-2 mb-6">
           <a

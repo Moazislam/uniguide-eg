@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BadgeCheck, GraduationCap, MapPin } from "lucide-react";
 import CompareButton from "@/components/compare/CompareButton";
+import ShortlistButton from "@/components/universities/ShortlistButton";
 import type { MatchRecommendation, University } from "@/types";
 
 interface Props {
@@ -74,7 +75,9 @@ export default function UniversityCard({ university, recommendation }: Props) {
           {university.tuition_min != null && (
             <div className="text-center">
               <p className="text-xs font-bold text-[#d4a843] font-cairo">
-                {university.tuition_min.toLocaleString()} {university.tuition_currency ?? "EGP"}
+                {university.tuition_min === 0
+                  ? "مجاني / Free"
+                  : `${university.tuition_min.toLocaleString()} ${(university.tuition_currency ?? "EGP").split("/")[0].trim()}`}
               </p>
               <p className="text-[10px] text-gray-400 font-cairo">Starting from</p>
             </div>
@@ -91,9 +94,7 @@ export default function UniversityCard({ university, recommendation }: Props) {
 
         <div className="mt-4 flex items-center gap-2">
           <CompareButton universityId={university.id} compact />
-          <span className="text-[11px] text-gray-400 font-cairo">
-            قارن مع جامعات أخرى بسهولة
-          </span>
+          <ShortlistButton universityId={university.id} compact />
         </div>
 
         {recommendation && (

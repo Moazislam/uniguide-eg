@@ -43,6 +43,12 @@ export interface University {
   total_students?: number;
   faculties_count?: number;
   ranking_egypt?: number;
+  famous_for?: string[];
+  admission_national?: string;
+  admission_ig?: string;
+  admission_american?: string;
+  admission_french?: string;
+  admission_german?: string;
   created_at: string;
 }
 

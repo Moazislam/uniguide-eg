@@ -1,9 +1,23 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CompareButton from "@/components/compare/CompareButton";
+import ShortlistButton from "@/components/universities/ShortlistButton";
 import { getUniversityBySlug } from "@/lib/universities";
 import { getUniversityMajors } from "@/lib/majors";
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const university = await getUniversityBySlug(slug);
+  if (!university) return { title: "University not found — UniGuide" };
+  return {
+    title: `${university.name_ar} / ${university.name_en} — UniGuide`,
+    description: university.description_en ?? `Explore ${university.name_en} — majors, fees, and admissions in Egypt.`,
+  };
+}
 import {
   MapPin,
   Globe,
@@ -28,11 +42,7 @@ export default async function UniversityPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [university, universityMajors] = await Promise.all([
-    getUniversityBySlug(slug),
-    Promise.resolve([]),
-  ]);
-
+  const university = await getUniversityBySlug(slug);
   if (!university) notFound();
 
   const majors = await getUniversityMajors(university.id);
@@ -95,8 +105,9 @@ export default async function UniversityPage({
                   </a>
                 )}
               </div>
-              <div className="mt-4">
+              <div className="mt-4 flex items-center gap-3 flex-wrap">
                 <CompareButton universityId={university.id} />
+                <ShortlistButton universityId={university.id} />
               </div>
             </div>
           </div>
@@ -175,18 +186,23 @@ export default async function UniversityPage({
               </div>
 
               {/* 2. Most Known For Section */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm border-r-4 border-r-[#d4a843]">
-                <div className="flex items-center gap-2 mb-3 text-[#1a3a5c]">
-                  <Star size={20} className="text-[#d4a843]" />
-                  <h2 className="font-bold font-cairo">
-                    تشتهر بـ / Most Known For
-                  </h2>
+              {university.famous_for && university.famous_for.length > 0 && (
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm border-r-4 border-r-[#d4a843]">
+                  <div className="flex items-center gap-2 mb-4 text-[#1a3a5c]">
+                    <Star size={20} className="text-[#d4a843]" />
+                    <h2 className="font-bold font-cairo">
+                      تشتهر بـ / Most Known For
+                    </h2>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {university.famous_for.map((item) => (
+                      <span key={item} className="text-xs bg-[#fff9ee] border border-[#d4a843]/30 text-[#b8922a] px-3 py-1.5 rounded-full font-cairo font-semibold">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <p className="text-sm text-gray-600 font-cairo">
-                  {/* Data will be pulled from university.famous_for or similar field */}
-                  هذا القسم مخصص لأبرز ما يميز الجامعة أكاديمياً أو جغرافياً.
-                </p>
-              </div>
+              )}
 
               {/* 3. Admission Requirements Sections */}
               <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
@@ -197,58 +213,28 @@ export default async function UniversityPage({
                   </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* IG Requirements */}
-                  <div className="p-4 bg-[#faf7f2] rounded-xl border border-gray-50">
-                    <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-2 underline decoration-[#d4a843]">
-                      IG Requirements
-                    </h3>
-                    <p className="text-xs text-gray-500 font-cairo">
-                      Placeholder for IGCSE/GCE entry scores and subject
-                      requirements.
-                    </p>
-                  </div>
-
-                  {/* American Requirements */}
-                  <div className="p-4 bg-[#faf7f2] rounded-xl border border-gray-50">
-                    <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-2 underline decoration-[#d4a843]">
-                      American Requirements
-                    </h3>
-                    <p className="text-xs text-gray-500 font-cairo">
-                      Placeholder for SAT/ACT/EST scores and GPA requirements.
-                    </p>
-                  </div>
-
-                  {/* National Requirements */}
-                  <div className="p-4 bg-[#faf7f2] rounded-xl border border-gray-50">
-                    <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-2 underline decoration-[#d4a843]">
-                      National (Thanaweya Amma)
-                    </h3>
-                    <p className="text-xs text-gray-500 font-cairo">
-                      تنسيق الثانوية العامة المصرية والشهادات المعادلة العربية.
-                    </p>
-                  </div>
-
-                  {/* French Requirements */}
-                  <div className="p-4 bg-[#faf7f2] rounded-xl border border-gray-50">
-                    <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-2 underline decoration-[#d4a843]">
-                      French Requirements
-                    </h3>
-                    <p className="text-xs text-gray-500 font-cairo">
-                      Placeholder for French Baccalaureate requirements.
-                    </p>
-                  </div>
-
-                  {/* German Requirements */}
-                  <div className="p-4 bg-[#faf7f2] rounded-xl border border-gray-50">
-                    <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-2 underline decoration-[#d4a843]">
-                      German Requirements
-                    </h3>
-                    <p className="text-xs text-gray-500 font-cairo">
-                      Placeholder for Abitur requirements.
-                    </p>
-                  </div>
-                </div>
+                {[
+                  { key: "admission_national", label: "الثانوية العامة / Thanaweya Amma", fallback: "يُقبل طلاب الثانوية العامة المصرية وفق تنسيق الوزارة." },
+                  { key: "admission_ig",       label: "IG / IGCSE Requirements",          fallback: null },
+                  { key: "admission_american", label: "American / SAT Requirements",       fallback: null },
+                  { key: "admission_french",   label: "French Baccalaureate",              fallback: null },
+                  { key: "admission_german",   label: "German Abitur",                     fallback: null },
+                ].filter(({ key, fallback }) => {
+                  const val = (university as Record<string, unknown>)[key] as string | undefined;
+                  return val || fallback;
+                }).map(({ key, label, fallback }) => {
+                  const val = (university as Record<string, unknown>)[key] as string | undefined;
+                  return (
+                    <div key={key} className="p-4 bg-[#faf7f2] rounded-xl border border-gray-50">
+                      <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-2 underline decoration-[#d4a843]">
+                        {label}
+                      </h3>
+                      <p className="text-xs text-gray-600 font-cairo leading-relaxed">
+                        {val ?? fallback}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Majors List */}

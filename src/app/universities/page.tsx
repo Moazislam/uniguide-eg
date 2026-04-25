@@ -1,5 +1,11 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import Footer from "@/components/layout/Footer";
+
+export const metadata: Metadata = {
+  title: "Egyptian Universities — UniGuide",
+  description: "Browse and compare public, private, and international universities in Egypt. Filter by score, budget, location, and interests.",
+};
 import Navbar from "@/components/layout/Navbar";
 import { CompareTray } from "@/components/compare/CompareButton";
 import UniversityCard from "@/components/universities/UniversityCard";
