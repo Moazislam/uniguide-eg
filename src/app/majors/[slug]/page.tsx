@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type { University, UniversityMajor } from "@/types";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 
 const categoryLabels: Record<string, { ar: string; en: string; emoji: string }> = {
   medicine:         { ar: "طب",             en: "Medicine",         emoji: "🏥" },
@@ -60,12 +61,12 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
       <Navbar />
 
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <Link
-          href="/majors"
-          className="flex items-center gap-2 text-[#d4a843] font-cairo text-sm mb-6 hover:underline"
-        >
-          <ChevronRight size={16} /> العودة إلى التخصصات / Back to Majors
-        </Link>
+        <Breadcrumbs 
+          items={[
+            { label: "التخصصات", href: "/majors" },
+            { label: major.name_ar }
+          ]} 
+        />
 
         {/* Hero */}
         <header className="mb-10 pb-8 border-b border-gray-200">

@@ -88,15 +88,16 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Nav - Animated Pills */}
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-2" aria-label="Main Navigation">
             {navLinks.map((link, i) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onMouseEnter={() => handleMouseEnter(i)}
                 onMouseLeave={() => handleMouseLeave(i)}
-                className={`relative overflow-hidden px-4 py-2 rounded-full transition-colors font-cairo text-sm font-medium
+                className={`relative overflow-hidden px-4 py-2 rounded-full transition-colors font-cairo text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843]
                   ${pathname === link.href ? "bg-[#1a3a5c] text-white" : "text-[#2c2c2c]"}`}
+                aria-label={`${link.label_ar} / ${link.label_en}`}
               >
                 <span
                   ref={(el) => { circleRefs.current[i] = el; }}
@@ -115,55 +116,24 @@ export default function Navbar() {
           </nav>
 
           {/* Actions */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="flex items-center gap-3">
             {user ? (
-              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo">
-                <User size={15} /> ملفي
+              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label="Profile">
+                <User size={15} /> <span className="hidden sm:inline">ملفي</span>
               </Link>
             ) : (
               <>
-                <Link href="/auth" className="flex items-center gap-1 text-sm text-[#1a3a5c] font-semibold hover:text-[#d4a843] transition-colors font-cairo">
+                <Link href="/auth" className="hidden sm:flex items-center gap-1 text-sm text-[#1a3a5c] font-semibold hover:text-[#d4a843] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] rounded px-1" aria-label="Login">
                   <LogIn size={15} /> دخول
                 </Link>
-                <Link href="/onboarding" className="bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo">
+                <Link href="/onboarding" className="bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label="Get Started">
                   ابدأ الآن
                 </Link>
               </>
             )}
           </div>
-
-          {/* Mobile toggle */}
-          <button className="md:hidden p-2 text-[#1a3a5c]" onClick={() => setOpen(!open)}>
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {open && (
-        <div className="md:hidden bg-[#faf7f2] border-t border-[#d4a843]/20 px-4 py-4 space-y-3">
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href}
-              className="block text-sm font-medium text-[#2c2c2c] hover:text-[#d4a843] py-2 font-cairo"
-              onClick={() => setOpen(false)}>
-              {link.label_ar} / {link.label_en}
-            </Link>
-          ))}
-          {user ? (
-            <Link href="/profile"
-              className="block bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg text-center font-cairo"
-              onClick={() => setOpen(false)}>
-              ملفي الشخصي
-            </Link>
-          ) : (
-            <Link href="/auth"
-              className="block bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg text-center font-cairo"
-              onClick={() => setOpen(false)}>
-              سجّل دخولك / Sign In
-            </Link>
-          )}
-        </div>
-      )}
     </header>
   );
 }

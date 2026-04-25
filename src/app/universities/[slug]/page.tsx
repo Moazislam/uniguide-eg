@@ -8,6 +8,7 @@ import { getUniversityBySlug } from "@/lib/universities";
 import { getUniversityMajors } from "@/lib/majors";
 import { getFacultiesByUniversityId } from "@/lib/faculties";
 import FacultiesSection from "@/components/universities/FacultiesSection";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
@@ -57,6 +58,14 @@ export default async function UniversityPage({
       <Navbar />
 
       <main className="flex-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+          <Breadcrumbs 
+            items={[
+              { label: "الجامعات", href: "/universities" },
+              { label: university.name_ar }
+            ]} 
+          />
+        </div>
         {/* Hero */}
         <div className="bg-gradient-to-br from-[#1a3a5c] to-[#2a5a8c] text-white py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-start gap-5">

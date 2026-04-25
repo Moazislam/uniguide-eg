@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+import BottomNav from "@/components/layout/BottomNav";
+
 export const metadata: Metadata = {
   title: "UniGuide — منصة قرارات الجامعة في مصر",
   description: "Egypt's University Decision Platform — ابحث وقارن واختار الجامعة والتخصص الصح",
@@ -21,8 +23,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-cream font-cairo min-h-screen">
+      <body className="bg-cream font-cairo min-h-screen pb-16 md:pb-0">
         {children}
+        <BottomNav />
       </body>
     </html>
   );
