@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/lib/LanguageContext";
 
 interface ProfileFormState {
   track: string;
@@ -53,11 +54,11 @@ const budgets = [
 ];
 
 const locations = [
-  { id: "Cairo", labelAr: "القاهرة" },
-  { id: "Giza", labelAr: "الجيزة" },
-  { id: "New Cairo", labelAr: "القاهرة الجديدة" },
-  { id: "Sheikh Zayed", labelAr: "الشيخ زايد" },
-  { id: "Alexandria", labelAr: "الإسكندرية" },
+  { id: "Cairo", labelAr: "القاهرة", labelEn: "Cairo" },
+  { id: "Giza", labelAr: "الجيزة", labelEn: "Giza" },
+  { id: "New Cairo", labelAr: "القاهرة الجديدة", labelEn: "New Cairo" },
+  { id: "Sheikh Zayed", labelAr: "الشيخ زايد", labelEn: "Sheikh Zayed" },
+  { id: "Alexandria", labelAr: "الإسكندرية", labelEn: "Alexandria" },
 ];
 
 const mobilityOptions = [
@@ -88,16 +89,16 @@ const systemOptions = [
 ];
 
 const interests = [
-  { id: "medicine", labelAr: "طب" },
-  { id: "engineering", labelAr: "هندسة" },
-  { id: "computer_science", labelAr: "علوم حاسب" },
-  { id: "business", labelAr: "إدارة وأعمال" },
-  { id: "arts", labelAr: "آداب وفنون" },
-  { id: "law", labelAr: "حقوق" },
-  { id: "pharmacy", labelAr: "صيدلة" },
-  { id: "architecture", labelAr: "عمارة" },
-  { id: "media", labelAr: "إعلام" },
-  { id: "science", labelAr: "علوم" },
+  { id: "medicine", labelAr: "طب", labelEn: "Medicine" },
+  { id: "engineering", labelAr: "هندسة", labelEn: "Engineering" },
+  { id: "computer_science", labelAr: "علوم حاسب", labelEn: "CS" },
+  { id: "business", labelAr: "إدارة وأعمال", labelEn: "Business" },
+  { id: "arts", labelAr: "آداب وفنون", labelEn: "Arts" },
+  { id: "law", labelAr: "حقوق", labelEn: "Law" },
+  { id: "pharmacy", labelAr: "صيدلة", labelEn: "Pharmacy" },
+  { id: "architecture", labelAr: "عمارة", labelEn: "Architecture" },
+  { id: "media", labelAr: "إعلام", labelEn: "Media" },
+  { id: "science", labelAr: "علوم", labelEn: "Science" },
 ];
 
 function classNames(...values: Array<string | false | null | undefined>) {
@@ -109,18 +110,21 @@ function SelectionCard({
   onClick,
   title,
   subtitle,
+  isRtl,
 }: {
   active: boolean;
   onClick: () => void;
   title: string;
   subtitle?: string;
+  isRtl: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={classNames(
-        "rounded-2xl border px-4 py-3 text-right transition-all",
+        "rounded-2xl border px-4 py-3 transition-all",
+        isRtl ? "text-right" : "text-left",
         active
           ? "border-[#d4a843] bg-[#fff8e8] shadow-sm"
           : "border-gray-200 bg-white hover:border-[#d4a843]/40 hover:bg-[#faf7f2]"
@@ -169,6 +173,9 @@ function SummaryPill({ label, value }: { label: string; value: string }) {
 export default function ProfilePage() {
   const supabase = createClient();
   const router = useRouter();
+  const { t, isRtl, language } = useLanguage();
+  const isAr = language === "ar";
+  
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<Partial<StudentProfile> | null>(null);
   const [form, setForm] = useState<ProfileFormState>({
@@ -331,7 +338,7 @@ export default function ProfilePage() {
 
     setProfile(nextProfile);
     setInitialForm(form);
-    setMessage("تم حفظ ملف المطابقة بنجاح");
+    setMessage(t("profile.success"));
     setSaving(false);
   };
 
@@ -339,22 +346,22 @@ export default function ProfilePage() {
     <div className="min-h-screen flex flex-col bg-[#faf7f2]">
       <Navbar />
       <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
+        <div className={`flex items-center justify-between mb-8 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+          <div className={`flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
             <div className="w-12 h-12 rounded-full bg-[#1a3a5c] flex items-center justify-center">
               <User size={22} className="text-white" />
             </div>
-            <div>
-              <h1 className="text-xl font-black text-[#1a3a5c] font-cairo">ملفي الشخصي</h1>
-              <p className="text-sm text-gray-400 font-cairo">{user?.email ?? "My Profile"}</p>
+            <div className={isRtl ? 'text-right' : 'text-left'}>
+              <h1 className="text-xl font-black text-[#1a3a5c] font-cairo">{t("profile.title")}</h1>
+              <p className="text-sm text-gray-400 font-cairo">{user?.email ?? ""}</p>
             </div>
           </div>
           <button
             onClick={signOut}
-            className="flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors font-cairo"
+            className={`flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
           >
             <LogOut size={16} />
-            خروج
+            {t("profile.logout")}
           </button>
         </div>
 
@@ -362,17 +369,17 @@ export default function ProfilePage() {
           <div className="space-y-6">
             <div className="overflow-hidden rounded-[28px] border border-gray-100 bg-white shadow-sm">
               <div className="border-b border-gray-100 bg-gradient-to-r from-[#1a3a5c] via-[#21486f] to-[#d4a843] p-6 text-white">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div className={`flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between ${isRtl ? 'text-right' : 'text-left'}`}>
                   <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/70">Matching Profile</p>
-                    <h2 className="mt-2 text-2xl font-black font-cairo">خصص نتائجك بدقة</h2>
+                    <p className="text-xs uppercase tracking-[0.2em] text-white/70">{t("profile.matchingProfile")}</p>
+                    <h2 className="mt-2 text-2xl font-black font-cairo">{t("profile.customize")}</h2>
                     <p className="mt-2 max-w-xl text-sm text-white/80 font-cairo">
-                      حدّث تفضيلاتك مرة واحدة وسنستخدمها لترتيب الجامعات والتخصصات بشكل يناسبك أنت بالذات.
+                      {t("profile.customizeDesc")}
                     </p>
                   </div>
-                  <div className="min-w-[180px] rounded-2xl bg-white/10 px-4 py-3 backdrop-blur-sm">
-                    <div className="flex items-center justify-between text-xs text-white/75">
-                      <span>Profile Completion</span>
+                  <div className="min-w-[180px] rounded-2xl bg-white/10 px-4 py-3 backdrop-blur-sm text-right">
+                    <div className={`flex items-center justify-between text-xs text-white/75 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                      <span>{t("profile.completion")}</span>
                       <span>{profileCompletion}%</span>
                     </div>
                     <div className="mt-2 h-2 rounded-full bg-white/20">
@@ -386,29 +393,29 @@ export default function ProfilePage() {
               </div>
 
               <div className="p-6">
-                <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-2 text-sm font-cairo">
+                <div className={`mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <div className={`flex items-center gap-2 text-sm font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse text-left'}`}>
                     <Sparkles size={16} className="text-[#d4a843]" />
                     <span className="text-[#1a3a5c] font-semibold">Personalize score, budget, location, and study preferences</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className={`flex items-center gap-2 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                     {isDirty && (
                       <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-                        Unsaved changes
+                        {t("profile.unsaved")}
                       </span>
                     )}
                     {!isDirty && !loading && (
                       <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
-                        Up to date
+                        {t("profile.upToDate")}
                       </span>
                     )}
                     <button
                       onClick={saveProfile}
                       disabled={saving || loading || !isDirty}
-                      className="inline-flex items-center gap-2 rounded-xl bg-[#1a3a5c] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#2a5a8c] disabled:opacity-50"
+                      className={`inline-flex items-center gap-2 rounded-xl bg-[#1a3a5c] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#2a5a8c] disabled:opacity-50 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
                     >
                       <Save size={14} />
-                      {saving ? "جارٍ الحفظ..." : "حفظ التغييرات"}
+                      {saving ? t("profile.saving") : t("profile.save")}
                     </button>
                   </div>
                 </div>
@@ -417,28 +424,29 @@ export default function ProfilePage() {
                   <div className="h-48 rounded-2xl bg-gray-50 animate-pulse" />
                 ) : (
                   <div className="space-y-8">
-                    <section>
+                    <section className={isRtl ? 'text-right' : 'text-left'}>
                       <div className="mb-3">
-                        <h3 className="text-sm font-bold text-[#1a3a5c] font-cairo">المسار الأكاديمي والدرجة</h3>
-                        <p className="text-xs text-gray-400 font-cairo">These are the strongest signals for admissions fit.</p>
+                        <h3 className="text-sm font-bold text-[#1a3a5c] font-cairo">{t("profile.academic")}</h3>
+                        <p className="text-xs text-gray-400 font-cairo">{t("profile.academicDesc")}</p>
                       </div>
                       <div className="grid gap-4 md:grid-cols-[1.1fr,0.9fr]">
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 ${isRtl ? 'dir-rtl' : 'dir-ltr'}`}>
                           {tracks.map((track) => (
                             <SelectionCard
                               key={track.id}
                               active={form.track === track.id}
                               onClick={() => setForm((current) => ({ ...current, track: track.id }))}
-                              title={track.labelAr}
-                              subtitle={track.labelEn}
+                              title={isAr ? track.labelAr : track.labelEn}
+                              subtitle={isAr ? track.labelEn : track.labelAr}
+                              isRtl={isRtl}
                             />
                           ))}
                         </div>
                         <div className="rounded-2xl border border-gray-200 bg-[#faf7f2] p-4">
-                          <div className="flex items-end justify-between gap-4">
-                            <div>
-                              <p className="text-sm font-bold text-[#1a3a5c] font-cairo">Score</p>
-                              <p className="text-xs text-gray-400 font-cairo">Thanaweya / expected percentage</p>
+                          <div className={`flex items-end justify-between gap-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                            <div className={isRtl ? 'text-right' : 'text-left'}>
+                              <p className="text-sm font-bold text-[#1a3a5c] font-cairo">{t("profile.score")}</p>
+                              <p className="text-xs text-gray-400 font-cairo">{t("profile.scoreDesc")}</p>
                             </div>
                             <div className="text-3xl font-black text-[#1a3a5c]">{form.score || "—"}</div>
                           </div>
@@ -451,7 +459,7 @@ export default function ProfilePage() {
                             onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
                             className="mt-4 w-full accent-[#d4a843]"
                           />
-                          <div className="mt-3 flex items-center gap-3">
+                          <div className={`mt-3 flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                             <input
                               type="number"
                               min="0"
@@ -460,7 +468,7 @@ export default function ProfilePage() {
                               value={form.score}
                               onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
                               placeholder="85.5"
-                              className="w-28 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-[#1a3a5c] focus:border-[#d4a843] focus:outline-none"
+                              className={`w-28 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-[#1a3a5c] focus:border-[#d4a843] focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
                             />
                             <span className="text-xs text-gray-400">%</span>
                           </div>
@@ -468,67 +476,70 @@ export default function ProfilePage() {
                       </div>
                     </section>
 
-                    <section>
+                    <section className={isRtl ? 'text-right' : 'text-left'}>
                       <div className="mb-3">
-                        <h3 className="text-sm font-bold text-[#1a3a5c] font-cairo">الاهتمامات</h3>
-                        <p className="text-xs text-gray-400 font-cairo">Pick multiple fields so recommendations stay broad but relevant.</p>
+                        <h3 className="text-sm font-bold text-[#1a3a5c] font-cairo">{t("profile.interests")}</h3>
+                        <p className="text-xs text-gray-400 font-cairo">{t("profile.interestsDesc")}</p>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className={`flex flex-wrap gap-2 ${isRtl ? 'flex-row' : 'flex-row-reverse justify-end'}`}>
                         {interests.map((interest) => (
                           <Chip
                             key={interest.id}
                             active={form.interests.includes(interest.id)}
-                            label={interest.labelAr}
+                            label={isAr ? interest.labelAr : interest.labelEn}
                             onClick={() => toggleInterest(interest.id)}
                           />
                         ))}
                       </div>
                     </section>
 
-                    <section>
+                    <section className={isRtl ? 'text-right' : 'text-left'}>
                       <div className="mb-3">
-                        <h3 className="text-sm font-bold text-[#1a3a5c] font-cairo">الميزانية والمكان</h3>
-                        <p className="text-xs text-gray-400 font-cairo">These help remove unrealistic options before ranking.</p>
+                        <h3 className="text-sm font-bold text-[#1a3a5c] font-cairo">{t("profile.budgetLocation")}</h3>
+                        <p className="text-xs text-gray-400 font-cairo">{t("profile.budgetLocationDesc")}</p>
                       </div>
                       <div className="grid gap-5 lg:grid-cols-2">
                         <div>
-                          <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Budget</p>
+                          <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{t("profile.budget")}</p>
                           <div className="grid grid-cols-2 gap-3">
                             {budgets.map((budget) => (
                               <SelectionCard
                                 key={budget.id}
                                 active={form.budget === budget.id}
                                 onClick={() => setForm((current) => ({ ...current, budget: budget.id }))}
-                                title={budget.labelAr}
-                                subtitle={budget.labelEn}
+                                title={isAr ? budget.labelAr : budget.labelEn}
+                                subtitle={isAr ? budget.labelEn : budget.labelAr}
+                                isRtl={isRtl}
                               />
                             ))}
                           </div>
                         </div>
                         <div className="space-y-5">
                           <div>
-                            <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Preferred Location</p>
+                            <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{t("profile.location")}</p>
                             <div className="grid grid-cols-2 gap-3">
                               {locations.map((location) => (
                                 <SelectionCard
                                   key={location.id}
                                   active={form.preferredLocation === location.id}
                                   onClick={() => setForm((current) => ({ ...current, preferredLocation: location.id }))}
-                                  title={location.labelAr}
+                                  title={isAr ? location.labelAr : location.labelEn}
+                                  isRtl={isRtl}
                                 />
                               ))}
                             </div>
                           </div>
                           <div>
-                            <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Mobility</p>
+                            <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{t("profile.mobility")}</p>
                             <div className="grid gap-3">
                               {mobilityOptions.map((option) => (
                                 <SelectionCard
                                   key={option.id}
                                   active={form.mobilityPreference === option.id}
                                   onClick={() => setForm((current) => ({ ...current, mobilityPreference: option.id }))}
-                                  title={option.labelAr}
-                                  subtitle={option.labelEn}
+                                  title={isAr ? option.labelAr : option.labelEn}
+                                  subtitle={isAr ? option.labelEn : option.labelAr}
+                                  isRtl={isRtl}
                                 />
                               ))}
                             </div>
@@ -537,50 +548,53 @@ export default function ProfilePage() {
                       </div>
                     </section>
 
-                    <section>
+                    <section className={isRtl ? 'text-right' : 'text-left'}>
                       <div className="mb-3">
-                        <h3 className="text-sm font-bold text-[#1a3a5c] font-cairo">تفضيلات الدراسة</h3>
-                        <p className="text-xs text-gray-400 font-cairo">Use these to nudge the engine toward the style of university you want.</p>
+                        <h3 className="text-sm font-bold text-[#1a3a5c] font-cairo">{t("profile.studyPrefs")}</h3>
+                        <p className="text-xs text-gray-400 font-cairo">{t("profile.studyPrefsDesc")}</p>
                       </div>
                       <div className="grid gap-5 lg:grid-cols-3">
                         <div>
-                          <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Language</p>
+                          <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{t("details.language")}</p>
                           <div className="grid gap-3">
                             {languageOptions.map((option) => (
                               <SelectionCard
                                 key={option.id}
                                 active={form.preferredLanguage === option.id}
                                 onClick={() => setForm((current) => ({ ...current, preferredLanguage: option.id }))}
-                                title={option.labelAr}
-                                subtitle={option.labelEn}
+                                title={isAr ? option.labelAr : option.labelEn}
+                                subtitle={isAr ? option.labelEn : option.labelAr}
+                                isRtl={isRtl}
                               />
                             ))}
                           </div>
                         </div>
                         <div>
-                          <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">University Type</p>
+                          <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{t("profile.type")}</p>
                           <div className="grid gap-3">
                             {typeOptions.map((option) => (
                               <SelectionCard
                                 key={option.id || "any-type"}
                                 active={form.preferredType === option.id}
                                 onClick={() => setForm((current) => ({ ...current, preferredType: option.id }))}
-                                title={option.labelAr}
-                                subtitle={option.labelEn}
+                                title={isAr ? option.labelAr : option.labelEn}
+                                subtitle={isAr ? option.labelEn : option.labelAr}
+                                isRtl={isRtl}
                               />
                             ))}
                           </div>
                         </div>
                         <div>
-                          <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">System</p>
+                          <p className="mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{t("profile.system")}</p>
                           <div className="grid gap-3">
                             {systemOptions.map((option) => (
                               <SelectionCard
                                 key={option.id || "any-system"}
                                 active={form.preferredSystem === option.id}
                                 onClick={() => setForm((current) => ({ ...current, preferredSystem: option.id }))}
-                                title={option.labelAr}
-                                subtitle={option.labelEn}
+                                title={isAr ? option.labelAr : option.labelEn}
+                                subtitle={isAr ? option.labelEn : option.labelAr}
+                                isRtl={isRtl}
                               />
                             ))}
                           </div>
@@ -589,7 +603,7 @@ export default function ProfilePage() {
                     </section>
 
                     {message && (
-                      <div className="flex items-center gap-2 rounded-2xl border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-700">
+                      <div className={`flex items-center gap-2 rounded-2xl border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-700 ${isRtl ? 'flex-row' : 'flex-row-reverse text-left'}`}>
                         <CheckCircle2 size={16} />
                         <span className="font-cairo">{message}</span>
                       </div>
@@ -599,43 +613,43 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="rounded-[28px] border border-gray-100 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 flex items-center gap-2 font-bold text-[#1a3a5c] font-cairo">
+            <div className={`rounded-[28px] border border-gray-100 bg-white p-6 shadow-sm ${isRtl ? 'text-right' : 'text-left'}`}>
+              <h2 className={`mb-4 flex items-center gap-2 font-bold text-[#1a3a5c] font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                 <GraduationCap size={18} className="text-[#d4a843]" />
-                قائمتي المختصرة ({universities.length})
+                {t("profile.shortlist")} ({universities.length})
               </h2>
               {loading && <div className="h-20 rounded-xl bg-gray-50 animate-pulse" />}
               {!loading && universities.length === 0 && (
                 <div className="rounded-2xl border border-dashed border-gray-200 py-12 text-center">
                   <GraduationCap size={36} className="mx-auto mb-3 text-gray-200" />
-                  <p className="mb-4 text-sm text-gray-400 font-cairo">لا توجد جامعات في قائمتك بعد</p>
+                  <p className="mb-4 text-sm text-gray-400 font-cairo">{t("profile.noShortlist")}</p>
                   <Link
                     href="/universities"
                     className="inline-block rounded-xl bg-[#1a3a5c] px-5 py-2.5 text-sm font-semibold text-white"
                   >
-                    استكشف الجامعات
+                    {t("hero.ctaBrowse")}
                   </Link>
                 </div>
               )}
               {!loading && universities.map((university) => (
                 <div
                   key={university.id}
-                  className="mb-3 flex items-center justify-between rounded-2xl border border-gray-100 p-4 last:mb-0"
+                  className={`mb-3 flex items-center justify-between rounded-2xl border border-gray-100 p-4 last:mb-0 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className={`flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a3a5c]/5">
                       <GraduationCap size={18} className="text-[#1a3a5c]" />
                     </div>
-                    <div>
+                    <div className={isRtl ? 'text-right' : 'text-left'}>
                       <Link
                         href={`/universities/${university.slug}`}
                         className="text-sm font-bold text-[#1a3a5c] font-cairo hover:text-[#d4a843]"
                       >
-                        {university.name_ar}
+                        {isAr ? university.name_ar : university.name_en}
                       </Link>
-                      <p className="flex items-center gap-1 text-xs text-gray-400 font-cairo">
+                      <p className={`flex items-center gap-1 text-xs text-gray-400 font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                         <MapPin size={10} />
-                        {university.location_ar}
+                        {isAr ? university.location_ar : university.location_en}
                       </p>
                     </div>
                   </div>
@@ -651,70 +665,70 @@ export default function ProfilePage() {
           </div>
 
           <div className="space-y-6">
-            <div className="rounded-[28px] bg-[#1a3a5c] p-6 text-white shadow-sm">
-              <div className="flex items-start justify-between gap-3">
+            <div className={`rounded-[28px] bg-[#1a3a5c] p-6 text-white shadow-sm ${isRtl ? 'text-right' : 'text-left'}`}>
+              <div className={`flex items-start justify-between gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-white/60">Recommendation Engine</p>
-                  <p className="mt-2 font-bold font-cairo">ملف المطابقة الحالي</p>
-                  <p className="mt-2 text-sm text-blue-200 font-cairo">
+                  <p className="text-xs uppercase tracking-[0.2em] text-white/60">{t("profile.engine")}</p>
+                  <p className="mt-2 font-bold font-cairo">{t("profile.currentProfile")}</p>
+                  <p className="mt-2 text-sm text-blue-200 font-cairo leading-relaxed">
                     {profile
-                      ? "Your saved profile is now powering personalized recommendations."
-                      : "Complete your profile once and reuse it anytime."}
+                      ? t("profile.profilePowered")
+                      : t("profile.profileEmpty")}
                   </p>
                 </div>
-                <BadgeCheck className="text-[#d4a843]" />
+                <BadgeCheck className="text-[#d4a843] shrink-0" />
               </div>
 
               <div className="mt-5 grid grid-cols-2 gap-3">
-                <SummaryPill label="Track" value={tracks.find((item) => item.id === form.track)?.labelAr ?? ""} />
-                <SummaryPill label="Budget" value={budgets.find((item) => item.id === form.budget)?.labelAr ?? ""} />
-                <SummaryPill label="Location" value={locations.find((item) => item.id === form.preferredLocation)?.labelAr ?? form.preferredLocation} />
-                <SummaryPill label="Interests" value={form.interests.length ? `${form.interests.length} selected` : ""} />
+                <SummaryPill label={isAr ? "المسار" : "Track"} value={isAr ? (tracks.find((item) => item.id === form.track)?.labelAr ?? "") : (tracks.find((item) => item.id === form.track)?.labelEn ?? "")} />
+                <SummaryPill label={isAr ? "الميزانية" : "Budget"} value={isAr ? (budgets.find((item) => item.id === form.budget)?.labelAr ?? "") : (budgets.find((item) => item.id === form.budget)?.labelEn ?? "")} />
+                <SummaryPill label={isAr ? "الموقع" : "Location"} value={isAr ? (locations.find((item) => item.id === form.preferredLocation)?.labelAr ?? form.preferredLocation) : (locations.find((item) => item.id === form.preferredLocation)?.labelEn ?? form.preferredLocation)} />
+                <SummaryPill label={isAr ? "الاهتمامات" : "Interests"} value={form.interests.length ? (isAr ? `${form.interests.length} مختار` : `${form.interests.length} selected`) : ""} />
               </div>
 
               <Link
                 href={`/universities?${recommendationQuery}`}
-                className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-[#d4a843] px-6 py-3 text-sm font-bold text-white"
+                className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-[#d4a843] px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-[#b8922a]"
               >
-                اعرض النتائج الشخصية ←
+                {t("profile.showResults")}
               </Link>
               <Link
                 href="/onboarding"
-                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-white/10 px-6 py-3 text-sm font-semibold text-white"
+                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/20"
               >
-                افتح تجربة المطابقة الكاملة
+                {t("profile.fullExperience")}
               </Link>
             </div>
 
-            <div className="rounded-[28px] border border-gray-100 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 font-bold text-[#1a3a5c] font-cairo">Quick Snapshot</h2>
+            <div className={`rounded-[28px] border border-gray-100 bg-white p-6 shadow-sm ${isRtl ? 'text-right' : 'text-left'}`}>
+              <h2 className="mb-4 font-bold text-[#1a3a5c] font-cairo">{t("profile.snapshot")}</h2>
               <div className="space-y-3 text-sm text-gray-500 font-cairo">
-                <div className="flex items-center justify-between">
-                  <span>Score</span>
+                <div className={`flex items-center justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <span>{t("profile.score")}</span>
                   <strong className="text-[#1a3a5c]">{form.score || "—"}</strong>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span>Mobility</span>
+                <div className={`flex items-center justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <span>{t("profile.mobility")}</span>
                   <strong className="text-[#1a3a5c]">
-                    {mobilityOptions.find((item) => item.id === form.mobilityPreference)?.labelAr || "—"}
+                    {isAr ? (mobilityOptions.find((item) => item.id === form.mobilityPreference)?.labelAr || "—") : (mobilityOptions.find((item) => item.id === form.mobilityPreference)?.labelEn || "—")}
                   </strong>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span>Language</span>
+                <div className={`flex items-center justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <span>{t("details.language")}</span>
                   <strong className="text-[#1a3a5c]">
-                    {languageOptions.find((item) => item.id === form.preferredLanguage)?.labelAr || "—"}
+                    {isAr ? (languageOptions.find((item) => item.id === form.preferredLanguage)?.labelAr || "—") : (languageOptions.find((item) => item.id === form.preferredLanguage)?.labelEn || "—")}
                   </strong>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span>Type</span>
+                <div className={`flex items-center justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <span>{isAr ? "النوع" : "Type"}</span>
                   <strong className="text-[#1a3a5c]">
-                    {typeOptions.find((item) => item.id === form.preferredType)?.labelAr || "—"}
+                    {isAr ? (typeOptions.find((item) => item.id === form.preferredType)?.labelAr || "—") : (typeOptions.find((item) => item.id === form.preferredType)?.labelEn || "—")}
                   </strong>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span>System</span>
+                <div className={`flex items-center justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <span>{isAr ? "النظام" : "System"}</span>
                   <strong className="text-[#1a3a5c]">
-                    {systemOptions.find((item) => item.id === form.preferredSystem)?.labelAr || "—"}
+                    {isAr ? (systemOptions.find((item) => item.id === form.preferredSystem)?.labelAr || "—") : (systemOptions.find((item) => item.id === form.preferredSystem)?.labelEn || "—")}
                   </strong>
                 </div>
               </div>
