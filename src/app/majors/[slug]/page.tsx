@@ -6,6 +6,7 @@ import {
   GraduationCap,
   BookOpen,
   Briefcase,
+  ChevronLeft,
   ChevronRight,
   MapPin,
   Clock,
@@ -17,6 +18,7 @@ import {
 import Link from "next/link";
 import type { University, UniversityMajor } from "@/types";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import { LocalizedHeading, LocalizedText, LocalizedParagraph } from "@/components/layout/LocalizedText";
 
 const categoryLabels: Record<string, { ar: string; en: string; emoji: string }> = {
   medicine:         { ar: "طب",             en: "Medicine",         emoji: "🏥" },
@@ -34,31 +36,15 @@ const categoryLabels: Record<string, { ar: string; en: string; emoji: string }> 
   other:            { ar: "أخرى",           en: "Other",            emoji: "🎓" },
 };
 
-const typeLabels: Record<string, { ar: string; color: string }> = {
-  public: { ar: "حكومية", color: "bg-blue-50 text-blue-700" },
-  private: { ar: "خاصة", color: "bg-amber-50 text-amber-700" },
-  international: { ar: "دولية", color: "bg-green-50 text-green-700" },
-};
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const major = await getMajorBySlug(slug);
-  if (!major) return { title: "Major not found — UniGuide" };
-  return {
-    title: `${major.name_ar} / ${major.name_en} — UniGuide`,
-    description: major.description_en ?? `Explore ${major.name_en} universities and career paths in Egypt.`,
-  };
-}
-
 export default async function MajorDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const major = await getMajorBySlug(slug);
   if (!major) notFound();
 
-  // Get best universities (sorted by ranking)
-  const bestUniversities = await getMajorUniversities(major.id, "ranking");
-  // Get all universities (sorted by tuition for the full list)
-  const allUniversities = await getMajorUniversities(major.id, "tuition");
+  const [bestUniversities, allUniversities] = await Promise.all([
+    getMajorUniversities(major.id, "ranking"),
+    getMajorUniversities(major.id, "tuition"),
+  ]);
 
   const cat = categoryLabels[major.category] ?? categoryLabels.other;
 
@@ -69,7 +55,7 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <Breadcrumbs 
           items={[
-            { label: "التخصصات", href: "/majors" },
+            { label: "التخصصات / Majors", href: "/majors" },
             { label: major.name_ar }
           ]} 
         />
@@ -85,11 +71,6 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                 <span className="text-xs font-semibold text-[#d4a843] uppercase tracking-wider font-cairo">
                   {cat.ar} / {cat.en}
                 </span>
-                {bestUniversities.length > 0 && (
-                  <span className="bg-[#d4a843]/10 text-[#d4a843] text-[10px] px-2 py-0.5 rounded-full font-bold font-cairo flex items-center gap-1">
-                    <Trophy size={10} /> أكثر التخصصات طلباً
-                  </span>
-                )}
               </div>
               <h1 className="text-3xl font-black text-[#1a3a5c] font-cairo mt-1">
                 {major.name_ar}
@@ -98,12 +79,12 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
               <div className="flex items-center gap-4 mt-3 text-sm text-gray-500 font-cairo flex-wrap">
                 <span className="flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-gray-100">
                   <Clock size={14} className="text-[#d4a843]" />
-                  {major.duration_years} سنوات / {major.duration_years} years
+                  {major.duration_years} <LocalizedText tKey="details.years" />
                 </span>
                 {bestUniversities.length > 0 && (
                   <span className="flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-gray-100">
                     <GraduationCap size={14} className="text-[#d4a843]" />
-                    {bestUniversities.length} جامعة متاحة
+                    {bestUniversities.length} جامعة متاحة / Universities
                   </span>
                 )}
               </div>
@@ -122,14 +103,14 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                     <Trophy size={20} />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold font-cairo leading-tight">أفضل الجامعات لهذا التخصص</h2>
-                    <p className="text-xs text-gray-400 font-cairo">Best Ranked Universities for this Major</p>
+                    <LocalizedHeading tKey="details.bestUnis" className="text-xl font-bold font-cairo leading-tight" />
+                    <LocalizedParagraph tKey="details.bestUnisDesc" className="text-xs text-gray-400 font-cairo" />
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {bestUniversities.slice(0, 4).map((um, index) => {
+                {bestUniversities.slice(0, 4).map((um) => {
                   const uni = um.university as University;
                   return (
                     <Link
@@ -147,13 +128,13 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full font-cairo ${typeLabels[uni.type]?.color}`}>
-                              {typeLabels[uni.type]?.ar}
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full font-cairo bg-blue-50 text-blue-700">
+                              {uni.type}
                             </span>
                             {uni.ranking_egypt && (
                               <span className="text-[10px] font-bold text-gray-400 font-cairo flex items-center gap-1">
                                 <BadgeCheck size={12} className="text-[#d4a843]" />
-                                #{uni.ranking_egypt} في مصر
+                                #{uni.ranking_egypt} في مصر / in Egypt
                               </span>
                             )}
                           </div>
@@ -166,16 +147,16 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                              <div className="flex items-center gap-3">
                                 {um.min_score && (
                                   <div className="text-center">
-                                    <p className="text-[10px] text-gray-400 font-cairo">أدنى درجة</p>
+                                    <p className="text-[10px] text-gray-400 font-cairo"><LocalizedText tKey="details.minScore" /></p>
                                     <p className="text-sm font-black text-[#1a3a5c] font-cairo">{um.min_score}%</p>
                                   </div>
                                 )}
                              </div>
                              {um.tuition_per_year != null && (
                                <div className="text-left">
-                                 <p className="text-[10px] text-gray-400 font-cairo">المصاريف السنوية</p>
+                                 <p className="text-[10px] text-gray-400 font-cairo"><LocalizedText tKey="details.tuition" /></p>
                                  <p className="text-sm font-black text-[#d4a843] font-cairo">
-                                   {um.tuition_per_year === 0 ? "مجاني" : `${um.tuition_per_year.toLocaleString()} ${um.currency ?? "EGP"}`}
+                                   {um.tuition_per_year === 0 ? "مجاني / Free" : `${um.tuition_per_year.toLocaleString()} ${um.currency ?? "EGP"}`}
                                  </p>
                                </div>
                              )}
@@ -200,7 +181,7 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                   <div className="absolute top-0 right-0 w-2 h-full bg-[#d4a843]" />
                   <div className="flex items-center gap-3 mb-4 text-[#1a3a5c]">
                     <BookOpen size={22} className="text-[#d4a843]" />
-                    <h2 className="text-xl font-bold font-cairo">عن هذا التخصص</h2>
+                    <h2 className="text-xl font-bold font-cairo"><LocalizedText tKey="details.about" /></h2>
                   </div>
                   {major.description_ar && (
                     <p className="text-gray-700 font-cairo leading-relaxed mb-4 text-lg">
@@ -220,15 +201,13 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                 <div className="flex items-center justify-between mb-6">
                    <div className="flex items-center gap-3 text-[#1a3a5c]">
                     <MapPin size={22} className="text-[#d4a843]" />
-                    <h2 className="text-xl font-bold font-cairo">جميع الجامعات المتاحة ({allUniversities.length})</h2>
+                    <LocalizedHeading tKey="details.allUnis" className="text-xl font-bold font-cairo" />
                   </div>
                 </div>
 
                 {allUniversities.length === 0 ? (
                   <div className="text-center py-10 bg-[#faf7f2] rounded-2xl border border-dashed border-gray-200">
-                    <p className="text-sm text-gray-400 font-cairo">
-                      سيتم إضافة الجامعات قريباً — Data coming soon.
-                    </p>
+                    <LocalizedParagraph tKey="common.noResults" className="text-sm text-gray-400 font-cairo" />
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -256,28 +235,20 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                               <div className="flex items-center gap-3 mt-1 text-[10px] text-gray-400 font-cairo flex-wrap">
                                 <span className="flex items-center gap-1">
                                   <MapPin size={10} />
-                                  {uni.location_ar}
+                                  {uni.location_ar} / {uni.location_en}
                                 </span>
-                                <span className={`px-1.5 py-0.5 rounded-md font-bold ${typeLabels[uni.type]?.color}`}>
-                                  {typeLabels[uni.type]?.ar}
-                                </span>
-                                {um.language && (
-                                  <span className="bg-gray-100 px-1.5 py-0.5 rounded-md text-gray-500">
-                                    {um.language === "arabic" ? "عربي" : um.language === "english" ? "إنجليزي" : "ثنائي"}
-                                  </span>
-                                )}
                               </div>
                             </div>
                           </div>
                           <div className="text-right flex-shrink-0">
                             {um.tuition_per_year != null && (
                               <p className="text-sm font-black text-[#d4a843] font-cairo">
-                                {um.tuition_per_year === 0 ? "مجاني" : `${um.tuition_per_year.toLocaleString()} ${um.currency ?? "EGP"}`}
+                                {um.tuition_per_year === 0 ? "Free" : `${um.tuition_per_year.toLocaleString()} ${um.currency ?? "EGP"}`}
                               </p>
                             )}
                             {um.min_score != null && (
                               <p className="text-[10px] text-gray-400 font-cairo">
-                                التنسيق: {um.min_score}%
+                                {um.min_score}%
                               </p>
                             )}
                           </div>
@@ -296,7 +267,7 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                 <section className="bg-[#1a3a5c] rounded-3xl p-6 text-white shadow-xl">
                   <div className="flex items-center gap-3 mb-6">
                     <Briefcase size={22} className="text-[#d4a843]" />
-                    <h2 className="text-lg font-bold font-cairo">مستقبلك المهني</h2>
+                    <LocalizedHeading tKey="details.futureCareer" className="text-lg font-bold font-cairo" />
                   </div>
                   <div className="space-y-3">
                     {major.career_paths.map((path) => (
@@ -317,10 +288,10 @@ export default async function MajorDetailPage({ params }: { params: Promise<{ sl
                  <div className="w-12 h-12 bg-[#fff9ee] rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#d4a843]">
                    <GraduationCap size={24} />
                  </div>
-                 <h3 className="font-bold text-[#1a3a5c] font-cairo mb-2">محتاج مساعدة؟</h3>
-                 <p className="text-xs text-gray-400 font-cairo mb-4">نقدر نساعدك تختار الجامعة الأنسب لمجموعك وميزانيتك.</p>
+                 <LocalizedHeading tKey="details.needHelp" className="font-bold text-[#1a3a5c] font-cairo mb-2" />
+                 <LocalizedParagraph tKey="details.helpDesc" className="text-xs text-gray-400 font-cairo mb-4" />
                  <Link href="/onboarding" className="block w-full bg-[#1a3a5c] text-white py-2.5 rounded-xl text-sm font-bold font-cairo hover:bg-[#2a5a8c] transition-colors">
-                    جرب المحرك الذكي
+                    <LocalizedText tKey="details.tryEngine" />
                  </Link>
               </div>
             </div>

@@ -1,11 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Footer from "@/components/layout/Footer";
-
-export const metadata: Metadata = {
-  title: "Egyptian Universities — UniGuide",
-  description: "Browse and compare public, private, and international universities in Egypt. Filter by score, budget, location, and interests.",
-};
 import Navbar from "@/components/layout/Navbar";
 import { CompareTray } from "@/components/compare/CompareButton";
 import UniversityCard from "@/components/universities/UniversityCard";
@@ -21,6 +16,12 @@ import {
 } from "@/lib/matching";
 import { getUniversities } from "@/lib/universities";
 import type { MatchProfile, UniversityFilters, UniversityType } from "@/types";
+import { LocalizedHeading, LocalizedParagraph } from "@/components/layout/LocalizedText";
+
+export const metadata: Metadata = {
+  title: "Egyptian Universities — UniGuide",
+  description: "Browse and compare public, private, and international universities in Egypt.",
+};
 
 interface SearchParams {
   search?: string;
@@ -71,7 +72,7 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
       return (
         <div className="text-center py-16">
           <p className="text-gray-500 font-cairo text-sm">
-            No strong personalized matches were found with the current criteria
+            No strong personalized matches were found
           </p>
         </div>
       );
@@ -79,15 +80,6 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
 
     return (
       <>
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
-          <p className="text-sm text-gray-500 font-cairo">
-            {recommendations.length} personalized university matches ranked for this student profile
-          </p>
-          <p className="text-xs text-gray-400 font-cairo">
-            Each university includes its best matching majors
-          </p>
-        </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
           {recommendations.map((recommendation) => (
             <UniversityCard
@@ -118,9 +110,6 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
 
   return (
     <>
-      <p className="text-sm text-gray-500 font-cairo mb-4">
-        {count} universities found
-      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {universities.map((university) => (
           <UniversityCard key={university.id} university={university} />
@@ -162,14 +151,14 @@ export default async function UniversitiesPage({
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         <div className="mb-8">
-          <h1 className="text-2xl font-black text-[#1a3a5c] font-cairo">
-            {matchingMode ? "Personalized Matches" : "Egyptian Universities"}
-          </h1>
-          <p className="text-gray-500 font-cairo text-sm">
-            {matchingMode
-              ? "Recommendations tailored to a single student profile across score, budget, location, and preferences"
-              : "Browse public, private, and international universities"}
-          </p>
+          <LocalizedHeading 
+            tKey={matchingMode ? "uni.matchTitle" : "uni.title"} 
+            className="text-2xl font-black text-[#1a3a5c] font-cairo" 
+          />
+          <LocalizedParagraph 
+            tKey={matchingMode ? "uni.matchSubtitle" : "uni.subtitle"} 
+            className="text-gray-500 font-cairo text-sm" 
+          />
         </div>
 
         <div className="mb-6">

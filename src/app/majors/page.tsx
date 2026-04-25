@@ -5,6 +5,8 @@ import Link from "next/link";
 import type { MajorCategory } from "@/types";
 import { BookOpen, Clock, ChevronLeft } from "lucide-react";
 import { Suspense } from "react";
+import { LocalizedHeading, LocalizedParagraph } from "@/components/layout/LocalizedText";
+import MajorCategoryFilters from "@/components/majors/MajorCategoryFilters";
 
 const categoryLabels: Record<string, { ar: string; en: string; emoji: string }> = {
   medicine:        { ar: "طب",               en: "Medicine",         emoji: "🏥" },
@@ -89,8 +91,8 @@ export default async function MajorsPage({
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         <div className="mb-8">
-          <h1 className="text-2xl font-black text-[#1a3a5c] font-cairo">التخصصات</h1>
-          <p className="text-gray-500 font-cairo text-sm">University Majors — استكشف كل التخصصات المتاحة</p>
+          <LocalizedHeading tKey="major.title" className="text-2xl font-black text-[#1a3a5c] font-cairo" />
+          <LocalizedParagraph tKey="major.subtitle" className="text-gray-500 font-cairo text-sm" />
         </div>
 
         {/* Search + Category filter */}
@@ -116,30 +118,7 @@ export default async function MajorsPage({
           </form>
         </div>
 
-        {/* Category filter pills */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          <a
-            href="/majors"
-            className={`text-xs font-semibold px-3 py-1.5 rounded-full font-cairo transition-colors ${
-              !params.category ? "bg-[#1a3a5c] text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-[#d4a843]"
-            }`}
-          >
-            الكل / All
-          </a>
-          {Object.entries(categoryLabels).map(([key, val]) => (
-            <a
-              key={key}
-              href={`/majors?category=${key}`}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-full font-cairo transition-colors ${
-                params.category === key
-                  ? "bg-[#1a3a5c] text-white"
-                  : "bg-white border border-gray-200 text-gray-600 hover:border-[#d4a843]"
-              }`}
-            >
-              {val.emoji} {val.ar}
-            </a>
-          ))}
-        </div>
+        <MajorCategoryFilters activeCategory={params.category} />
 
         <Suspense fallback={
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

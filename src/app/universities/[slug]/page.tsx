@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CompareButton from "@/components/compare/CompareButton";
@@ -9,29 +8,17 @@ import { getUniversityMajors } from "@/lib/majors";
 import { getFacultiesByUniversityId } from "@/lib/faculties";
 import FacultiesSection from "@/components/universities/FacultiesSection";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
-
-export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> }
-): Promise<Metadata> {
-  const { slug } = await params;
-  const university = await getUniversityBySlug(slug);
-  if (!university) return { title: "University not found — UniGuide" };
-  return {
-    title: `${university.name_ar} / ${university.name_en} — UniGuide`,
-    description: university.description_en ?? `Explore ${university.name_en} — majors, fees, and admissions in Egypt.`,
-  };
-}
+import { LocalizedHeading, LocalizedText, LocalizedParagraph } from "@/components/layout/LocalizedText";
 import {
   MapPin,
   Globe,
   GraduationCap,
-  Users,
-  BookOpen,
   BadgeCheck,
   FileText,
   Star,
   Award,
 } from "lucide-react";
+import type { University, UniversityMajor, Faculty } from "@/types";
 
 const typeLabels: Record<string, { ar: string; en: string }> = {
   public: { ar: "حكومية", en: "Public" },
@@ -61,11 +48,12 @@ export default async function UniversityPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
           <Breadcrumbs 
             items={[
-              { label: "الجامعات", href: "/universities" },
+              { label: "الجامعات / Universities", href: "/universities" },
               { label: university.name_ar }
             ]} 
           />
         </div>
+        
         {/* Hero */}
         <div className="bg-gradient-to-br from-[#1a3a5c] to-[#2a5a8c] text-white py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-start gap-5">
@@ -83,13 +71,12 @@ export default async function UniversityPage({
             <div>
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="bg-[#d4a843]/20 text-[#d4a843] text-xs font-semibold px-2 py-0.5 rounded-full font-cairo">
-                  {typeLabels[university.type]?.ar} /{" "}
-                  {typeLabels[university.type]?.en}
+                  {university.type}
                 </span>
                 {university.ranking_egypt && (
                   <span className="flex items-center gap-1 text-xs text-blue-200 font-cairo">
                     <BadgeCheck size={12} className="text-[#d4a843]" />#
-                    {university.ranking_egypt} في مصر
+                    {university.ranking_egypt} في مصر / in Egypt
                   </span>
                 )}
               </div>
@@ -99,235 +86,143 @@ export default async function UniversityPage({
               <p className="text-blue-200 text-sm font-cairo">
                 {university.name_en}
               </p>
-              <div className="flex items-center gap-4 mt-3 flex-wrap text-sm text-blue-200 font-cairo">
-                <span className="flex items-center gap-1">
-                  <MapPin size={14} />
-                  {university.location_ar}
-                </span>
-                {university.founded_year && (
-                  <span>تأسست {university.founded_year}</span>
-                )}
-                {university.website && (
-                  <a
-                    href={university.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-[#d4a843] hover:underline"
-                  >
-                    <Globe size={14} />
-                    الموقع الرسمي
-                  </a>
-                )}
-              </div>
-              <div className="mt-4 flex items-center gap-3 flex-wrap">
-                <CompareButton universityId={university.id} />
-                <ShortlistButton universityId={university.id} />
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Stats bar */}
-        {(university.faculties_count ||
-          university.total_students ||
-          university.tuition_min) && (
-          <div className="bg-white border-b border-gray-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex gap-8 flex-wrap">
-              {university.faculties_count && (
-                <div className="flex items-center gap-2">
-                  <BookOpen size={16} className="text-[#d4a843]" />
-                  <div>
-                    <p className="text-base font-bold text-[#1a3a5c] font-cairo">
-                      {university.faculties_count}
-                    </p>
-                    <p className="text-xs text-gray-400 font-cairo">
-                      كلية / Faculties
-                    </p>
-                  </div>
-                </div>
-              )}
-              {university.total_students && (
-                <div className="flex items-center gap-2">
-                  <Users size={16} className="text-[#d4a843]" />
-                  <div>
-                    <p className="text-base font-bold text-[#1a3a5c] font-cairo">
-                      {university.total_students.toLocaleString()}
-                    </p>
-                    <p className="text-xs text-gray-400 font-cairo">
-                      طالب / Students
-                    </p>
-                  </div>
-                </div>
-              )}
-              {university.tuition_min && (
-                <div className="flex items-center gap-2">
-                  <div>
-                    <p className="text-base font-bold text-[#d4a843] font-cairo">
-                      {university.tuition_min.toLocaleString()}{" "}
-                      {university.tuition_currency ?? "EGP"}
-                    </p>
-                    <p className="text-xs text-gray-400 font-cairo">
-                      مصروفات تبدأ من / Tuition from
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main content */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* 1. University Description Section */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <div className="flex items-center gap-2 mb-4 text-[#1a3a5c]">
-                  <FileText size={20} className="text-[#d4a843]" />
-                  <h2 className="font-bold font-cairo">
-                    وصف الجامعة / University Description
-                  </h2>
+            {/* Left Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* About */}
+              <section className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
+                <div className="flex items-center gap-3 mb-6 text-[#1a3a5c]">
+                  <FileText size={22} className="text-[#d4a843]" />
+                  <LocalizedHeading tKey="details.about" className="text-xl font-bold font-cairo" />
                 </div>
-                <p className="text-sm text-gray-600 font-cairo leading-relaxed">
-                  {university.description_ar || "سيتم إضافة الوصف قريباً..."}
-                </p>
-                {university.description_en && (
-                  <p className="text-xs text-gray-400 font-cairo mt-3 leading-relaxed border-t pt-3">
-                    {university.description_en}
-                  </p>
-                )}
-              </div>
+                <div className="prose prose-blue max-w-none">
+                   {/* We use localized text blocks for description too */}
+                   <p className="text-gray-600 font-cairo leading-relaxed whitespace-pre-line">
+                     {university.description_ar}
+                   </p>
+                   <p className="text-gray-400 font-cairo text-sm leading-relaxed whitespace-pre-line border-t pt-4 mt-4">
+                     {university.description_en}
+                   </p>
+                </div>
+              </section>
 
-              {/* 2. Most Known For Section */}
-              {university.famous_for && university.famous_for.length > 0 && (
-                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm border-r-4 border-r-[#d4a843]">
-                  <div className="flex items-center gap-2 mb-4 text-[#1a3a5c]">
-                    <Star size={20} className="text-[#d4a843]" />
-                    <h2 className="font-bold font-cairo">
-                      تشتهر بـ / Most Known For
-                    </h2>
+              {/* Admission */}
+              {(university.admission_requirements_ar ||
+                university.admission_requirements_en) && (
+                <section className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
+                  <div className="flex items-center gap-3 mb-6 text-[#1a3a5c]">
+                    <BadgeCheck size={22} className="text-[#d4a843]" />
+                    <LocalizedHeading tKey="details.admission" className="text-xl font-bold font-cairo" />
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {university.famous_for.map((item) => (
-                      <span key={item} className="text-xs bg-[#fff9ee] border border-[#d4a843]/30 text-[#b8922a] px-3 py-1.5 rounded-full font-cairo font-semibold">
-                        {item}
-                      </span>
-                    ))}
+                  <div className="space-y-6">
+                     {university.admission_requirements_ar && (
+                       <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                         {university.admission_requirements_ar}
+                       </p>
+                     )}
+                     {university.admission_requirements_en && (
+                       <p className="text-gray-400 font-cairo text-xs leading-relaxed whitespace-pre-line border-t pt-4">
+                         {university.admission_requirements_en}
+                       </p>
+                     )}
                   </div>
-                </div>
+                </section>
               )}
-
-              {/* 3. Admission Requirements Sections */}
-              <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <div className="flex items-center gap-2 mb-6 text-[#1a3a5c] border-b pb-3">
-                  <Award size={20} className="text-[#d4a843]" />
-                  <h2 className="font-bold font-cairo text-lg">
-                    متطلبات القبول / Admission Requirements
-                  </h2>
-                </div>
-
-                {[
-                  { key: "admission_national", label: "الثانوية العامة / Thanaweya Amma", fallback: "يُقبل طلاب الثانوية العامة المصرية وفق تنسيق الوزارة." },
-                  { key: "admission_ig",       label: "IG / IGCSE Requirements",          fallback: null },
-                  { key: "admission_american", label: "American / SAT Requirements",       fallback: null },
-                  { key: "admission_french",   label: "French Baccalaureate",              fallback: null },
-                  { key: "admission_german",   label: "German Abitur",                     fallback: null },
-                ].filter(({ key, fallback }) => {
-                  const val = (university as unknown as Record<string, unknown>)[key] as string | undefined;
-                  return val || fallback;
-                }).map(({ key, label, fallback }) => {
-                  const val = (university as unknown as Record<string, unknown>)[key] as string | undefined;
-                  return (
-                    <div key={key} className="p-4 bg-[#faf7f2] rounded-xl border border-gray-50">
-                      <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-2 underline decoration-[#d4a843]">
-                        {label}
-                      </h3>
-                      <p className="text-xs text-gray-600 font-cairo leading-relaxed">
-                        {val ?? fallback}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
 
               {/* Faculties Section */}
               <FacultiesSection faculties={faculties} universityMajors={majors} />
+            </div>
 
-              {/* Majors List */}
-              {majors.length > 0 && (
-                <div className="bg-white rounded-2xl p-5 border border-gray-100">
-                  <h2 className="font-bold text-[#1a3a5c] font-cairo mb-4">
-                    التخصصات المتاحة ({majors.length})
-                  </h2>
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Quick Info */}
+              <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
+                <div className="space-y-5">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                      <MapPin size={18} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase font-cairo">Location</p>
+                      <p className="text-sm font-bold text-[#1a3a5c] font-cairo">
+                        {university.location_ar} / {university.location_en}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
+                      <Star size={18} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase font-cairo">System</p>
+                      <p className="text-sm font-bold text-[#1a3a5c] font-cairo capitalize">
+                        {university.system}
+                      </p>
+                    </div>
+                  </div>
+
+                  {university.website && (
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">
+                        <Globe size={18} />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] text-gray-400 font-bold uppercase font-cairo">Website</p>
+                        <a
+                          href={university.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-bold text-blue-600 hover:underline font-cairo block truncate"
+                        >
+                          {university.website.replace(/^https?:\/\//, "")}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-gray-50 grid grid-cols-2 gap-3">
+                  <ShortlistButton universityId={university.id} />
+                  <CompareButton universityId={university.id} />
+                </div>
+              </div>
+
+              {/* Accreditation */}
+              {university.accreditations && university.accreditations.length > 0 && (
+                <div className="bg-[#1a3a5c] rounded-3xl p-6 text-white shadow-xl">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Award size={22} className="text-[#d4a843]" />
+                    <LocalizedHeading tKey="details.accreditations" className="font-bold font-cairo" />
+                  </div>
                   <div className="space-y-3">
-                    {majors.map((um) => (
+                    {university.accreditations.map((item) => (
                       <div
-                        key={um.id}
-                        className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0"
+                        key={item}
+                        className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10"
                       >
-                        <div>
-                          <p className="text-sm font-semibold text-[#1a3a5c] font-cairo">
-                            {um.major?.name_ar}
-                          </p>
-                          <p className="text-xs text-gray-400 font-cairo">
-                            {um.major?.name_en}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          {um.tuition_per_year && (
-                            <p className="text-xs font-bold text-[#d4a843] font-cairo">
-                              {um.tuition_per_year.toLocaleString()}{" "}
-                              {um.currency ?? "EGP"}/year
-                            </p>
-                          )}
-                          {um.min_score && (
-                            <p className="text-xs text-gray-400 font-cairo">
-                              أدنى درجة: {um.min_score}%
-                            </p>
-                          )}
-                        </div>
+                        <BadgeCheck size={16} className="text-[#d4a843]" />
+                        <span className="text-xs font-medium font-cairo">{item}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
-            </div>
 
-            {/* Sidebar */}
-            <div className="space-y-4">
-              {/* Accreditations */}
-              {university.accreditations?.length ? (
-                <div className="bg-white rounded-2xl p-5 border border-gray-100">
-                  <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-3">
-                    الاعتمادات / Accreditations
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {university.accreditations.map((a) => (
-                      <span
-                        key={a}
-                        className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full font-cairo"
-                      >
-                        {a}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
-              {/* Compare CTA */}
-              <div className="bg-[#1a3a5c] rounded-2xl p-5 text-white">
-                <h3 className="font-bold font-cairo text-sm mb-2">
-                  قارن مع جامعات أخرى
-                </h3>
-                <p className="text-blue-200 text-xs font-cairo mb-3">
-                  Compare with other universities side-by-side
-                </p>
+              {/* Compare Promo */}
+              <div className="bg-gradient-to-br from-[#fff9ee] to-[#fff4d9] rounded-3xl p-6 border border-[#d4a843]/20">
+                <LocalizedHeading tKey="details.compareCta" className="font-black text-[#1a3a5c] font-cairo mb-2" />
+                <LocalizedParagraph tKey="details.compareDesc" className="text-xs text-gray-600 font-cairo mb-4 leading-relaxed" />
                 <a
                   href="/compare"
-                  className="block text-center bg-[#d4a843] text-white text-sm font-semibold py-2 rounded-xl hover:bg-[#b8922a] transition-colors font-cairo"
+                  className="inline-flex items-center justify-center w-full bg-[#1a3a5c] text-white py-3 rounded-xl text-xs font-bold hover:bg-[#b8922a] transition-colors font-cairo"
                 >
-                  اذهب للمقارنة →
+                  <LocalizedText tKey="details.goToCompare" /> →
                 </a>
               </div>
             </div>
