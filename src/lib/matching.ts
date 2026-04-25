@@ -256,6 +256,8 @@ function getRankingScore(rankingEgypt: number | undefined) {
 
 function hardReject(profile: MatchProfile, row: JoinedUniversityMajor) {
   const compatibleTracks = getCompatibleTracks(profile.track);
+  
+  // 1. Explicit Track Compatibility (Database-driven)
   if (
     profile.track &&
     row.major.required_tracks?.length &&
@@ -264,16 +266,37 @@ function hardReject(profile: MatchProfile, row: JoinedUniversityMajor) {
     return true;
   }
 
+  // 2. Hard Egyptian Eligibility Constraints (Fallback/Explicit)
+  // Math track students (national) cannot enter medical fields
+  if (profile.track === "math") {
+    const medicalCategories: MajorCategory[] = ["medicine", "pharmacy", "dentistry", "vet"];
+    if (medicalCategories.includes(row.major.category)) return true;
+  }
+
+  // Science or Arts track students (national) cannot enter Engineering
+  if (profile.track === "science" || profile.track === "arts") {
+    if (row.major.category === "engineering") return true;
+  }
+
+  // Arts track students (national) cannot enter most scientific fields
+  if (profile.track === "arts") {
+    const scientificCategories: MajorCategory[] = ["medicine", "pharmacy", "dentistry", "vet", "science", "engineering"];
+    if (scientificCategories.includes(row.major.category)) return true;
+  }
+
+  // 3. Score Thresholds (Strict rejection if way below cutoff)
   if (profile.score != null && row.min_score != null && profile.score < row.min_score - 7) {
     return true;
   }
 
+  // 4. Budget constraints (Rejection if way over budget)
   const { max } = parseBudgetRange(profile.budget);
   const tuition = row.tuition_per_year ?? row.university.tuition_min;
   if (max != null && tuition != null && tuition > max * 1.35) {
     return true;
   }
 
+  // 5. Location/Mobility
   if (
     profile.preferredLocation &&
     profile.mobilityPreference === "same_city" &&
