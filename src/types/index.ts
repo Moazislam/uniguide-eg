@@ -174,3 +174,23 @@ export interface PaginatedResponse<T> {
   page: number;
   pageSize: number;
 }
+
+export type FacultyCategory =
+  | "medicine" | "engineering" | "business" | "arts" | "science" | "law"
+  | "pharmacy" | "dentistry" | "media" | "computer_science" | "architecture"
+  | "education" | "agriculture" | "tourism" | "other";
+
+export interface Faculty {
+  id: string;
+  university_id: string;
+  name_ar: string;
+  name_en: string;
+  category: FacultyCategory;
+  description_ar?: string;
+  duration_years?: number;
+  tuition_min?: number;
+  currency?: string;
+  language?: string;
+  website?: string;
+  created_at: string;
+}

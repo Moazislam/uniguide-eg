@@ -6,6 +6,8 @@ import CompareButton from "@/components/compare/CompareButton";
 import ShortlistButton from "@/components/universities/ShortlistButton";
 import { getUniversityBySlug } from "@/lib/universities";
 import { getUniversityMajors } from "@/lib/majors";
+import { getFacultiesByUniversityId } from "@/lib/faculties";
+import FacultiesSection from "@/components/universities/FacultiesSection";
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
@@ -45,7 +47,10 @@ export default async function UniversityPage({
   const university = await getUniversityBySlug(slug);
   if (!university) notFound();
 
-  const majors = await getUniversityMajors(university.id);
+  const [majors, faculties] = await Promise.all([
+    getUniversityMajors(university.id),
+    getFacultiesByUniversityId(university.id),
+  ]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#faf7f2]">
@@ -236,6 +241,9 @@ export default async function UniversityPage({
                   );
                 })}
               </div>
+
+              {/* Faculties Section */}
+              <FacultiesSection faculties={faculties} />
 
               {/* Majors List */}
               {majors.length > 0 && (
