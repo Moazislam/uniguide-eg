@@ -197,6 +197,36 @@ export default function FacultiesSection({ faculties, universityMajors = [] }: P
               )}
             </div>
 
+            {/* Admission Requirements */}
+            {(selectedFaculty.admission_national || selectedFaculty.admission_ig || selectedFaculty.admission_american || selectedFaculty.admission_other) && (
+              <div className="space-y-4">
+                <div className={`flex items-center gap-2 text-[#1a3a5c] ${isRtl ? 'flex-row' : 'flex-row-reverse text-left'}`}>
+                  <BadgeCheck size={20} className="text-[#d4a843]" />
+                  <h4 className="font-bold">{t("details.admission")}</h4>
+                </div>
+                <div className="grid grid-cols-1 gap-3">
+                  {selectedFaculty.admission_national && (
+                    <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100/50">
+                      <p className="font-bold text-[#1a3a5c] text-[10px] uppercase tracking-wider mb-1">{t("details.thanaweya")}</p>
+                      <p className="text-gray-600 text-xs leading-relaxed">{selectedFaculty.admission_national}</p>
+                    </div>
+                  )}
+                  {selectedFaculty.admission_ig && (
+                    <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-100/50">
+                      <p className="font-bold text-[#1a3a5c] text-[10px] uppercase tracking-wider mb-1">{t("details.ig")}</p>
+                      <p className="text-gray-600 text-xs leading-relaxed">{selectedFaculty.admission_ig}</p>
+                    </div>
+                  )}
+                  {selectedFaculty.admission_american && (
+                    <div className="p-4 rounded-2xl bg-purple-50/50 border border-purple-100/50">
+                      <p className="font-bold text-[#1a3a5c] text-[10px] uppercase tracking-wider mb-1">{t("details.american")}</p>
+                      <p className="text-gray-600 text-xs leading-relaxed">{selectedFaculty.admission_american}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Departments / Majors */}
             <div>
               <div className={`flex items-center gap-2 mb-4 text-[#1a3a5c] ${isRtl ? 'flex-row' : 'flex-row-reverse text-left'}`}>

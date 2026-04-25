@@ -192,5 +192,9 @@ export interface Faculty {
   currency?: string;
   language?: string;
   website?: string;
+  admission_national?: string;
+  admission_ig?: string;
+  admission_american?: string;
+  admission_other?: string;
   created_at: string;
 }
