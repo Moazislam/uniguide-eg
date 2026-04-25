@@ -31,36 +31,43 @@ export default function UniversityCard({ university, recommendation }: Props) {
   return (
     <Link
       href={`/universities/${university.slug}`}
-      className="group block bg-white rounded-2xl border border-gray-100 hover:border-[#d4a843]/40 hover:shadow-lg transition-all duration-200 overflow-hidden"
+      className="group block bg-white rounded-3xl border border-gray-100 hover:border-[#d4a843]/40 hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
     >
-      <div className="h-28 bg-gradient-to-br from-[#1a3a5c] to-[#2a5a8c] relative">
-        {university.cover_url && (
-          <img
-            src={university.cover_url}
-            alt={isAr ? university.name_ar : university.name_en}
-            className="w-full h-full object-cover opacity-40"
-          />
+      <div className="h-32 bg-[#1a3a5c] relative overflow-hidden">
+        {university.cover_url ? (
+          <>
+            <img
+              src={university.cover_url}
+              alt={isAr ? university.name_ar : university.name_en}
+              className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a3a5c] via-transparent to-transparent opacity-60" />
+          </>
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-[#1a3a5c] to-[#2a5a8c]" />
         )}
-        <div className={`absolute -bottom-5 ${isRtl ? 'right-4' : 'left-4'} w-14 h-14 rounded-xl bg-white shadow border border-gray-100 flex items-center justify-center overflow-hidden`}>
+        
+        <div className={`absolute -bottom-6 ${isRtl ? 'right-6' : 'left-6'} w-16 h-16 rounded-2xl bg-white shadow-xl border border-gray-100 flex items-center justify-center overflow-hidden z-10 group-hover:scale-105 transition-transform duration-300`}>
           {university.logo_url ? (
-            <img src={university.logo_url} alt={isAr ? university.name_ar : university.name_en} className="w-10 h-10 object-contain" />
+            <img src={university.logo_url} alt={isAr ? university.name_ar : university.name_en} className="w-12 h-12 object-contain" />
           ) : (
-            <GraduationCap size={24} className="text-[#1a3a5c]" />
+            <GraduationCap size={28} className="text-[#1a3a5c]" />
           )}
         </div>
-        <div className={`absolute top-3 ${isRtl ? 'left-3' : 'right-3'} flex items-center gap-2`}>
-          <span className={`text-xs font-semibold px-2 py-1 rounded-full font-cairo ${typeColors[university.type]}`}>
+        
+        <div className={`absolute top-4 ${isRtl ? 'left-4' : 'right-4'} flex items-center gap-2 z-10`}>
+          <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-lg font-cairo ${typeColors[university.type]} !bg-opacity-90`}>
             {isAr ? typeLabels[university.type]?.ar : typeLabels[university.type]?.en}
           </span>
           {recommendation && (
-            <span className="text-xs font-semibold px-2 py-1 rounded-full font-cairo bg-white/90 text-[#1a3a5c]">
+            <span className="text-[10px] font-black px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-lg font-cairo bg-white/90 text-[#1a3a5c]">
               {recommendation.overallScore}% {isAr ? "توافق" : "Match"}
             </span>
           )}
         </div>
       </div>
 
-      <div className={`p-4 ${isRtl ? 'pt-8' : 'pt-8 text-left'}`}>
+      <div className={`p-6 ${isRtl ? 'pt-10' : 'pt-10 text-left'}`}>
         <h3 className="font-bold text-[#1a3a5c] text-base leading-snug font-cairo group-hover:text-[#d4a843] transition-colors">
           {isAr ? university.name_ar : university.name_en}
         </h3>
