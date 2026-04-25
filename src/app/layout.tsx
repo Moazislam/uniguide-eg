@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import BottomNav from "@/components/layout/BottomNav";
+import { LanguageProvider } from "@/lib/LanguageContext";
 
 export const metadata: Metadata = {
   title: "UniGuide — منصة قرارات الجامعة في مصر",
@@ -24,8 +25,10 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-cream font-cairo min-h-screen pb-16 md:pb-0">
-        {children}
-        <BottomNav />
+        <LanguageProvider>
+          {children}
+          <BottomNav />
+        </LanguageProvider>
       </body>
     </html>
   );

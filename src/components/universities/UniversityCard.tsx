@@ -3,6 +3,7 @@ import { BadgeCheck, GraduationCap, MapPin } from "lucide-react";
 import CompareButton from "@/components/compare/CompareButton";
 import ShortlistButton from "@/components/universities/ShortlistButton";
 import type { MatchRecommendation, University } from "@/types";
+import { useLanguage } from "@/lib/LanguageContext";
 
 interface Props {
   university: University;
@@ -22,6 +23,9 @@ const typeLabels: Record<string, { ar: string; en: string }> = {
 };
 
 export default function UniversityCard({ university, recommendation }: Props) {
+  const { language, isRtl } = useLanguage();
+  const isAr = language === "ar";
+
   return (
     <Link
       href={`/universities/${university.slug}`}
@@ -31,62 +35,62 @@ export default function UniversityCard({ university, recommendation }: Props) {
         {university.cover_url && (
           <img
             src={university.cover_url}
-            alt={university.name_en}
+            alt={isAr ? university.name_ar : university.name_en}
             className="w-full h-full object-cover opacity-40"
           />
         )}
-        <div className="absolute -bottom-5 right-4 w-14 h-14 rounded-xl bg-white shadow border border-gray-100 flex items-center justify-center overflow-hidden">
+        <div className={`absolute -bottom-5 ${isRtl ? 'right-4' : 'left-4'} w-14 h-14 rounded-xl bg-white shadow border border-gray-100 flex items-center justify-center overflow-hidden`}>
           {university.logo_url ? (
-            <img src={university.logo_url} alt={university.name_en} className="w-10 h-10 object-contain" />
+            <img src={university.logo_url} alt={isAr ? university.name_ar : university.name_en} className="w-10 h-10 object-contain" />
           ) : (
             <GraduationCap size={24} className="text-[#1a3a5c]" />
           )}
         </div>
-        <div className="absolute top-3 left-3 flex items-center gap-2">
+        <div className={`absolute top-3 ${isRtl ? 'left-3' : 'right-3'} flex items-center gap-2`}>
           <span className={`text-xs font-semibold px-2 py-1 rounded-full font-cairo ${typeColors[university.type]}`}>
-            {typeLabels[university.type]?.ar}
+            {isAr ? typeLabels[university.type]?.ar : typeLabels[university.type]?.en}
           </span>
           {recommendation && (
             <span className="text-xs font-semibold px-2 py-1 rounded-full font-cairo bg-white/90 text-[#1a3a5c]">
-              {recommendation.overallScore}% Match
+              {recommendation.overallScore}% {isAr ? "توافق" : "Match"}
             </span>
           )}
         </div>
       </div>
 
-      <div className="p-4 pt-8">
+      <div className={`p-4 ${isRtl ? 'pt-8' : 'pt-8 text-left'}`}>
         <h3 className="font-bold text-[#1a3a5c] text-base leading-snug font-cairo group-hover:text-[#d4a843] transition-colors">
-          {university.name_ar}
+          {isAr ? university.name_ar : university.name_en}
         </h3>
-        <p className="text-xs text-gray-500 font-cairo mt-0.5">{university.name_en}</p>
+        <p className="text-xs text-gray-500 font-cairo mt-0.5">{isAr ? university.name_en : university.name_ar}</p>
 
         <div className="flex items-center gap-1 mt-2 text-gray-500">
           <MapPin size={12} />
-          <span className="text-xs font-cairo">{university.location_ar}</span>
+          <span className="text-xs font-cairo">{isAr ? university.location_ar : university.location_en}</span>
         </div>
 
         <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-100">
           {university.faculties_count && (
             <div className="text-center">
               <p className="text-xs font-bold text-[#1a3a5c] font-cairo">{university.faculties_count}</p>
-              <p className="text-[10px] text-gray-400 font-cairo">Faculties</p>
+              <p className="text-[10px] text-gray-400 font-cairo">{isAr ? "كلية" : "Faculties"}</p>
             </div>
           )}
           {university.tuition_min != null && (
             <div className="text-center">
               <p className="text-xs font-bold text-[#d4a843] font-cairo">
                 {university.tuition_min === 0
-                  ? "مجاني / Free"
-                  : `${university.tuition_min.toLocaleString()} ${(university.tuition_currency ?? "EGP").split("/")[0].trim()}`}
+                  ? (isAr ? "مجاني" : "Free")
+                  : `${university.tuition_min.toLocaleString()} ${isAr ? "ج.م" : "EGP"}`}
               </p>
-              <p className="text-[10px] text-gray-400 font-cairo">Starting from</p>
+              <p className="text-[10px] text-gray-400 font-cairo">{isAr ? "بداية من" : "Starting from"}</p>
             </div>
           )}
           {university.ranking_egypt && (
-            <div className="mr-auto">
+            <div className={isRtl ? "mr-auto" : "ml-auto"}>
               <span className="flex items-center gap-1 text-[10px] text-gray-400 font-cairo">
                 <BadgeCheck size={11} className="text-[#d4a843]" />
-                #{university.ranking_egypt} in Egypt
+                #{university.ranking_egypt} {isAr ? "في مصر" : "in Egypt"}
               </span>
             </div>
           )}
@@ -101,17 +105,17 @@ export default function UniversityCard({ university, recommendation }: Props) {
           <div className="mt-4 space-y-3">
             <div className="rounded-xl bg-[#faf7f2] p-3">
               <p className="text-[11px] font-semibold text-[#1a3a5c] font-cairo mb-2">
-                Top matching majors ({recommendation.matchedMajorsCount})
+                {isAr ? "أفضل التخصصات المتوافقة" : "Top matching majors"} ({recommendation.matchedMajorsCount})
               </p>
               <div className="space-y-2">
                 {recommendation.topMajors.map((majorMatch) => (
                   <div key={majorMatch.universityMajor.id} className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-bold text-[#1a3a5c] font-cairo">{majorMatch.major.name_ar}</p>
-                      <p className="text-[11px] text-gray-400 font-cairo">{majorMatch.major.name_en}</p>
+                    <div className={isRtl ? "" : "text-left"}>
+                      <p className="text-sm font-bold text-[#1a3a5c] font-cairo">{isAr ? majorMatch.major.name_ar : majorMatch.major.name_en}</p>
+                      <p className="text-[11px] text-gray-400 font-cairo">{isAr ? majorMatch.major.name_en : majorMatch.major.name_ar}</p>
                       {majorMatch.universityMajor.min_score != null && (
                         <p className="text-[11px] text-gray-500 font-cairo">
-                          Cutoff: {majorMatch.universityMajor.min_score}%
+                          {isAr ? "تنسيق" : "Cutoff"}: {majorMatch.universityMajor.min_score}%
                         </p>
                       )}
                     </div>
@@ -119,14 +123,6 @@ export default function UniversityCard({ university, recommendation }: Props) {
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div className="space-y-1">
-              {recommendation.reasons.map((reason) => (
-                <p key={reason} className="text-[11px] text-gray-500 font-cairo leading-relaxed">
-                  {reason}
-                </p>
-              ))}
             </div>
           </div>
         )}

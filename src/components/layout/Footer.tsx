@@ -1,7 +1,12 @@
+"use client";
 import Link from "next/link";
 import { Instagram, Facebook } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Footer() {
+  const { t, language } = useLanguage();
+  const isAr = language === "ar";
+
   return (
     <footer className="bg-[#1a3a5c] text-white py-12 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,8 +20,7 @@ export default function Footer() {
               <span className="font-bold text-white text-lg font-cairo">UniGuide</span>
             </div>
             <p className="text-sm text-blue-200 font-cairo leading-relaxed">
-              منصة اتخاذ قرارات الجامعة في مصر<br />
-              Egypt's University Decision Platform
+              {isAr ? "منصة اتخاذ قرارات الجامعة في مصر" : "Egypt's University Decision Platform"}
             </p>
             <div className="flex gap-3 mt-4">
               <a href="https://instagram.com/uni.guidee" target="_blank" rel="noopener noreferrer"
@@ -32,26 +36,30 @@ export default function Footer() {
 
           {/* Platform Links */}
           <div>
-            <h4 className="font-semibold text-[#d4a843] text-sm mb-3 font-cairo">المنصة / Platform</h4>
+            <h4 className="font-semibold text-[#d4a843] text-sm mb-3 font-cairo">
+              {isAr ? "المنصة" : "Platform"}
+            </h4>
             <ul className="space-y-2 text-sm text-blue-200 font-cairo">
-              <li><Link href="/universities" className="hover:text-white transition-colors">الجامعات / Universities</Link></li>
-              <li><Link href="/majors" className="hover:text-white transition-colors">التخصصات / Majors</Link></li>
-              <li><Link href="/compare" className="hover:text-white transition-colors">مقارنة / Compare</Link></li>
-              <li><Link href="/onboarding" className="hover:text-white transition-colors">ابدأ / Get Started</Link></li>
+              <li><Link href="/universities" className="hover:text-white transition-colors">{t("nav.universities")}</Link></li>
+              <li><Link href="/majors" className="hover:text-white transition-colors">{t("nav.majors")}</Link></li>
+              <li><Link href="/compare" className="hover:text-white transition-colors">{t("nav.compare")}</Link></li>
+              <li><Link href="/onboarding" className="hover:text-white transition-colors">{t("nav.start")}</Link></li>
             </ul>
           </div>
 
           {/* Info */}
           <div>
-            <h4 className="font-semibold text-[#d4a843] text-sm mb-3 font-cairo">معلومات / Info</h4>
+            <h4 className="font-semibold text-[#d4a843] text-sm mb-3 font-cairo">
+              {isAr ? "معلومات" : "Info"}
+            </h4>
             <ul className="space-y-2 text-sm text-blue-200 font-cairo">
-              <li><Link href="/profile" className="hover:text-white transition-colors">ملفي / My Profile</Link></li>
+              <li><Link href="/profile" className="hover:text-white transition-colors">{t("nav.profile")}</Link></li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-white/10 mt-8 pt-6 text-center text-xs text-blue-300 font-cairo">
-          © 2026 UniGuide · جميع الحقوق محفوظة · All rights reserved
+          © 2026 UniGuide · {isAr ? "جميع الحقوق محفوظة" : "All rights reserved"}
         </div>
       </div>
     </footer>

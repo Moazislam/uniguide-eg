@@ -6,11 +6,13 @@ import { usePathname } from "next/navigation";
 import { Menu, X, User, LogIn } from "lucide-react";
 import { gsap } from "gsap";
 import { createClient } from "@/lib/supabase/client";
+import LanguageToggle from "./LanguageToggle";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const navLinks = [
-  { href: "/universities", label_ar: "الجامعات", label_en: "Universities" },
-  { href: "/majors",       label_ar: "التخصصات", label_en: "Majors" },
-  { href: "/compare",      label_ar: "مقارنة",   label_en: "Compare" },
+  { href: "/universities", key: "nav.universities" },
+  { href: "/majors",       key: "nav.majors" },
+  { href: "/compare",      key: "nav.compare" },
 ];
 
 export default function Navbar() {
@@ -18,6 +20,7 @@ export default function Navbar() {
   const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
   const supabase = createClient();
+  const { t, language } = useLanguage();
 
   const circleRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const tlRefs = useRef<Array<gsap.core.Timeline | null>>([]);
@@ -69,7 +72,7 @@ export default function Navbar() {
     initPillAnimations();
     window.addEventListener("resize", initPillAnimations);
     return () => window.removeEventListener("resize", initPillAnimations);
-  }, []);
+  }, [language]); // Re-init when language changes because text width might change
 
   const handleMouseEnter = (i: number) => tlRefs.current[i]?.play();
   const handleMouseLeave = (i: number) => tlRefs.current[i]?.reverse();
@@ -97,7 +100,7 @@ export default function Navbar() {
                 onMouseLeave={() => handleMouseLeave(i)}
                 className={`relative overflow-hidden px-4 py-2 rounded-full transition-colors font-cairo text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843]
                   ${pathname === link.href ? "bg-[#1a3a5c] text-white" : "text-[#2c2c2c]"}`}
-                aria-label={`${link.label_ar} / ${link.label_en}`}
+                aria-label={t(link.key)}
               >
                 <span
                   ref={(el) => { circleRefs.current[i] = el; }}
@@ -105,10 +108,10 @@ export default function Navbar() {
                 />
                 <span className="relative z-10 flex flex-col items-center">
                   <span className="pill-label block">
-                    {link.label_ar} <span className="text-[10px] opacity-60">/ {link.label_en}</span>
+                    {t(link.key)}
                   </span>
                   <span className="pill-label-hover absolute inset-0 flex items-center justify-center opacity-0 text-[#d4a843] translate-y-4">
-                    {link.label_ar}
+                    {t(link.key)}
                   </span>
                 </span>
               </Link>
@@ -117,17 +120,18 @@ export default function Navbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
+            <LanguageToggle />
             {user ? (
-              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label="Profile">
-                <User size={15} /> <span className="hidden sm:inline">ملفي</span>
+              <Link href="/profile" className="flex items-center gap-2 bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.profile")}>
+                <User size={15} /> <span className="hidden sm:inline">{t("nav.profile")}</span>
               </Link>
             ) : (
               <>
-                <Link href="/auth" className="hidden sm:flex items-center gap-1 text-sm text-[#1a3a5c] font-semibold hover:text-[#d4a843] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] rounded px-1" aria-label="Login">
-                  <LogIn size={15} /> دخول
+                <Link href="/auth" className="hidden sm:flex items-center gap-1 text-sm text-[#1a3a5c] font-semibold hover:text-[#d4a843] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] rounded px-1" aria-label={t("nav.login")}>
+                  <LogIn size={15} /> {t("nav.login")}
                 </Link>
-                <Link href="/onboarding" className="bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label="Get Started">
-                  ابدأ الآن
+                <Link href="/onboarding" className="bg-[#1a3a5c] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#2a5a8c] transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a843] focus-visible:ring-offset-2" aria-label={t("nav.start")}>
+                  {t("nav.start")}
                 </Link>
               </>
             )}
