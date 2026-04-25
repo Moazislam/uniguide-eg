@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { BadgeCheck, GraduationCap, MapPin } from "lucide-react";
 import CompareButton from "@/components/compare/CompareButton";
