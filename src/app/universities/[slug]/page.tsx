@@ -225,10 +225,10 @@ export default async function UniversityPage({
                   { key: "admission_french",   label: "French Baccalaureate",              fallback: null },
                   { key: "admission_german",   label: "German Abitur",                     fallback: null },
                 ].filter(({ key, fallback }) => {
-                  const val = (university as Record<string, unknown>)[key] as string | undefined;
+                  const val = (university as unknown as Record<string, unknown>)[key] as string | undefined;
                   return val || fallback;
                 }).map(({ key, label, fallback }) => {
-                  const val = (university as Record<string, unknown>)[key] as string | undefined;
+                  const val = (university as unknown as Record<string, unknown>)[key] as string | undefined;
                   return (
                     <div key={key} className="p-4 bg-[#faf7f2] rounded-xl border border-gray-50">
                       <h3 className="font-bold text-[#1a3a5c] font-cairo text-sm mb-2 underline decoration-[#d4a843]">
