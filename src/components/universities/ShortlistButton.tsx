@@ -71,8 +71,8 @@ export default function ShortlistButton({ universityId, compact = false }: Props
         title={saved ? "إزالة من القائمة" : "حفظ في القائمة"}
         className={`flex items-center justify-center w-8 h-8 rounded-xl border transition-all ${
           saved
-            ? "border-[#d4a843] bg-[#fff9ee] text-[#d4a843]"
-            : "border-gray-200 bg-white text-gray-400 hover:border-[#d4a843]/50 hover:text-[#d4a843]"
+            ? "border-amber bg-amber/10 text-amber"
+            : "border-border bg-card-bg text-text-secondary/60 hover:border-amber/50 hover:text-amber"
         }`}
       >
         {saved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
@@ -86,8 +86,8 @@ export default function ShortlistButton({ universityId, compact = false }: Props
       disabled={loading}
       className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold font-cairo transition-all ${
         saved
-          ? "border-[#d4a843] bg-[#fff9ee] text-[#d4a843]"
-          : "border-gray-200 bg-white text-gray-600 hover:border-[#d4a843]/50 hover:text-[#d4a843]"
+          ? "border-amber bg-amber/10 text-amber"
+          : "border-border bg-card-bg text-text-secondary hover:border-amber/50 hover:text-amber"
       }`}
     >
       {saved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}

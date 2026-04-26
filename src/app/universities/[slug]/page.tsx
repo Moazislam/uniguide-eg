@@ -41,7 +41,7 @@ export default async function UniversityPage({
   ]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf7f2]">
+    <div className="min-h-screen flex flex-col bg-cream">
       <Navbar />
 
       <main className="flex-1">
@@ -55,7 +55,7 @@ export default async function UniversityPage({
         </div>
         
         {/* Hero */}
-        <div className="bg-gradient-to-br from-[#1a3a5c] to-[#2a5a8c] text-white py-10">
+        <div className="bg-gradient-to-br from-blue to-blue-light text-white py-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-start gap-5">
             <div className="w-16 h-16 rounded-2xl bg-white shadow flex items-center justify-center flex-shrink-0">
               {university.logo_url ? (
@@ -65,17 +65,17 @@ export default async function UniversityPage({
                   className="w-12 h-12 object-contain"
                 />
               ) : (
-                <GraduationCap size={28} className="text-[#1a3a5c]" />
+                <GraduationCap size={28} className="text-blue" />
               )}
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <span className="bg-[#d4a843]/20 text-[#d4a843] text-xs font-semibold px-2 py-0.5 rounded-full font-cairo">
+                <span className="bg-amber/20 text-amber text-xs font-semibold px-2 py-0.5 rounded-full font-cairo">
                   {university.type}
                 </span>
                 {university.ranking_egypt && (
-                  <span className="flex items-center gap-1 text-xs text-blue-200 font-cairo">
-                    <BadgeCheck size={12} className="text-[#d4a843]" />#
+                  <span className="flex items-center gap-1 text-xs text-blue-100/80 font-cairo">
+                    <BadgeCheck size={12} className="text-amber" />#
                     {university.ranking_egypt} في مصر / in Egypt
                   </span>
                 )}
@@ -83,7 +83,7 @@ export default async function UniversityPage({
               <h1 className="text-2xl sm:text-3xl font-black font-cairo">
                 {university.name_ar}
               </h1>
-              <p className="text-blue-200 text-sm font-cairo">
+              <p className="text-blue-100/80 text-sm font-cairo">
                 {university.name_en}
               </p>
             </div>
@@ -95,17 +95,17 @@ export default async function UniversityPage({
             {/* Left Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* About */}
-              <section className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
-                <div className="flex items-center gap-3 mb-6 text-[#1a3a5c]">
-                  <FileText size={22} className="text-[#d4a843]" />
+              <section className="bg-card-bg rounded-3xl p-8 border border-border shadow-sm">
+                <div className="flex items-center gap-3 mb-6 text-blue dark:text-white">
+                  <FileText size={22} className="text-amber" />
                   <LocalizedHeading tKey="details.about" className="text-xl font-bold font-cairo" />
                 </div>
-                <div className="prose prose-blue max-w-none">
+                <div className="prose prose-blue dark:prose-invert max-w-none">
                    {/* We use localized text blocks for description too */}
-                   <p className="text-gray-600 font-cairo leading-relaxed whitespace-pre-line">
+                   <p className="text-text-secondary font-cairo leading-relaxed whitespace-pre-line">
                      {university.description_ar}
                    </p>
-                   <p className="text-gray-400 font-cairo text-sm leading-relaxed whitespace-pre-line border-t pt-4 mt-4">
+                   <p className="text-text-secondary/80 font-cairo text-sm leading-relaxed whitespace-pre-line border-t border-border pt-4 mt-4">
                      {university.description_en}
                    </p>
                 </div>
@@ -113,40 +113,40 @@ export default async function UniversityPage({
 
               {/* Admission */}
               {(university.admission_national || university.admission_ig || university.admission_american || university.admission_french || university.admission_german) && (
-                <section className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
-                  <div className="flex items-center gap-3 mb-6 text-[#1a3a5c]">
-                    <BadgeCheck size={22} className="text-[#d4a843]" />
+                <section className="bg-card-bg rounded-3xl p-8 border border-border shadow-sm">
+                  <div className="flex items-center gap-3 mb-6 text-blue dark:text-white">
+                    <BadgeCheck size={22} className="text-amber" />
                     <LocalizedHeading tKey="details.admission" className="text-xl font-bold font-cairo" />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {university.admission_national && (
-                      <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100/50">
-                        <h4 className="font-bold text-[#1a3a5c] text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.thanaweya" /></h4>
-                        <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                      <div className="p-4 rounded-2xl bg-blue/5 border border-blue/10">
+                        <h4 className="font-bold text-blue dark:text-blue-light text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.thanaweya" /></h4>
+                        <p className="text-text-secondary font-cairo text-sm leading-relaxed whitespace-pre-line">
                           {university.admission_national}
                         </p>
                       </div>
                     )}
                     {university.admission_ig && (
-                      <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-100/50">
-                        <h4 className="font-bold text-[#1a3a5c] text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.ig" /></h4>
-                        <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                      <div className="p-4 rounded-2xl bg-amber/5 border border-amber/10">
+                        <h4 className="font-bold text-blue dark:text-amber text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.ig" /></h4>
+                        <p className="text-text-secondary font-cairo text-sm leading-relaxed whitespace-pre-line">
                           {university.admission_ig}
                         </p>
                       </div>
                     )}
                     {university.admission_american && (
-                      <div className="p-4 rounded-2xl bg-purple-50/50 border border-purple-100/50">
-                        <h4 className="font-bold text-[#1a3a5c] text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.american" /></h4>
-                        <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                      <div className="p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-900/10 border border-purple-100/50 dark:border-purple-900/20">
+                        <h4 className="font-bold text-blue dark:text-purple-400 text-xs uppercase tracking-wider mb-2 font-cairo"><LocalizedText tKey="details.american" /></h4>
+                        <p className="text-text-secondary font-cairo text-sm leading-relaxed whitespace-pre-line">
                           {university.admission_american}
                         </p>
                       </div>
                     )}
                     {(university.admission_french || university.admission_german) && (
-                      <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
-                        <h4 className="font-bold text-[#1a3a5c] text-xs uppercase tracking-wider mb-2 font-cairo">Other Diplomas / شهادات أخرى</h4>
-                        <p className="text-gray-600 font-cairo text-sm leading-relaxed whitespace-pre-line">
+                      <div className="p-4 rounded-2xl bg-cream/50 border border-border">
+                        <h4 className="font-bold text-blue dark:text-white text-xs uppercase tracking-wider mb-2 font-cairo">Other Diplomas / شهادات أخرى</h4>
+                        <p className="text-text-secondary font-cairo text-sm leading-relaxed whitespace-pre-line">
                           {[university.admission_french, university.admission_german].filter(Boolean).join('\n\n')}
                         </p>
                       </div>
@@ -162,27 +162,27 @@ export default async function UniversityPage({
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Quick Info */}
-              <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
+              <div className="bg-card-bg rounded-3xl p-6 border border-border shadow-sm">
                 <div className="space-y-5">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-blue/5 flex items-center justify-center text-blue flex-shrink-0">
                       <MapPin size={18} />
                     </div>
                     <div>
-                      <p className="text-[10px] text-gray-400 font-bold uppercase font-cairo">Location</p>
-                      <p className="text-sm font-bold text-[#1a3a5c] font-cairo">
+                      <p className="text-[10px] text-text-secondary/80 font-bold uppercase font-cairo">Location</p>
+                      <p className="text-sm font-bold text-blue dark:text-white font-cairo">
                         {university.location_ar} / {university.location_en}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-amber/5 flex items-center justify-center text-amber flex-shrink-0">
                       <Star size={18} />
                     </div>
                     <div>
-                      <p className="text-[10px] text-gray-400 font-bold uppercase font-cairo">System</p>
-                      <p className="text-sm font-bold text-[#1a3a5c] font-cairo capitalize">
+                      <p className="text-[10px] text-text-secondary/80 font-bold uppercase font-cairo">System</p>
+                      <p className="text-sm font-bold text-blue dark:text-white font-cairo capitalize">
                         {university.system}
                       </p>
                     </div>
@@ -190,16 +190,16 @@ export default async function UniversityPage({
 
                   {university.website && (
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 flex-shrink-0">
                         <Globe size={18} />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[10px] text-gray-400 font-bold uppercase font-cairo">Website</p>
+                        <p className="text-[10px] text-text-secondary/80 font-bold uppercase font-cairo">Website</p>
                         <a
                           href={university.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm font-bold text-blue-600 hover:underline font-cairo block truncate"
+                          className="text-sm font-bold text-blue hover:underline font-cairo block truncate"
                         >
                           {university.website.replace(/^https?:\/\//, "")}
                         </a>
@@ -208,7 +208,7 @@ export default async function UniversityPage({
                   )}
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-gray-50 grid grid-cols-2 gap-3">
+                <div className="mt-8 pt-6 border-t border-border grid grid-cols-2 gap-3">
                   <ShortlistButton universityId={university.id} />
                   <CompareButton universityId={university.id} />
                 </div>
@@ -216,9 +216,9 @@ export default async function UniversityPage({
 
               {/* Accreditation */}
               {university.accreditations && university.accreditations.length > 0 && (
-                <div className="bg-[#1a3a5c] rounded-3xl p-6 text-white shadow-xl">
+                <div className="bg-blue rounded-3xl p-6 text-white shadow-xl">
                   <div className="flex items-center gap-3 mb-6">
-                    <Award size={22} className="text-[#d4a843]" />
+                    <Award size={22} className="text-amber" />
                     <LocalizedHeading tKey="details.accreditations" className="font-bold font-cairo" />
                   </div>
                   <div className="space-y-3">
@@ -227,7 +227,7 @@ export default async function UniversityPage({
                         key={item}
                         className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10"
                       >
-                        <BadgeCheck size={16} className="text-[#d4a843]" />
+                        <BadgeCheck size={16} className="text-amber" />
                         <span className="text-xs font-medium font-cairo">{item}</span>
                       </div>
                     ))}
@@ -236,12 +236,12 @@ export default async function UniversityPage({
               )}
 
               {/* Compare Promo */}
-              <div className="bg-gradient-to-br from-[#fff9ee] to-[#fff4d9] rounded-3xl p-6 border border-[#d4a843]/20">
-                <LocalizedHeading tKey="details.compareCta" className="font-black text-[#1a3a5c] font-cairo mb-2" />
-                <LocalizedParagraph tKey="details.compareDesc" className="text-xs text-gray-600 font-cairo mb-4 leading-relaxed" />
+              <div className="bg-gradient-to-br from-cream to-amber/5 rounded-3xl p-6 border border-amber/20">
+                <LocalizedHeading tKey="details.compareCta" className="font-black text-blue dark:text-white font-cairo mb-2" />
+                <LocalizedParagraph tKey="details.compareDesc" className="text-xs text-text-secondary font-cairo mb-4 leading-relaxed" />
                 <a
                   href="/compare"
-                  className="inline-flex items-center justify-center w-full bg-[#1a3a5c] text-white py-3 rounded-xl text-xs font-bold hover:bg-[#b8922a] transition-colors font-cairo"
+                  className="inline-flex items-center justify-center w-full bg-blue text-white py-3 rounded-xl text-xs font-bold hover:bg-amber-dark transition-colors font-cairo"
                 >
                   <LocalizedText tKey="details.goToCompare" /> →
                 </a>

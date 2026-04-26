@@ -22,7 +22,7 @@ export default function Breadcrumbs({ items }: Props) {
     <nav className="flex items-center gap-2 text-xs font-cairo mb-6 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar" aria-label="Breadcrumb">
       <Link
         href="/"
-        className="text-gray-400 hover:text-[#d4a843] transition-colors flex items-center gap-1"
+        className="text-text-secondary hover:text-amber transition-colors flex items-center gap-1"
         aria-label={t("nav.home")}
       >
         <Home size={14} />
@@ -30,16 +30,16 @@ export default function Breadcrumbs({ items }: Props) {
 
       {items.map((item, index) => (
         <React.Fragment key={index}>
-          {isRtl ? <ChevronLeft size={12} className="text-gray-300 shrink-0" /> : <ChevronRight size={12} className="text-gray-300 shrink-0" />}
+          {isRtl ? <ChevronLeft size={12} className="text-text-secondary/60 shrink-0" /> : <ChevronRight size={12} className="text-text-secondary/60 shrink-0" />}
           {item.href ? (
             <Link
               href={item.href}
-              className="text-gray-400 hover:text-[#d4a843] transition-colors"
+              className="text-text-secondary hover:text-amber transition-colors"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="text-[#1a3a5c] font-bold" aria-current="page">
+            <span className="text-blue dark:text-amber font-bold" aria-current="page">
               {item.label}
             </span>
           )}

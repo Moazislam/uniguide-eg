@@ -29,7 +29,7 @@ export default function BottomNav() {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center gap-1 w-full h-full transition-colors relative ${
-                isActive ? "text-[#1a3a5c]" : "text-gray-400"
+                isActive ? "text-blue dark:text-amber" : "text-text-secondary/60"
               }`}
               aria-label={t(item.key)}
             >

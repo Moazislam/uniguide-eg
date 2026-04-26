@@ -94,10 +94,10 @@ export default function CompareButton({ universityId, compact = false }: Props) 
           : "px-3.5 py-2 text-sm"
       } ${
         isAdded
-          ? "bg-[#d4a843] text-white shadow-sm"
+          ? "bg-amber text-white dark:text-blue-dark shadow-sm"
           : isFull
-            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-            : "bg-[#1a3a5c]/6 text-[#1a3a5c] hover:bg-[#1a3a5c] hover:text-white"
+            ? "bg-card-bg/50 text-text-secondary/40 border border-border cursor-not-allowed"
+            : "bg-blue/5 dark:bg-amber/10 text-blue dark:text-amber hover:bg-blue dark:hover:bg-amber hover:text-white dark:hover:text-blue-dark"
       }`}
     >
       {isAdded ? <Check size={14} /> : <GitCompareArrows size={14} />}
@@ -113,17 +113,17 @@ export function CompareTray() {
   if (!ids.length) return null;
 
   return (
-    <div className={`fixed bottom-5 left-1/2 z-40 w-[min(94vw,700px)] -translate-x-1/2 rounded-2xl border border-[#1a3a5c]/10 bg-white/95 p-3 shadow-2xl backdrop-blur ${isRtl ? 'dir-rtl' : 'dir-ltr'}`}>
+    <div className={`fixed bottom-20 md:bottom-5 left-1/2 z-40 w-[min(94vw,700px)] -translate-x-1/2 rounded-2xl border border-border bg-card-bg/95 dark:bg-card-bg/80 p-3 shadow-2xl backdrop-blur-xl ${isRtl ? 'dir-rtl' : 'dir-ltr'}`}>
       <div className={`flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
         <div className={`flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#1a3a5c] text-white">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue dark:bg-amber text-white dark:text-blue-dark">
             <GitCompareArrows size={18} />
           </div>
           <div className={isRtl ? 'text-right' : 'text-left'}>
-            <p className="text-sm font-bold text-[#1a3a5c] font-cairo">
+            <p className="text-sm font-bold text-blue dark:text-text-primary font-cairo">
               {ids.length} {t("compare.trayTitle")}
             </p>
-            <p className="text-xs text-gray-500 font-cairo">
+            <p className="text-xs text-text-secondary font-cairo">
               {t("compare.trayDesc")}
             </p>
           </div>
@@ -133,14 +133,14 @@ export function CompareTray() {
           <button
             type="button"
             onClick={clear}
-            className={`inline-flex items-center gap-1 rounded-xl border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-500 transition-colors hover:border-red-200 hover:text-red-500 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+            className={`inline-flex items-center gap-1 rounded-xl border border-border bg-card-bg px-3 py-2 text-xs font-semibold text-text-secondary transition-colors hover:border-red-200 hover:text-red-500 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
           >
             <X size={12} />
             {t("compare.emptyTray")}
           </button>
           <Link
             href="/compare"
-            className={`inline-flex items-center gap-2 rounded-xl bg-[#d4a843] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#b8922a] ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
+            className={`inline-flex items-center gap-2 rounded-xl bg-amber text-white dark:text-blue-dark px-4 py-2.5 text-sm font-bold transition-colors hover:bg-amber-dark ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}
           >
             {t("compare.open")}
             <GitCompareArrows size={14} />

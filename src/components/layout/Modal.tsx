@@ -36,13 +36,13 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       />
       
       {/* Content */}
-      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
+      <div className="relative bg-card-bg rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200 border border-border">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-bold text-[#1a3a5c] font-cairo">{title}</h3>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-card-bg">
+          <h3 className="text-lg font-bold text-blue dark:text-text-primary font-cairo">{title}</h3>
           <button 
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-[#d4a843] hover:bg-gray-50 rounded-full transition-all"
+            className="p-2 text-text-secondary hover:text-amber hover:bg-cream dark:hover:bg-blue/10 rounded-full transition-all"
             aria-label="Close"
           >
             <X size={20} />
@@ -50,7 +50,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
         </div>
         
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-gray-200">
+        <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-border">
           {children}
         </div>
       </div>

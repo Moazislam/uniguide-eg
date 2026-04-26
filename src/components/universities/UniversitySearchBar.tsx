@@ -44,9 +44,9 @@ export default function UniversitySearchBar() {
       {/* Search input */}
       <div className="relative flex-1">
         {isPending ? (
-          <Loader2 size={16} className={`absolute top-1/2 ${isAr ? 'right-3' : 'left-3'} -translate-y-1/2 text-[#d4a843] animate-spin`} />
+          <Loader2 size={16} className={`absolute top-1/2 ${isAr ? 'right-3' : 'left-3'} -translate-y-1/2 text-amber animate-spin`} />
         ) : (
-          <Search size={16} className={`absolute top-1/2 ${isAr ? 'right-3' : 'left-3'} -translate-y-1/2 text-gray-400`} />
+          <Search size={16} className={`absolute top-1/2 ${isAr ? 'right-3' : 'left-3'} -translate-y-1/2 text-text-secondary/60`} />
         )}
         <input
           type="text"

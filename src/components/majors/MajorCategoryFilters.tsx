@@ -26,7 +26,7 @@ export default function MajorCategoryFilters({ activeCategory }: { activeCategor
       <a
         href="/majors"
         className={`text-xs font-semibold px-3 py-1.5 rounded-full font-cairo transition-colors ${
-          !activeCategory ? "bg-[#1a3a5c] text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-[#d4a843]"
+          !activeCategory ? "bg-blue text-white" : "bg-card-bg border border-border text-text-secondary hover:border-amber"
         }`}
       >
         {t("major.all")}
@@ -37,8 +37,8 @@ export default function MajorCategoryFilters({ activeCategory }: { activeCategor
           href={`/majors?category=${key}`}
           className={`text-xs font-semibold px-3 py-1.5 rounded-full font-cairo transition-colors ${
             activeCategory === key
-              ? "bg-[#1a3a5c] text-white"
-              : "bg-white border border-gray-200 text-gray-600 hover:border-[#d4a843]"
+              ? "bg-blue text-white"
+              : "bg-card-bg border border-border text-text-secondary hover:border-amber"
           }`}
         >
           {val.emoji} {isRtl ? val.ar : val.en}

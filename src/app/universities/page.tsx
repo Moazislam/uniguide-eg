@@ -70,8 +70,8 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
 
     if (!recommendations.length) {
       return (
-        <div className="text-center py-16">
-          <p className="text-gray-500 font-cairo text-sm">
+        <div className="text-center py-16 bg-card-bg/50 rounded-[32px] border border-dashed border-border">
+          <p className="text-text-secondary font-cairo text-sm">
             No strong personalized matches were found
           </p>
         </div>
@@ -102,8 +102,8 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
 
   if (!universities.length) {
     return (
-      <div className="text-center py-16">
-        <p className="text-gray-500 font-cairo text-sm">No results found</p>
+      <div className="text-center py-16 bg-card-bg/50 rounded-[32px] border border-dashed border-border">
+        <p className="text-text-secondary font-cairo text-sm">No results found</p>
       </div>
     );
   }

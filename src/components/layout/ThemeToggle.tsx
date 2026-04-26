@@ -15,7 +15,7 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="w-9 h-9 rounded-xl border border-gray-200 bg-white" />
+      <div className="w-9 h-9 rounded-xl border border-border bg-card-bg/50" />
     );
   }
 
