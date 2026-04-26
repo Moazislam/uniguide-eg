@@ -81,7 +81,7 @@ export default function HomePage() {
                 <span className="block text-amber font-playfair italic">{t("hero.titleHighlight")}</span>
               </h1>
 
-              <p className="mt-6 max-w-2xl text-base leading-8 text-text-secondary font-cairo sm:text-lg">
+              <p className="mt-6 max-w-2xl text-base leading-8 text-text-primary/80 dark:text-text-secondary font-cairo sm:text-lg">
                 {t("hero.description")}
               </p>
 
@@ -95,7 +95,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/universities"
-                  className="inline-flex items-center justify-center rounded-2xl border-2 border-blue/15 dark:border-border bg-white/80 dark:bg-card-bg/20 px-8 py-4 text-base font-bold text-blue dark:text-text-primary transition-colors hover:border-amber/40 hover:bg-white dark:hover:bg-card-bg/40"
+                  className="inline-flex items-center justify-center rounded-2xl border-2 border-blue/15 dark:border-border bg-white dark:bg-card-bg/40 px-8 py-4 text-base font-bold text-blue dark:text-text-primary transition-colors hover:border-amber/40 hover:bg-white dark:hover:bg-card-bg"
                 >
                   {t("hero.ctaBrowse")}
                 </Link>

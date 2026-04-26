@@ -87,7 +87,7 @@ export default function ShortlistButton({ universityId, compact = false }: Props
       className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold font-cairo transition-all ${
         saved
           ? "border-amber bg-amber/10 text-amber"
-          : "border-border bg-card-bg text-text-secondary hover:border-amber/50 hover:text-amber"
+          : "border-border bg-card-bg text-text-primary dark:text-text-secondary hover:border-amber/50 hover:text-amber"
       }`}
     >
       {saved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
