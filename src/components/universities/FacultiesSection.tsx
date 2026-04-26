@@ -75,8 +75,8 @@ export default function FacultiesSection({ faculties, universityMajors = [] }: P
           onClick={() => setActive("all")}
           className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold font-cairo transition-all border ${
             active === "all"
-              ? "bg-blue dark:bg-amber text-white dark:text-blue border-blue dark:border-amber"
-              : "bg-card-bg text-text-secondary border-border hover:border-amber/40 hover:text-blue dark:hover:text-white"
+              ? "bg-blue dark:bg-amber text-white dark:text-blue-dark border-blue dark:border-amber"
+              : "bg-card-bg text-text-secondary border-border hover:border-amber/40 hover:text-blue dark:hover:text-amber"
           }`}
         >
           {t("major.all")} ({faculties.length})
@@ -90,8 +90,8 @@ export default function FacultiesSection({ faculties, universityMajors = [] }: P
               onClick={() => setActive(cat)}
               className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold font-cairo transition-all border ${
                 active === cat
-                  ? "bg-blue dark:bg-amber text-white dark:text-blue border-blue dark:border-amber"
-                  : "bg-card-bg text-text-secondary border-border hover:border-amber/40 hover:text-blue dark:hover:text-white"
+                  ? "bg-blue dark:bg-amber text-white dark:text-blue-dark border-blue dark:border-amber"
+                  : "bg-card-bg text-text-secondary border-border hover:border-amber/40 hover:text-blue dark:hover:text-amber"
               }`}
             >
               <span>{meta.emoji}</span>
