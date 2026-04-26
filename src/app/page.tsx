@@ -103,8 +103,8 @@ export default function HomePage() {
 
               <div className="mt-10 grid gap-3 sm:grid-cols-3">
                 {pillars.map((pillar) => (
-                  <div key={pillar.key} className="rounded-3xl border border-white/70 dark:border-border bg-white/70 dark:bg-card-bg/40 p-4 shadow-sm backdrop-blur">
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-blue/6 dark:bg-amber/10">
+                  <div key={pillar.key} className="rounded-3xl border border-border bg-card-bg/40 p-4 shadow-sm backdrop-blur">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-blue/5 dark:bg-amber/10">
                       {pillar.icon}
                     </div>
                     <h2 className="text-sm font-bold text-blue dark:text-text-primary font-cairo">{t(`${pillar.key}.title`)}</h2>
@@ -115,11 +115,11 @@ export default function HomePage() {
             </div>
 
             <div className="relative">
-              <div className="rounded-[32px] border border-white/70 dark:border-border bg-white/90 dark:bg-card-bg/60 p-5 shadow-[0_30px_80px_rgba(15,36,60,0.12)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.3)] backdrop-blur">
+              <div className="rounded-[32px] border border-border bg-card-bg/80 p-5 shadow-[0_30px_80px_rgba(15,36,60,0.12)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.3)] backdrop-blur">
                 <div className={`rounded-[28px] bg-blue dark:bg-blue-dark p-6 text-white ${isRtl ? 'text-right' : 'text-left'}`}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-white/55">Matching Preview</p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-white/50">Matching Preview</p>
                       <p className="mt-2 text-2xl font-black font-cairo">{t("preview.title")}</p>
                     </div>
                     <div className="rounded-2xl bg-white/10 px-3 py-2 text-center">
@@ -130,29 +130,29 @@ export default function HomePage() {
 
                   <div className="mt-6 space-y-3">
                     {steps.map((step, index) => (
-                      <div key={index} className="flex items-start gap-3 rounded-2xl bg-white/6 px-4 py-3">
+                      <div key={index} className="flex items-start gap-3 rounded-2xl bg-white/5 px-4 py-3">
                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber text-sm font-black text-white">
                           {index + 1}
                         </div>
-                        <p className={`pt-1 text-sm text-white/85 font-cairo ${isRtl ? 'text-right' : 'text-left'}`}>{step}</p>
+                        <p className={`pt-1 text-sm text-white/80 font-cairo ${isRtl ? 'text-right' : 'text-left'}`}>{step}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                  <div className={`rounded-3xl border border-gray-100 dark:border-border bg-cream dark:bg-card-bg/30 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
-                    <p className="text-xs uppercase tracking-wide text-text-secondary">{t("preview.factors")}</p>
+                  <div className={`rounded-3xl border border-border bg-cream/50 dark:bg-blue-dark/30 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+                    <p className="text-xs uppercase tracking-wide text-text-secondary/70">{t("preview.factors")}</p>
                     <div className={`mt-3 flex flex-wrap gap-2 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
                       {localizedFactors.map((item) => (
-                        <span key={item} className="rounded-full bg-white dark:bg-blue px-3 py-1.5 text-xs font-semibold text-blue dark:text-text-primary shadow-sm">
+                        <span key={item} className="rounded-full bg-card-bg px-3 py-1.5 text-xs font-semibold text-blue dark:text-text-primary shadow-sm border border-border">
                           {item}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className={`rounded-3xl border border-gray-100 dark:border-border bg-[#fff9ee] dark:bg-amber/5 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
-                    <p className="text-xs uppercase tracking-wide text-text-secondary">{isRtl ? "وضع المقارنة" : "Compare mode"}</p>
+                  <div className={`rounded-3xl border border-border bg-amber/5 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+                    <p className="text-xs uppercase tracking-wide text-text-secondary/70">{isRtl ? "وضع المقارنة" : "Compare mode"}</p>
                     <p className="mt-3 text-sm leading-7 text-blue dark:text-text-primary font-cairo">
                       {t("preview.compare")}
                     </p>
@@ -164,7 +164,7 @@ export default function HomePage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="grid gap-4 rounded-[32px] bg-blue dark:bg-blue-dark px-6 py-8 text-center text-white shadow-sm md:grid-cols-4">
+          <div className="grid gap-4 rounded-[32px] bg-blue dark:bg-blue-dark px-6 py-8 text-center text-white shadow-xl shadow-blue/10 dark:shadow-none md:grid-cols-4">
             {[
               { value: "40+", key: "stats.universities" },
               { value: "3", key: "stats.compare" },
@@ -173,7 +173,7 @@ export default function HomePage() {
             ].map((item) => (
               <div key={item.key}>
                 <p className="text-3xl font-black text-amber">{item.value}</p>
-                <p className="mt-2 text-sm text-blue-100 font-cairo">{t(item.key)}</p>
+                <p className="mt-2 text-sm text-blue-100/70 font-cairo">{t(item.key)}</p>
               </div>
             ))}
           </div>
@@ -197,9 +197,9 @@ export default function HomePage() {
               <Link
                 key={feature.href}
                 href={feature.href}
-                className={`group rounded-[28px] border border-white/70 dark:border-border bg-white/80 dark:bg-card-bg/40 p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-amber/30 hover:shadow-lg ${isRtl ? 'text-right' : 'text-left'}`}
+                className={`group rounded-[28px] border border-border bg-card-bg/40 p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-amber/30 hover:shadow-lg ${isRtl ? 'text-right' : 'text-left'}`}
               >
-                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-cream dark:bg-blue/20 transition-colors group-hover:bg-[#fff4d9] dark:group-hover:bg-amber/10 ${isRtl ? 'mr-0 ml-auto' : 'ml-0 mr-auto'}`}>
+                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-cream dark:bg-blue/20 transition-colors group-hover:bg-amber/10 dark:group-hover:bg-amber/10 ${isRtl ? 'mr-0 ml-auto' : 'ml-0 mr-auto'}`}>
                   {feature.icon}
                 </div>
                 <h3 className="mt-5 text-lg font-bold text-blue dark:text-text-primary font-cairo">{t(`${feature.key}.title`)}</h3>
@@ -209,9 +209,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="border-y border-amber/20 dark:border-amber/10 bg-[#fff9ee] dark:bg-amber/5 py-16">
+        <section className="border-y border-border bg-amber/5 py-16">
           <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-            <p className="text-xs uppercase tracking-[0.2em] text-amber">{t("cta.ready")}</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-amber font-bold">{t("cta.ready")}</p>
             <h2 className="mt-4 text-3xl font-black text-blue dark:text-text-primary font-cairo">
               {t("cta.title")}
             </h2>
@@ -221,13 +221,13 @@ export default function HomePage() {
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
                 href="/onboarding"
-                className="rounded-2xl bg-amber px-8 py-3.5 text-base font-bold text-white transition-colors hover:bg-amber-dark dark:text-blue-dark"
+                className="rounded-2xl bg-amber px-8 py-3.5 text-base font-bold text-white dark:text-blue-dark transition-colors hover:bg-amber-dark"
               >
                 {t("nav.start")}
               </Link>
               <Link
                 href="/compare"
-                className="rounded-2xl border border-blue/15 dark:border-border bg-white dark:bg-card-bg/40 px-8 py-3.5 text-base font-bold text-blue dark:text-text-primary transition-colors hover:border-amber/40"
+                className="rounded-2xl border border-border bg-card-bg px-8 py-3.5 text-base font-bold text-blue dark:text-text-primary transition-colors hover:border-amber/40"
               >
                 {t("cta.openCompare")}
               </Link>
