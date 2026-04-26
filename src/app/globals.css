@@ -24,11 +24,14 @@
   --cream: #020617;
   --charcoal: #f3f4f6;
   --card-bg: #0f172a;
-  --border: #334155;
+  --border: #1e293b;
   --blue-light: #1e293b;
+  --amber: #fbbf24;
+  --amber-light: #fcd34d;
+  --amber-dark: #d97706;
   --text-primary: #f9fafb;
   --text-secondary: #cbd5e1;
-  --nav-bg: rgba(2, 6, 23, 0.9);
+  --nav-bg: #020617;
 }
 
 * {
