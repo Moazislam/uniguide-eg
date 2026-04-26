@@ -26,6 +26,7 @@ const config: Config = {
         border: "var(--border)",
         "text-primary": "var(--text-primary)",
         "text-secondary": "var(--text-secondary)",
+        "nav-bg": "var(--nav-bg)",
       },
       fontFamily: {
         cairo: ["Cairo", "sans-serif"],

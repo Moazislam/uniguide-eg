@@ -18,7 +18,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-t border-[#d4a843]/20 pb-safe">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-nav-bg backdrop-blur-lg border-t border-border pb-safe">
       <div className="flex items-center justify-around h-16">
         {items.map((item) => {
           const Icon = item.icon;
@@ -29,14 +29,14 @@ export default function BottomNav() {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center gap-1 w-full h-full transition-colors relative ${
-                isActive ? "text-blue dark:text-amber" : "text-text-secondary/60"
+                isActive ? "text-blue dark:text-amber" : "text-text-secondary"
               }`}
               aria-label={t(item.key)}
             >
-              <Icon size={20} className={isActive ? "text-[#d4a843]" : ""} />
+              <Icon size={20} className={isActive ? "text-blue dark:text-amber" : ""} />
               <span className="text-[10px] font-bold font-cairo">{t(item.key)}</span>
               {isActive && (
-                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-[#d4a843]" />
+                <span className="absolute bottom-1 w-1 h-1 rounded-full bg-blue dark:bg-amber" />
               )}
             </Link>
           );

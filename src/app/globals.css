@@ -21,14 +21,14 @@
 }
 
 .dark {
-  --cream: #080c17;
+  --cream: #020617;
   --charcoal: #f3f4f6;
-  --card-bg: #111827;
-  --border: #1f2937;
-  --blue-light: #1f2937;
+  --card-bg: #0f172a;
+  --border: #334155;
+  --blue-light: #1e293b;
   --text-primary: #f9fafb;
-  --text-secondary: #9ca3af;
-  --nav-bg: rgba(8, 12, 23, 0.8);
+  --text-secondary: #cbd5e1;
+  --nav-bg: rgba(2, 6, 23, 0.9);
 }
 
 * {
