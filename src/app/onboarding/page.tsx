@@ -306,19 +306,24 @@ export default function OnboardingPage() {
                       className="mt-4 w-full accent-amber"
                     />
 
-                    <div className={`mt-4 flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        step="0.5"
-                        value={form.score}
-                        onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
-                        placeholder="Example: 85.5"
-                        className={`w-32 rounded-2xl border border-border bg-card-bg px-4 py-3 text-center text-lg font-black text-blue dark:text-text-primary focus:border-amber focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
-                      />
-                      <span className="text-sm text-text-secondary font-cairo">%</span>
-                    </div>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.5"
+                      value={form.score}
+                      onChange={(event) => {
+                        const val = Number.parseFloat(event.target.value);
+                        if (isNaN(val)) {
+                          setForm((current) => ({ ...current, score: "" }));
+                        } else {
+                          const clamped = Math.max(0, Math.min(100, val));
+                          setForm((current) => ({ ...current, score: clamped.toString() }));
+                        }
+                      }}
+                      placeholder="Example: 85.5"
+                      className={`w-32 rounded-2xl border border-border bg-card-bg px-4 py-3 text-center text-lg font-black text-blue dark:text-text-primary focus:border-amber focus:outline-none ${isRtl ? 'text-right' : 'text-left'}`}
+                    />
 
                     <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                       <div className="rounded-2xl bg-card-bg p-3">

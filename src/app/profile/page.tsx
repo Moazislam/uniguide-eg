@@ -4,6 +4,9 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import { createClient } from "@/lib/supabase/client";
+import ShortlistExport from "@/components/universities/ShortlistExport";
+import { User as AuthUser } from "@supabase/supabase-js";
+import { AppError, wrapSupabaseError } from "@/lib/errors";
 import {
   buildRecommendationQuery,
   buildStudentProfilePayload,
@@ -184,7 +187,7 @@ export default function ProfilePage() {
   const { t, isRtl, language } = useLanguage();
   const isAr = language === "ar";
   
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [profile, setProfile] = useState<Partial<StudentProfile> | null>(null);
   const [activeTab, setActiveTab] = useState<"matching" | "shortlist">("matching");
   const [form, setForm] = useState<ProfileFormState>({
@@ -204,6 +207,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState<AppError | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -211,50 +215,63 @@ export default function ProfilePage() {
     let active = true;
 
     async function loadProfile() {
-      const { data: authData } = await supabase.auth.getUser();
-      const authUser = authData.user;
-      if (!active) return;
-      setUser(authUser);
+      try {
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+        if (authError) throw authError;
 
-      if (!authUser) {
-        setLoading(false);
-        return;
-      }
+        const authUser = authData.user;
+        if (!active) return;
+        setUser(authUser);
 
-      const { data } = await supabase
-        .from("student_profiles")
-        .select("*")
-        .eq("user_id", authUser.id)
-        .maybeSingle();
+        if (!authUser) {
+          setLoading(false);
+          return;
+        }
 
-      if (!active) return;
-
-      const currentProfile = (data as Partial<StudentProfile> | null) ?? null;
-      const hydratedForm = hydrateFormFromProfile(currentProfile);
-      setProfile(currentProfile);
-      setForm(hydratedForm);
-      setInitialForm(hydratedForm);
-
-      const ids = currentProfile?.shortlist ?? [];
-      setShortlistIds(ids);
-      if (ids.length) {
-        const { data: universitiesData } = await supabase
-          .from("universities")
+        const { data, error: profileError } = await supabase
+          .from("student_profiles")
           .select("*")
-          .in("id", ids);
+          .eq("user_id", authUser.id)
+          .maybeSingle();
+
+        if (profileError) throw profileError;
+
+        if (!active) return;
+
+        const currentProfile = (data as Partial<StudentProfile> | null) ?? null;
+        const hydratedForm = hydrateFormFromProfile(currentProfile);
+        setProfile(currentProfile);
+        setForm(hydratedForm);
+        setInitialForm(hydratedForm);
+
+        const ids = currentProfile?.shortlist ?? [];
+        setShortlistIds(ids);
+        if (ids.length) {
+          const { data: universitiesData, error: shortlistError } = await supabase
+            .from("universities")
+            .select("*")
+            .in("id", ids);
+
+          if (shortlistError) throw shortlistError;
+
+          if (active) {
+            setUniversities((universitiesData as University[]) ?? []);
+          }
+        }
 
         if (active) {
-          setUniversities((universitiesData as University[]) ?? []);
+          setLoading(false);
+          // Subtle entrance animation
+          gsap.fromTo(".profile-animate", 
+            { y: 20, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out" }
+          );
         }
-      }
-
-      if (active) {
-        setLoading(false);
-        // Subtle entrance animation
-        gsap.fromTo(".profile-animate", 
-          { y: 20, opacity: 0 }, 
-          { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power2.out" }
-        );
+      } catch (err: any) {
+        if (active) {
+          setError(wrapSupabaseError(err, "loadProfile"));
+          setLoading(false);
+        }
       }
     }
 
@@ -404,6 +421,32 @@ export default function ProfilePage() {
          </main>
       </div>
 
+      {error && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+          <div className={`rounded-[24px] border border-red-200 bg-red-50/50 backdrop-blur-sm p-5 ${isRtl ? 'text-right' : 'text-left'}`}>
+            <div className={`flex items-center gap-4 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+              <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-sm shrink-0">
+                <span className="text-2xl">⚠️</span>
+              </div>
+              <div>
+                <p className="text-base font-black text-red-900 font-cairo leading-tight">
+                  {isAr ? error.messageAr : error.messageEn}
+                </p>
+                <p className="text-sm text-red-700/70 font-cairo mt-1">
+                  {isAr ? "يرجى تحديث الصفحة أو المحاولة لاحقاً." : "Please refresh the page or try again later."}
+                </p>
+              </div>
+              <button 
+                onClick={() => window.location.reload()}
+                className={`px-4 py-2 rounded-xl bg-red-100 text-red-700 text-xs font-bold font-cairo hover:bg-red-200 transition-colors ${isRtl ? 'mr-auto' : 'ml-auto'}`}
+              >
+                {isAr ? "إعادة المحاولة" : "Try Again"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 pb-16 w-full relative z-20">
         <div className="grid gap-8 xl:grid-cols-[1.35fr,0.85fr]">
           
@@ -467,8 +510,12 @@ export default function ProfilePage() {
                          <Sparkles size={18} className="text-amber" />
                       </div>
                       <div>
-                        <p className="text-blue dark:text-text-primary font-black text-sm font-cairo">Auto-Personalization Active</p>
-                        <p className="text-[11px] text-text-secondary font-cairo">We adjust results as you type.</p>
+                        <p className="text-blue dark:text-text-primary font-black text-sm font-cairo">
+                          {isAr ? "نظام التخصيص التلقائي نشط" : "Auto-Personalization Active"}
+                        </p>
+                        <p className="text-[11px] text-text-secondary font-cairo">
+                          {isAr ? "نقوم بتحديث النتائج بناءً على اختياراتك." : "We adjust results as you type."}
+                        </p>
                       </div>
                     </div>
                     <div className={`flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
@@ -529,7 +576,11 @@ export default function ProfilePage() {
                                 max="100"
                                 step="0.5"
                                 value={form.score || "70"}
-                                onChange={(event) => setForm((current) => ({ ...current, score: event.target.value }))}
+                                onChange={(event) => {
+                                  const val = Number.parseFloat(event.target.value);
+                                  const clamped = Math.max(0, Math.min(100, val));
+                                  setForm((current) => ({ ...current, score: clamped.toString() }));
+                                }}
                                 className="w-full accent-amber cursor-pointer"
                              />
                              <div className="flex justify-between mt-2 text-[10px] text-text-secondary/50 font-bold px-1">
@@ -686,20 +737,25 @@ export default function ProfilePage() {
             {activeTab === "shortlist" && (
               <div className="profile-animate space-y-6">
                 <div className={`rounded-[32px] border border-border bg-card-bg p-10 shadow-xl shadow-blue/5 ${isRtl ? 'text-right' : 'text-left'}`}>
-                  <div className={`mb-10 flex items-center justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <div className={`mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                     <div>
                       <h2 className={`flex items-center gap-3 text-2xl font-black text-blue dark:text-text-primary font-cairo ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
                         <GraduationCap size={28} className="text-amber" />
                         {t("profile.shortlist")}
                       </h2>
-                      <p className="text-sm text-text-secondary font-cairo mt-2">Access your saved favorites anytime for quick comparison.</p>
+                      <p className="text-sm text-text-secondary font-cairo mt-2">
+                        {isAr ? "قم بالوصول إلى جامعاتك المفضلة في أي وقت للمقارنة السريعة." : "Access your saved favorites anytime for quick comparison."}
+                      </p>
                     </div>
-                    <Link
-                       href="/universities"
-                       className="px-5 py-2.5 rounded-xl border border-border text-blue dark:text-amber text-xs font-black font-cairo hover:bg-cream dark:hover:bg-blue/10 transition-colors"
-                    >
-                       {t("hero.ctaBrowse")}
-                    </Link>
+                    <div className="flex items-center gap-3">
+                      <ShortlistExport universities={universities} />
+                      <Link
+                         href="/universities"
+                         className="px-5 py-2.5 rounded-xl border border-border text-blue dark:text-amber text-xs font-black font-cairo hover:bg-cream dark:hover:bg-blue/10 transition-colors"
+                      >
+                         {t("hero.ctaBrowse")}
+                      </Link>
+                    </div>
                   </div>
                   
                   {loading ? (
@@ -714,7 +770,9 @@ export default function ProfilePage() {
                          <GraduationCap size={40} className="text-text-secondary/20" />
                       </div>
                       <p className="mb-4 text-lg font-black text-blue dark:text-text-primary font-cairo">{t("profile.noShortlist")}</p>
-                      <p className="text-sm text-text-secondary font-cairo mb-8 max-w-sm mx-auto">Explore all Egyptian universities and add your favorites to this list to compare them side-by-side.</p>
+                      <p className="text-sm text-text-secondary font-cairo mb-8 max-w-sm mx-auto">
+                        {isAr ? "استكشف جميع الجامعات المصرية وأضف مفضلاتك إلى هذه القائمة للمقارنة بينها جنباً إلى جنب." : "Explore all Egyptian universities and add your favorites to this list to compare them side-by-side."}
+                      </p>
                       <Link
                         href="/universities"
                         className="inline-flex items-center gap-2 rounded-2xl bg-blue dark:bg-amber px-8 py-3.5 text-sm font-black text-white dark:text-blue-dark shadow-lg shadow-blue/20 dark:shadow-amber/10 hover:bg-blue-light dark:hover:bg-amber-dark transition-all"

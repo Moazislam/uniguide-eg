@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { translateAuthError } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/client";
 import { buildStudentProfilePayload } from "@/lib/student-profile";
 import { useRouter } from "next/navigation";
@@ -87,7 +88,7 @@ export default function AuthPage() {
       password: form.password,
     });
     if (signInError) {
-      setError(signInError.message);
+      setError(translateAuthError(signInError.message, isAr));
     } else {
       router.push("/profile");
     }
@@ -107,13 +108,13 @@ export default function AuthPage() {
     });
 
     if (signUpError) {
-      setError(signUpError.message);
+      setError(translateAuthError(signUpError.message, isAr));
       setLoading(false);
       return;
     }
 
     if (data.user) {
-      await supabase.from("student_profiles").upsert(
+      const { error: profileError } = await supabase.from("student_profiles").upsert(
         {
           user_id: data.user.id,
           ...buildStudentProfilePayload({
@@ -123,6 +124,15 @@ export default function AuthPage() {
         },
         { onConflict: "user_id" }
       );
+
+      if (profileError) {
+        console.error("Profile creation error:", profileError);
+        setSuccess(isAr 
+          ? "تم إنشاء الحساب بنجاح، ولكن حدث خطأ أثناء إنشاء الملف الشخصي. يمكنك تحديثه لاحقاً." 
+          : "Account created successfully, but there was an error creating your profile. You can update it later.");
+        setLoading(false);
+        return;
+      }
     }
 
     setSuccess(t("auth.success"));

@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import { createClient } from "@/lib/supabase/client";
 import type { University } from "@/types";
-import { GitCompareArrows, MapPin, GraduationCap, Plus, Trash2, ArrowLeftRight } from "lucide-react";
+import { GitCompareArrows, MapPin, GraduationCap, Plus, Trash2, ArrowLeftRight, X } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/lib/LanguageContext";
 
@@ -152,15 +152,75 @@ export default function ComparePage() {
             </Link>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-[28px] border border-border bg-card-bg shadow-sm">
-            <div className="border-b border-border bg-cream dark:bg-blue-dark/50 px-5 py-4">
-              <p className="text-sm font-semibold text-blue dark:text-amber font-cairo">
-                {t("compare.selected")} {ids.length} {ids.length === 1 ? t("compare.uni") : t("compare.unis")}
-              </p>
+          <div className="space-y-6">
+            {/* Mobile View */}
+            <div className="grid grid-cols-1 gap-4 md:hidden">
+              {loading ? (
+                ids.map(id => (
+                  <div key={id} className="h-40 rounded-[28px] bg-card-bg border border-border animate-pulse" />
+                ))
+              ) : (
+                universities.map(university => (
+                  <div key={university.id} className="bg-card-bg rounded-[28px] border border-border p-6 shadow-sm overflow-hidden relative">
+                    <div className={`flex items-start gap-4 mb-6 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
+                      <div className="w-14 h-14 rounded-2xl bg-blue/5 dark:bg-amber/10 flex items-center justify-center shrink-0">
+                        {university.logo_url ? (
+                          <img src={university.logo_url} alt={isAr ? university.name_ar : university.name_en} className="w-10 h-10 object-contain" />
+                        ) : (
+                          <GraduationCap size={24} className="text-blue dark:text-amber" />
+                        )}
+                      </div>
+                      <div className={`flex-1 ${isRtl ? 'text-right' : 'text-left'}`}>
+                         <h3 className="font-black text-blue dark:text-text-primary font-cairo leading-tight">{isAr ? university.name_ar : university.name_en}</h3>
+                         <p className="text-xs text-text-secondary font-cairo mt-1">{isAr ? university.name_en : university.name_ar}</p>
+                      </div>
+                      <button 
+                        onClick={() => remove(university.id)}
+                        className="text-text-secondary/30 hover:text-red-500 transition-colors"
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+                      <div>
+                        <p className="text-[10px] text-text-secondary uppercase font-bold font-cairo tracking-wider">{t("profile.location")}</p>
+                        <p className="text-sm font-bold text-blue dark:text-white font-cairo mt-0.5">{isAr ? university.location_ar : university.location_en}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-text-secondary uppercase font-bold font-cairo tracking-wider">{t("profile.type")}</p>
+                        <p className="text-sm font-bold text-blue dark:text-white font-cairo mt-0.5 capitalize">{university.type}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-text-secondary uppercase font-bold font-cairo tracking-wider">{t("profile.system")}</p>
+                        <p className="text-sm font-bold text-blue dark:text-white font-cairo mt-0.5 capitalize">{university.system}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-text-secondary uppercase font-bold font-cairo tracking-wider">National Rank</p>
+                        <p className="text-sm font-bold text-amber font-cairo mt-0.5">#{university.ranking_egypt || "—"}</p>
+                      </div>
+                      <div className="col-span-2 pt-2 border-t border-border">
+                        <p className="text-[10px] text-text-secondary uppercase font-bold font-cairo tracking-wider">{t("profile.budget")}</p>
+                        <p className="text-base font-black text-emerald-600 font-cairo mt-0.5">
+                          {university.tuition_min != null ? `${university.tuition_min.toLocaleString()} ${isAr ? "ج.م" : "EGP"}` : "—"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
 
-            <div className="overflow-x-auto">
-              <div className={`grid min-w-[760px] font-cairo ${isRtl ? 'dir-rtl' : 'dir-ltr'}`} style={{ gridTemplateColumns: gridTemplate }}>
+            {/* Desktop View */}
+            <div className="hidden md:block overflow-hidden rounded-[28px] border border-border bg-card-bg shadow-sm">
+              <div className="border-b border-border bg-cream dark:bg-blue-dark/50 px-5 py-4">
+                <p className="text-sm font-semibold text-blue dark:text-amber font-cairo">
+                  {t("compare.selected")} {ids.length} {ids.length === 1 ? t("compare.uni") : t("compare.unis")}
+                </p>
+              </div>
+
+              <div className="overflow-x-auto">
+                <div className={`grid md:min-w-[760px] font-cairo ${isRtl ? 'dir-rtl' : 'dir-ltr'}`} style={{ gridTemplateColumns: gridTemplate }}>
                 <div className={`p-5 border-b ${isRtl ? 'border-l' : 'border-r'} border-border bg-card-bg`} />
                 {loading
                   ? ids.map((id) => (
@@ -220,7 +280,8 @@ export default function ComparePage() {
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
       </main>
 
       <Footer />

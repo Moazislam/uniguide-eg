@@ -11,22 +11,22 @@ export default function HomePage() {
 
   const features = [
     {
-      icon: <Search size={20} className="text-[#d4a843]" />,
+      icon: <Search size={20} className="text-amber" />,
       key: "features.browse",
       href: "/universities",
     },
     {
-      icon: <Sparkles size={20} className="text-[#d4a843]" />,
+      icon: <Sparkles size={20} className="text-amber" />,
       key: "features.match",
       href: "/onboarding",
     },
     {
-      icon: <GitCompareArrows size={20} className="text-[#d4a843]" />,
+      icon: <GitCompareArrows size={20} className="text-amber" />,
       key: "features.compare",
       href: "/compare",
     },
     {
-      icon: <BookOpen size={20} className="text-[#d4a843]" />,
+      icon: <BookOpen size={20} className="text-amber" />,
       key: "features.majors",
       href: "/majors",
     },
@@ -34,15 +34,15 @@ export default function HomePage() {
 
   const pillars = [
     {
-      icon: <Target size={18} className="text-[#d4a843]" />,
+      icon: <Target size={18} className="text-amber" />,
       key: "pillar.clear",
     },
     {
-      icon: <Wallet size={18} className="text-[#d4a843]" />,
+      icon: <Wallet size={18} className="text-amber" />,
       key: "pillar.budget",
     },
     {
-      icon: <GitCompareArrows size={18} className="text-[#d4a843]" />,
+      icon: <GitCompareArrows size={18} className="text-amber" />,
       key: "pillar.compare",
     },
   ];

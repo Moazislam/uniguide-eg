@@ -157,6 +157,8 @@ export interface UniversityFilters {
   location?: string[];
   tuition_max?: number;
   tracks?: StudentTrack[];
+  track?: string;
+  min_score?: number;
   search?: string;
 }
 

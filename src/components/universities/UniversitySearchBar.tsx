@@ -58,6 +58,20 @@ export default function UniversitySearchBar() {
         />
       </div>
 
+      {/* Track filter */}
+      <select
+        value={searchParams.get("track") || ""}
+        onChange={(e) => updateParams("track", e.target.value)}
+        className="px-3 py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:border-amber focus:ring-2 focus:ring-amber/10 bg-card-bg font-cairo text-text-primary transition-all cursor-pointer"
+        aria-label="Filter by academic track"
+      >
+        <option value="" className="bg-card-bg">{isAr ? "جميع الشهادات" : "All Tracks"}</option>
+        <option value="national" className="bg-card-bg">{isAr ? "ثانوية عامة" : "Thanaweya"}</option>
+        <option value="ig" className="bg-card-bg">{isAr ? "IGCSE" : "IG"}</option>
+        <option value="american" className="bg-card-bg">{isAr ? "American" : "American"}</option>
+        <option value="french" className="bg-card-bg">{isAr ? "French" : "French"}</option>
+      </select>
+
       {/* Type filter */}
       <select
         value={type}

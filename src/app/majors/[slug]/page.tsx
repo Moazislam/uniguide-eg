@@ -1,4 +1,40 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
+// ... existing imports
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const major = await getMajorBySlug(slug);
+
+  if (!major) return {};
+
+  const title = `دراسة ${major.name_ar} في مصر | ${major.name_en}`;
+  const description = `اكتشف تخصص ${major.name_ar}: مجالات العمل، الجامعات المتاحة، والرواتب المتوقعة في مصر. كل ما تحتاج لمعرفته على UniGuide.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/majors/${slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/majors/${slug}`,
+      type: "website",
+      images: [
+        {
+          url: "/og-major.png",
+          alt: major.name_en,
+        },
+      ],
+    },
+  };
+}
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { getMajorBySlug, getMajorUniversities } from "@/lib/majors";

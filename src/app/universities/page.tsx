@@ -96,6 +96,7 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
   const filters: UniversityFilters = {
     search: searchParams.search,
     type: searchParams.type ? [searchParams.type as UniversityType] : undefined,
+    track: searchParams.track,
   };
   const page = Number.parseInt(searchParams.page ?? "1", 10);
   const { data: universities, count } = await getUniversities(filters, page, 12);

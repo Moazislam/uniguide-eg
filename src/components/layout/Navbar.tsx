@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, User, LogIn } from "lucide-react";
 import { gsap } from "gsap";
 import { createClient } from "@/lib/supabase/client";
+import { User as AuthUser } from "@supabase/supabase-js";
 import LanguageToggle from "./LanguageToggle";
 import ThemeToggle from "./ThemeToggle";
 import { useLanguage } from "@/lib/LanguageContext";
@@ -18,7 +19,8 @@ const navLinks = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [hydrated, setHydrated] = useState(false);
   const pathname = usePathname();
   const supabase = createClient();
   const { t, language } = useLanguage();
@@ -27,6 +29,7 @@ export default function Navbar() {
   const tlRefs = useRef<Array<gsap.core.Timeline | null>>([]);
 
   useEffect(() => {
+    setHydrated(true);
     supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
@@ -35,7 +38,11 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const initPillAnimations = () => {
+      if (prefersReducedMotion) return;
+
       circleRefs.current.forEach((circle, index) => {
         if (!circle?.parentElement) return;
 
@@ -123,7 +130,9 @@ export default function Navbar() {
           <div className="flex items-center gap-2 sm:gap-3">
             <ThemeToggle />
             <LanguageToggle />
-            {user ? (
+            {!hydrated ? (
+               <div className="w-24 h-9 bg-border/20 animate-pulse rounded-lg" />
+            ) : user ? (
               <Link href="/profile" className="flex items-center gap-2 bg-blue dark:bg-amber text-white dark:text-blue-dark text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-light dark:hover:bg-amber-dark transition-colors font-cairo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber focus-visible:ring-offset-2" aria-label={t("nav.profile")}>
                 <User size={15} /> <span className="hidden xs:inline">{t("nav.profile")}</span>
               </Link>

@@ -113,7 +113,11 @@ export function CompareTray() {
   if (!ids.length) return null;
 
   return (
-    <div className={`fixed bottom-20 md:bottom-5 left-1/2 z-40 w-[min(94vw,700px)] -translate-x-1/2 rounded-2xl border border-border bg-card-bg/95 dark:bg-card-bg/80 p-3 shadow-2xl backdrop-blur-xl ${isRtl ? 'dir-rtl' : 'dir-ltr'}`}>
+    <div 
+      role="complementary"
+      aria-label="Compare universities"
+      className={`fixed bottom-20 md:bottom-5 left-1/2 z-40 w-[min(94vw,700px)] -translate-x-1/2 rounded-2xl border border-border bg-card-bg/95 dark:bg-card-bg/80 p-3 shadow-2xl backdrop-blur-xl ${isRtl ? 'dir-rtl' : 'dir-ltr'}`}
+    >
       <div className={`flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
         <div className={`flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue dark:bg-amber text-white dark:text-blue-dark">

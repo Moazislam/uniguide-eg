@@ -12,3 +12,15 @@ export async function getFacultiesByUniversityId(universityId: string): Promise<
   if (error) return [];
   return data as Faculty[];
 }
+
+export async function getFacultyById(id: string): Promise<Faculty | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("faculties")
+    .select("*, university:universities(*)")
+    .eq("id", id)
+    .single();
+
+  if (error) return null;
+  return data as (Faculty & { university: any });
+}

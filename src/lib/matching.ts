@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { parseBudgetRange } from "@/lib/student-profile";
 import type {
   Major,
   MajorCategory,
@@ -18,14 +19,15 @@ import type {
 const WEIGHTS = {
   track: 16,
   score: 22,
-  interests: 22,
-  budget: 12,
-  location: 12,
-  language: 6,
-  type: 4,
+  interests: 18,
+  budget: 14,
+  location: 10,
+  language: 7,
+  type: 7,
   system: 3,
   ranking: 3,
 } satisfies MatchBreakdown;
+
 
 const RELATED_INTERESTS: Partial<Record<MajorCategory, MajorCategory[]>> = {
   medicine: ["pharmacy", "science"],
@@ -54,19 +56,6 @@ function normalizeValue(value?: string) {
   return value?.trim().toLowerCase() ?? "";
 }
 
-function parseBudgetRange(budget?: string): { min?: number; max?: number } {
-  if (!budget) return {};
-  if (budget.endsWith("+")) {
-    return { min: Number.parseInt(budget.replace("+", ""), 10) || undefined };
-  }
-
-  const [min, max] = budget.split("-").map((value) => Number.parseInt(value, 10));
-  return {
-    min: Number.isFinite(min) ? min : undefined,
-    max: Number.isFinite(max) ? max : undefined,
-  };
-}
-
 function getCompatibleTracks(track?: StudentTrack): StudentTrack[] {
   if (!track) return [];
   if (track === "ig" || track === "american" || track === "french") {
@@ -89,9 +78,17 @@ function getTrackScore(track: StudentTrack | undefined, major: Major) {
   }
 
   const compatibleTracks = getCompatibleTracks(track);
-  const matches = major.required_tracks.some((requiredTrack) =>
-    compatibleTracks.includes(requiredTrack as StudentTrack)
-  );
+  const matches = major.required_tracks.some((requiredTrack) => {
+    const isStudentTrack =
+      requiredTrack === "science" ||
+      requiredTrack === "math" ||
+      requiredTrack === "arts" ||
+      requiredTrack === "ig" ||
+      requiredTrack === "american" ||
+      requiredTrack === "french";
+    
+    return isStudentTrack && compatibleTracks.includes(requiredTrack as StudentTrack);
+  });
 
   if (matches) {
     return {
@@ -225,7 +222,7 @@ function getLanguageScore(preferredLanguage: StudyLanguage | undefined, majorLan
 
 function getTypeScore(preferredType: UniversityType | undefined, universityType: UniversityType) {
   if (!preferredType) {
-    return { score: Math.round(WEIGHTS.type * 0.5) };
+    return { score: Math.round(WEIGHTS.type * 0.5), reason: "University type preference was not specified" };
   }
   return preferredType === universityType
     ? { score: WEIGHTS.type, reason: "University type fits the student's preference" }
@@ -234,7 +231,7 @@ function getTypeScore(preferredType: UniversityType | undefined, universityType:
 
 function getSystemScore(preferredSystem: UniversitySystem | undefined, system: UniversitySystem) {
   if (!preferredSystem) {
-    return { score: Math.round(WEIGHTS.system * 0.5) };
+    return { score: Math.round(WEIGHTS.system * 0.5), reason: "University system preference was not specified" };
   }
   return preferredSystem === system
     ? { score: WEIGHTS.system, reason: "University system fits the student's preference" }
@@ -243,7 +240,7 @@ function getSystemScore(preferredSystem: UniversitySystem | undefined, system: U
 
 function getRankingScore(rankingEgypt: number | undefined) {
   if (!rankingEgypt) {
-    return { score: Math.round(WEIGHTS.ranking * 0.4) };
+    return { score: Math.round(WEIGHTS.ranking * 0.4), reason: "National ranking is not available" };
   }
   if (rankingEgypt <= 3) {
     return { score: WEIGHTS.ranking, reason: "Strong national ranking adds confidence" };
@@ -251,7 +248,7 @@ function getRankingScore(rankingEgypt: number | undefined) {
   if (rankingEgypt <= 8) {
     return { score: Math.round(WEIGHTS.ranking * 0.7), reason: "Solid national ranking" };
   }
-  return { score: 1 };
+  return { score: 1, reason: "Recognized national university" };
 }
 
 function hardReject(profile: MatchProfile, row: JoinedUniversityMajor) {

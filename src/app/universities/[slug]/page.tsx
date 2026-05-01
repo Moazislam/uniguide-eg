@@ -1,4 +1,40 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
+// ... existing imports
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const university = await getUniversityBySlug(slug);
+
+  if (!university) return {};
+
+  const title = `${university.name_ar} | ${university.name_en}`;
+  const description = `تعرف على ${university.name_ar}: المصروفات، الكليات، التنسيق، وطرق التقديم. قارن بينها وبين الجامعات الأخرى على UniGuide.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/universities/${slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/universities/${slug}`,
+      type: "website",
+      images: [
+        {
+          url: university.cover_url || "/og-university.png",
+          alt: university.name_en,
+        },
+      ],
+    },
+  };
+}
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CompareButton from "@/components/compare/CompareButton";
@@ -35,16 +71,39 @@ export default async function UniversityPage({
   const university = await getUniversityBySlug(slug);
   if (!university) notFound();
 
-  const [majors, faculties] = await Promise.all([
-    getUniversityMajors(university.id),
-    getFacultiesByUniversityId(university.id),
-  ]);
+  let majors: any[] = [];
+  let faculties: any[] = [];
+  let dataError = false;
+
+  try {
+    const [majorsData, facultiesData] = await Promise.all([
+      getUniversityMajors(university.id),
+      getFacultiesByUniversityId(university.id),
+    ]);
+    majors = majorsData;
+    faculties = facultiesData;
+  } catch (err) {
+    console.error("Error loading university details:", err);
+    dataError = true;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
       <Navbar />
 
       <main className="flex-1">
+        {dataError && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-800 text-sm font-cairo flex items-center gap-3">
+              <span>⚠️</span>
+              <p>
+                حدث خطأ أثناء تحميل بعض تفاصيل الكليات. قد تكون المعلومات المعروضة أدناه غير مكتملة.
+                <br />
+                Some faculty details could not be loaded. Information below might be incomplete.
+              </p>
+            </div>
+          </div>
+        )}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
           <Breadcrumbs 
             items={[
@@ -156,7 +215,11 @@ export default async function UniversityPage({
               )}
 
               {/* Faculties Section */}
-              <FacultiesSection faculties={faculties} universityMajors={majors} />
+              <FacultiesSection 
+              faculties={faculties} 
+              universityMajors={majors} 
+              universitySlug={slug}
+            />
             </div>
 
             {/* Sidebar */}

@@ -24,9 +24,38 @@ const typeLabels: Record<string, { ar: string; en: string }> = {
   international: { ar: "دولية", en: "International" },
 };
 
+import { useSearchParams } from "next/navigation";
+// ... existing imports
+
 export default function UniversityCard({ university, recommendation }: Props) {
-  const { language, isRtl } = useLanguage();
+  const { t, isRtl, language } = useLanguage();
   const isAr = language === "ar";
+  const searchParams = useSearchParams();
+  const selectedTrack = searchParams.get("track");
+
+  const getAdmissionSnippet = () => {
+    if (!selectedTrack) return null;
+
+    let admission = "";
+    if (selectedTrack === "ig") admission = university.admission_ig || "";
+    else if (selectedTrack === "american") admission = university.admission_american || "";
+    else if (selectedTrack === "french") admission = university.admission_french || "";
+    else if (selectedTrack === "national") admission = university.admission_national || "";
+
+    if (!admission) return null;
+
+    return (
+      <div className="mt-3 px-3 py-2 rounded-xl bg-amber/5 border border-amber/10">
+        <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider mb-1">
+          {isAr ? "متطلبات القبول" : "Admission Info"}
+        </p>
+        <p className="text-xs text-text-secondary font-cairo line-clamp-2 leading-relaxed">
+          {admission}
+        </p>
+      </div>
+    );
+  };
+
 
   return (
     <Link
@@ -38,8 +67,15 @@ export default function UniversityCard({ university, recommendation }: Props) {
           <>
             <img
               src={university.cover_url}
-              alt={isAr ? university.name_ar : university.name_en}
+              alt={isAr ? `صورة غلاف ${university.name_ar}` : `Cover photo of ${university.name_en}`}
               className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                if (target.parentElement) {
+                  target.parentElement.classList.add('bg-gradient-to-br', 'from-blue', 'to-blue-light');
+                }
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-blue dark:from-blue-dark via-transparent to-transparent opacity-60" />
           </>
@@ -49,7 +85,14 @@ export default function UniversityCard({ university, recommendation }: Props) {
         
         <div className={`absolute -bottom-6 ${isRtl ? 'right-6' : 'left-6'} w-16 h-16 rounded-2xl bg-card-bg shadow-xl border border-border flex items-center justify-center overflow-hidden z-10 group-hover:scale-105 transition-transform duration-300`}>
           {university.logo_url ? (
-            <img src={university.logo_url} alt={isAr ? university.name_ar : university.name_en} className="w-12 h-12 object-contain" />
+            <img 
+              src={university.logo_url} 
+              alt={isAr ? `شعار ${university.name_ar}` : `Logo of ${university.name_en}`} 
+              className="w-12 h-12 object-contain"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://www.google.com/s2/favicons?domain=' + (university.website || 'uniguide.com') + '&sz=64';
+              }}
+            />
           ) : (
             <GraduationCap size={28} className="text-blue dark:text-amber" />
           )}
@@ -77,6 +120,8 @@ export default function UniversityCard({ university, recommendation }: Props) {
           <MapPin size={12} />
           <span className="text-xs font-cairo">{isAr ? university.location_ar : university.location_en}</span>
         </div>
+
+        {getAdmissionSnippet()}
 
         <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border">
           {university.faculties_count && (

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Faculty, FacultyCategory, UniversityMajor } from "@/types";
-import { Clock, DollarSign, Globe2, BookOpen, BadgeCheck, GraduationCap, Info } from "lucide-react";
+import { Clock, DollarSign, Globe2, BookOpen, BadgeCheck, GraduationCap, Info, ChevronRight } from "lucide-react";
 import Modal from "@/components/layout/Modal";
 import { useLanguage } from "@/lib/LanguageContext";
 
@@ -34,9 +34,13 @@ interface Props {
   faculties: Faculty[];
   universityMajors?: UniversityMajor[];
   universityLanguage?: string;
+  universitySlug: string;
 }
 
-export default function FacultiesSection({ faculties, universityMajors = [] }: Props) {
+import Link from "next/link";
+// ... existing imports
+
+export default function FacultiesSection({ faculties, universityMajors = [], universitySlug }: Props) {
   const { t, language, isRtl } = useLanguage();
   const isAr = language === "ar";
   const categories = Array.from(new Set(faculties.map((f) => f.category)));
@@ -60,13 +64,19 @@ export default function FacultiesSection({ faculties, universityMajors = [] }: P
     <div className={`bg-card-bg rounded-2xl border border-border shadow-sm overflow-hidden ${isRtl ? 'text-right' : 'text-left'}`}>
       {/* Header */}
       <div className={`px-6 py-5 border-b border-border flex items-center gap-3 ${isRtl ? 'flex-row' : 'flex-row-reverse'}`}>
-        <BookOpen size={20} className="text-[#d4a843] flex-shrink-0" />
+        <BookOpen size={20} className="text-amber flex-shrink-0" />
         <div className={isRtl ? 'text-right' : 'text-left'}>
           <h2 className="font-bold text-blue dark:text-white font-cairo text-base">
             {t("details.faculties")} ({faculties.length})
           </h2>
           <p className="text-xs text-text-secondary/80 font-cairo">Faculties & Schools</p>
         </div>
+        <Link 
+          href={`/universities/${universitySlug}/faculties`}
+          className={`text-[11px] font-black text-amber hover:underline font-cairo ${isRtl ? 'mr-auto' : 'ml-auto'}`}
+        >
+          {isAr ? "عرض الكل" : "View All"} →
+        </Link>
       </div>
 
       {/* Category tabs */}
@@ -105,7 +115,7 @@ export default function FacultiesSection({ faculties, universityMajors = [] }: P
       </div>
 
       {/* Faculty cards grid */}
-      <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {visible.map((faculty) => {
           const meta = categoryMeta[faculty.category] ?? categoryMeta.other;
           return (
@@ -272,6 +282,14 @@ export default function FacultiesSection({ faculties, universityMajors = [] }: P
                   <p className="text-sm text-text-secondary/80">{isAr ? "سيتم إضافة تفاصيل الأقسام قريباً" : "Department details coming soon"}</p>
                 </div>
               )}
+
+              <Link
+                href={`/universities/${universitySlug}/faculties/${selectedFaculty.id}`}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-blue/5 dark:bg-amber/10 border border-blue/10 dark:border-amber/10 py-4 text-sm font-black text-blue dark:text-amber transition-all hover:bg-blue/10 dark:hover:bg-amber/20"
+              >
+                {isAr ? "عرض التفاصيل الكاملة في صفحة منفصلة" : "View full details in separate page"}
+                <ChevronRight size={16} className={isRtl ? 'rotate-180' : ''} />
+              </Link>
             </div>
           </div>
         )}

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { wrapSupabaseError } from "./errors";
 import type { University, UniversityFilters, PaginatedResponse } from "@/types";
 
 export async function getUniversities(
@@ -24,6 +25,15 @@ export async function getUniversities(
     );
   }
 
+  // Phase 9.2: New Filters
+  if (filters.track) {
+    if (filters.track === "ig") query = query.not("admission_ig", "is", null);
+    else if (filters.track === "american") query = query.not("admission_american", "is", null);
+    else if (filters.track === "french") query = query.not("admission_french", "is", null);
+    else if (filters.track === "german") query = query.not("admission_german", "is", null);
+    else if (filters.track === "national") query = query.not("admission_national", "is", null);
+  }
+
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
@@ -31,7 +41,7 @@ export async function getUniversities(
     .order("ranking_egypt", { ascending: true, nullsFirst: false })
     .range(from, to);
 
-  if (error) throw error;
+  if (error) throw wrapSupabaseError(error, "getUniversities");
 
   return {
     data: data as University[],
@@ -49,7 +59,10 @@ export async function getUniversityBySlug(slug: string): Promise<University | nu
     .eq("slug", slug)
     .single();
 
-  if (error) return null;
+  if (error) {
+    if (error.code === "PGRST116") return null;
+    throw wrapSupabaseError(error, "getUniversityBySlug");
+  }
   return data as University;
 }
 
@@ -60,6 +73,6 @@ export async function getUniversitiesByIds(ids: string[]): Promise<University[]>
     .select("*")
     .in("id", ids);
 
-  if (error) throw error;
+  if (error) throw wrapSupabaseError(error, "getUniversitiesByIds");
   return data as University[];
 }

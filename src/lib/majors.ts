@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { wrapSupabaseError } from "./errors";
 import type { Major, UniversityMajor, MajorFilters, PaginatedResponse } from "@/types";
 
 export async function getMajors(
@@ -25,7 +26,7 @@ export async function getMajors(
     .order("name_ar", { ascending: true })
     .range(from, to);
 
-  if (error) throw error;
+  if (error) throw wrapSupabaseError(error, "getMajors");
   return { data: data as Major[], count: count ?? 0, page, pageSize };
 }
 
@@ -37,7 +38,10 @@ export async function getMajorBySlug(slug: string): Promise<Major | null> {
     .eq("slug", slug)
     .single();
 
-  if (error) return null;
+  if (error) {
+    if (error.code === "PGRST116") return null;
+    throw wrapSupabaseError(error, "getMajorBySlug");
+  }
   return data as Major;
 }
 
@@ -48,7 +52,7 @@ export async function getUniversityMajors(universityId: string): Promise<Univers
     .select(`*, major:majors(*)`)
     .eq("university_id", universityId);
 
-  if (error) throw error;
+  if (error) throw wrapSupabaseError(error, "getUniversityMajors");
   return data as UniversityMajor[];
 }
 
@@ -64,15 +68,11 @@ export async function getMajorUniversities(
 
   if (sortBy === "tuition") {
     query = query.order("tuition_per_year", { ascending: true });
-  } else {
-    // Note: We can't directly order by a related table's column in a single select easily in some Supabase versions 
-    // without using a join/view, but we can sort in JS if needed, or try the nested order if supported.
-    // For now, let's sort in JavaScript to ensure accuracy across all university fields.
   }
 
   const { data, error } = await query;
 
-  if (error) throw error;
+  if (error) throw wrapSupabaseError(error, "getMajorUniversities");
   
   const results = data as UniversityMajor[];
 
