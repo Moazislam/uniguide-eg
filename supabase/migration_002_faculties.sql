@@ -18,6 +18,7 @@ create table if not exists faculties (
   description_ar  text,
   duration_years  integer,
   tuition_min     integer,
+  min_score       numeric(5,2),
   currency        text default 'EGP',
   language        text default 'arabic' check (language in ('arabic','english','bilingual')),
   website         text,

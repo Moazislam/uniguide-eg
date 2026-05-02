@@ -160,6 +160,21 @@ export default function FacultiesSection({ faculties, universityMajors = [], uni
                     {faculty.tuition_min.toLocaleString()} {isAr ? "ج.م" : "EGP"}
                   </span>
                 )}
+                {(() => {
+                  const scoreToShow = faculty.min_score || (
+                    universityMajors.filter(um => um.major?.category === faculty.category)
+                    .map(um => um.min_score ?? 100)
+                    .filter(s => s > 0)
+                    .reduce((min, s) => Math.min(min, s), 100)
+                  );
+                  
+                  return scoreToShow < 100 ? (
+                    <span className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold font-cairo">
+                      <BadgeCheck size={11} />
+                      {isAr ? "تنسيق" : "Cutoff"} {scoreToShow}%
+                    </span>
+                  ) : null;
+                })()}
                 <span className={`flex items-center gap-1 text-[11px] text-text-secondary/80 font-bold font-cairo ${isRtl ? 'mr-auto' : 'ml-auto'}`}>
                   <Info size={11} /> {t("details.details")}
                 </span>

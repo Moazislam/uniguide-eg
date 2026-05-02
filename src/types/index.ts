@@ -191,6 +191,7 @@ export interface Faculty {
   description_ar?: string;
   duration_years?: number;
   tuition_min?: number;
+  min_score?: number;
   currency?: string;
   language?: string;
   website?: string;
