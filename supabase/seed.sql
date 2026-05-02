@@ -182,7 +182,7 @@ insert into universities (
   description_ar, description_en,
   tuition_min, tuition_max, tuition_currency,
   faculties_count, total_students, ranking_egypt,
-  accreditations
+  accreditations, logo_url
 ) values
 
 -- Public universities
@@ -192,7 +192,7 @@ insert into universities (
  'أعرق الجامعات المصرية وأكبرها، تأسست عام 1908 وتضم أكثر من 25 كلية في مختلف التخصصات. تتصدر التصنيفات المحلية وتحتل مراتب متقدمة في التصنيفات العربية والدولية.',
  'Egypt''s oldest and largest university founded in 1908, with 25+ faculties across all disciplines. Consistently ranked first in Egypt and among the top in the Arab world.',
  0, 0, 'EGP', 25, 250000, 1,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], '/photos/logos/Cairo_University_new_logo.png'),
 
 ('ain-shams-university', 'جامعة عين شمس', 'Ain Shams University', 'public', 'egyptian',
  'القاهرة', 'Cairo', 'Cairo', 'greater-cairo',
@@ -200,7 +200,7 @@ insert into universities (
  'ثاني أكبر الجامعات الحكومية المصرية، تأسست عام 1950 وتتميز بكلياتها الطبية والهندسية والعلوم الإنسانية.',
  'Egypt''s second largest public university founded in 1950, known for its strong medical, engineering, and humanities faculties.',
  0, 0, 'EGP', 15, 180000, 2,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], '/photos/logos/Ain_Shams_logo.png'),
 
 ('alexandria-university', 'جامعة الإسكندرية', 'Alexandria University', 'public', 'egyptian',
  'الإسكندرية', 'Alexandria', 'Alexandria', 'alexandria',
@@ -208,7 +208,7 @@ insert into universities (
  'الجامعة الحكومية الرئيسية في الإسكندرية، تأسست عام 1938 وتتميز بكلياتها البحرية والهندسية والطبية.',
  'The main public university in Alexandria founded in 1938, renowned for its maritime, engineering, and medical faculties.',
  0, 0, 'EGP', 22, 190000, 3,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], '/photos/logos/alexanderia_university.jpg'),
 
 ('mansoura-university', 'جامعة المنصورة', 'Mansoura University', 'public', 'egyptian',
  'المنصورة', 'Mansoura', 'Dakahlia', 'nile-delta',
@@ -216,7 +216,7 @@ insert into universities (
  'من أبرز الجامعات الإقليمية، تشتهر بكليتي الطب والهندسة وأبحاثها في زراعة الكلى.',
  'One of Egypt''s leading regional universities, internationally recognized for its kidney transplant research and strong medical and engineering programs.',
  0, 0, 'EGP', 16, 150000, 4,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], null),
 
 ('helwan-university', 'جامعة حلوان', 'Helwan University', 'public', 'egyptian',
  'القاهرة', 'Cairo', 'Cairo', 'greater-cairo',
@@ -224,7 +224,7 @@ insert into universities (
  'تتميز بكلياتها في الفنون التطبيقية والموسيقى والتمريض والهندسة والتجارة.',
  'Known for its applied arts, music, nursing, engineering, and commerce faculties.',
  0, 0, 'EGP', 18, 140000, 6,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], null),
 
 ('assiut-university', 'جامعة أسيوط', 'Assiut University', 'public', 'egyptian',
  'أسيوط', 'Assiut', 'Assiut', 'upper-egypt',
@@ -232,7 +232,7 @@ insert into universities (
  'الجامعة الرئيسية في صعيد مصر، تتميز بكلياتها العلمية والهندسية والطبية.',
  'The leading university in Upper Egypt, with strong science, engineering, and medical programs.',
  0, 0, 'EGP', 17, 120000, 7,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], null),
 
 ('zagazig-university', 'جامعة الزقازيق', 'Zagazig University', 'public', 'egyptian',
  'الزقازيق', 'Zagazig', 'Sharqia', 'nile-delta',
@@ -240,7 +240,7 @@ insert into universities (
  'جامعة إقليمية رائدة في دلتا النيل بكلياتها الزراعية والطبية والهندسية.',
  'A leading regional university in the Nile Delta with notable agricultural, medical, and engineering programs.',
  0, 0, 'EGP', 16, 110000, 8,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], '/photos/logos/Zagazig_univeristy_logo.png'),
 
 ('tanta-university', 'جامعة طنطا', 'Tanta University', 'public', 'egyptian',
  'طنطا', 'Tanta', 'Gharbia', 'nile-delta',
@@ -248,7 +248,7 @@ insert into universities (
  'جامعة حكومية رائدة في الدلتا تتميز بكليتي الطب والصيدلة.',
  'A leading public university in the Nile Delta region, known for its medicine and pharmacy faculties.',
  0, 0, 'EGP', 14, 100000, 9,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], '/photos/logos/tanta.png'),
 
 -- Private universities
 ('guc', 'الجامعة الألمانية بالقاهرة', 'German University in Cairo (GUC)', 'private', 'german',
@@ -257,7 +257,7 @@ insert into universities (
  'جامعة خاصة تعمل بالنظام الألماني، تقدم برامج مزدوجة مع جامعات ألمانية في الهندسة والمعلوماتية والأعمال.',
  'A private university operating on the German system, offering dual-degree programs with German universities in engineering, informatics, and business.',
  120000, 220000, 'EGP', 8, 8000, 10,
- ARRAY['NAQAAE', 'German Accreditation Council']),
+ ARRAY['NAQAAE', 'German Accreditation Council'], '/photos/logos/german.png'),
 
 ('auc', 'الجامعة الأمريكية بالقاهرة', 'American University in Cairo (AUC)', 'international', 'american',
  'القاهرة الجديدة', 'New Cairo', 'Cairo', 'greater-cairo',
@@ -265,7 +265,7 @@ insert into universities (
  'أقدم الجامعات الخاصة في مصر بنظام أمريكي معتمد من مؤسسات أمريكية. تعتبر من أرقى الجامعات في الشرق الأوسط.',
  'Egypt''s oldest private university with full American accreditation. Consistently ranked among the top universities in the Middle East.',
  350000, 550000, 'EGP', 7, 6000, 5,
- ARRAY['Middle States Commission on Higher Education (USA)', 'ABET']),
+ ARRAY['Middle States Commission on Higher Education (USA)', 'ABET'], '/photos/logos/auc.png'),
 
 ('msa-university', 'جامعة مصر للعلوم والتكنولوجيا', 'MSA University', 'private', 'british',
  'القاهرة الجديدة', 'New Cairo', 'Cairo', 'greater-cairo',
@@ -273,7 +273,7 @@ insert into universities (
  'جامعة خاصة رائدة تتشارك مع جامعة غرينتش البريطانية، وتقدم برامج في الهندسة والأعمال والصيدلة والتكنولوجيا.',
  'A leading private university affiliated with the University of Greenwich, offering programs in engineering, business, pharmacy, and technology.',
  80000, 160000, 'EGP', 10, 18000, 11,
- ARRAY['NAQAAE', 'University of Greenwich']),
+ ARRAY['NAQAAE', 'University of Greenwich'], '/photos/logos/MSA_Logo3.jpg'),
 
 ('nile-university', 'جامعة النيل', 'Nile University', 'private', 'american',
  'الشيخ زايد', 'Sheikh Zayed', 'Giza', 'greater-cairo',
@@ -281,7 +281,7 @@ insert into universities (
  'جامعة بحثية خاصة متخصصة في التكنولوجيا والأعمال، تركز على البحث العلمي والابتكار وريادة الأعمال.',
  'A private research-focused university specializing in technology and business, with a strong emphasis on scientific research, innovation, and entrepreneurship.',
  90000, 180000, 'EGP', 6, 4000, 13,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], '/photos/logos/Nile_University_logo.png'),
 
 ('bue', 'الجامعة البريطانية في مصر', 'British University in Egypt (BUE)', 'private', 'british',
  'القاهرة', 'Cairo', 'Cairo', 'greater-cairo',
@@ -289,7 +289,7 @@ insert into universities (
  'جامعة خاصة تعمل بالنظام البريطاني وتمنح درجات معتمدة من جامعات بريطانية في الهندسة والأعمال والحوسبة.',
  'A private university operating on the British system, awarding degrees validated by UK universities in engineering, business, and computing.',
  110000, 200000, 'EGP', 9, 10000, 14,
- ARRAY['NAQAAE', 'UK University Partners']),
+ ARRAY['NAQAAE', 'UK University Partners'], null),
 
 ('misr-international', 'جامعة مصر الدولية', 'Misr International University (MIU)', 'private', 'american',
  'القاهرة الجديدة', 'New Cairo', 'Cairo', 'greater-cairo',
@@ -297,7 +297,7 @@ insert into universities (
  'جامعة خاصة بنظام أمريكي تقدم برامج في الصيدلة والهندسة والأعمال والإعلام والحاسبات.',
  'A private American-system university offering programs in pharmacy, engineering, business, media, and computing.',
  70000, 140000, 'EGP', 9, 12000, 15,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], null),
 
 ('pharos-university', 'جامعة فاروس', 'Pharos University in Alexandria', 'private', 'egyptian',
  'الإسكندرية', 'Alexandria', 'Alexandria', 'alexandria',
@@ -305,7 +305,7 @@ insert into universities (
  'جامعة خاصة في الإسكندرية تقدم برامج في الهندسة والتجارة والإعلام والحاسبات والصيدلة.',
  'A private university in Alexandria offering programs in engineering, business, media, computing, and pharmacy.',
  65000, 130000, 'EGP', 8, 8000, 16,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], '/photos/logos/pharos.png'),
 
 ('modern-sciences-arts', 'جامعة العلوم والتكنولوجيا الحديثة', 'Modern Sciences and Arts University (MSA Giza)', 'private', 'british',
  'الجيزة', 'Giza', 'Giza', 'greater-cairo',
@@ -313,7 +313,7 @@ insert into universities (
  'فرع الجيزة لجامعة مصر للعلوم والتكنولوجيا بنظام بريطاني معتمد.',
  'Giza campus of MSA University with UK-validated British system programs.',
  75000, 150000, 'EGP', 7, 9000, 17,
- ARRAY['NAQAAE', 'University of Greenwich']),
+ ARRAY['NAQAAE', 'University of Greenwich'], '/photos/logos/MSA_Logo3.jpg'),
 
 ('arab-academy', 'الأكاديمية العربية للعلوم والتكنولوجيا', 'Arab Academy for Science, Technology & Maritime Transport (AASTMT)', 'private', 'egyptian',
  'الإسكندرية', 'Alexandria', 'Alexandria', 'alexandria',
@@ -321,7 +321,7 @@ insert into universities (
  'أكاديمية متخصصة في العلوم البحرية والنقل والتكنولوجيا والأعمال مع فروع في القاهرة والغردقة وبورسعيد.',
  'Specialized in maritime sciences, transportation, technology, and business with campuses across Egypt and internationally.',
  70000, 140000, 'EGP', 8, 30000, 12,
- ARRAY['NAQAAE', 'Arab League Educational Cultural and Scientific Organization']),
+ ARRAY['NAQAAE', 'Arab League Educational Cultural and Scientific Organization'], '/photos/logos/png-clipart-arab-academy-for-science-technology-maritime-transport-university.png'),
 
 -- International universities
 ('esmad', 'إيزميت الجامعية', 'El Shorouk Academy', 'private', 'egyptian',
@@ -330,7 +330,7 @@ insert into universities (
  'أكاديمية تقدم برامج في الإعلام والحاسبات والتجارة والتصميم.',
  'Academy offering programs in media, computing, business, and design.',
  45000, 90000, 'EGP', 5, 6000, 20,
- ARRAY['NAQAAE']),
+ ARRAY['NAQAAE'], '/photos/logos/shorouk.png'),
 
 ('modern-cairo-university', 'جامعة القاهرة الحديثة', 'Modern Cairo University (Misr University for Science and Technology)', 'private', 'egyptian',
  'الجيزة', 'Giza', 'Giza', 'greater-cairo',
@@ -338,7 +338,7 @@ insert into universities (
  'جامعة خاصة تقدم برامج في الطب والهندسة والصيدلة والأعمال.',
  'Private university offering programs in medicine, engineering, pharmacy, and business.',
  80000, 180000, 'EGP', 11, 15000, 18,
- ARRAY['NAQAAE'])
+ ARRAY['NAQAAE'], '/photos/logos/must.png')
 
 on conflict (slug) do update set
   description_ar = excluded.description_ar,
@@ -352,7 +352,8 @@ on conflict (slug) do update set
   governorate = excluded.governorate,
   metro_area = excluded.metro_area,
   system = excluded.system,
-  accreditations = excluded.accreditations;
+  accreditations = excluded.accreditations,
+  logo_url = excluded.logo_url;
 
 
 -- ─── UNIVERSITY MAJORS (join table) ─────────────────────────
