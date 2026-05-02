@@ -154,7 +154,13 @@ export default function FacultiesSection({ faculties, universityMajors = [], uni
                     {faculty.duration_years} {t("details.years")}
                   </span>
                 )}
-                <span className={`flex items-center gap-1 text-[11px] text-amber font-bold font-cairo ${isRtl ? 'mr-auto' : 'ml-auto'}`}>
+                {faculty.tuition_min != null && faculty.tuition_min > 0 && (
+                  <span className="flex items-center gap-1 text-[11px] text-amber font-bold font-cairo">
+                    <DollarSign size={11} />
+                    {faculty.tuition_min.toLocaleString()} {isAr ? "ج.م" : "EGP"}
+                  </span>
+                )}
+                <span className={`flex items-center gap-1 text-[11px] text-text-secondary/80 font-bold font-cairo ${isRtl ? 'mr-auto' : 'ml-auto'}`}>
                   <Info size={11} /> {t("details.details")}
                 </span>
               </div>
