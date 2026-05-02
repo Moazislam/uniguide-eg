@@ -83,7 +83,7 @@ export default function UniversityCard({ university, recommendation }: Props) {
           <div className="w-full h-full bg-gradient-to-br from-blue to-blue-light" />
         )}
         
-        <div className={`absolute -bottom-6 ${isRtl ? 'right-6' : 'left-6'} w-16 h-16 rounded-2xl bg-card-bg shadow-xl border border-border flex items-center justify-center overflow-hidden z-10 group-hover:scale-105 transition-transform duration-300`}>
+        <div className={`absolute -bottom-3 ${isRtl ? 'right-6' : 'left-6'} w-16 h-16 rounded-2xl bg-card-bg shadow-xl border border-border flex items-center justify-center overflow-hidden z-10 group-hover:scale-105 transition-transform duration-300`}>
           {university.logo_url ? (
             <img 
               src={university.logo_url} 
