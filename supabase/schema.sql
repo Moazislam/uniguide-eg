@@ -11,7 +11,7 @@ create table if not exists universities (
   name_ar         text not null,
   name_en         text not null,
   type            text not null check (type in ('public','private','international')),
-  system          text not null default 'egyptian' check (system in ('egyptian','american','british','french')),
+  system          text not null default 'egyptian' check (system in ('egyptian','american','british','french','german')),
   location_ar     text not null,
   location_en     text not null,
   governorate     text,

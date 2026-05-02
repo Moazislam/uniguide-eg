@@ -1,5 +1,5 @@
 export type UniversityType = "public" | "private" | "international";
-export type UniversitySystem = "egyptian" | "american" | "british" | "french";
+export type UniversitySystem = "egyptian" | "american" | "british" | "french" | "german";
 export type MajorCategory =
   | "medicine"
   | "engineering"
