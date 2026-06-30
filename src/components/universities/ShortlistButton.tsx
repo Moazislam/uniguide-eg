@@ -1,7 +1,7 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { Bookmark, BookmarkCheck, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function ShortlistButton({ universityId, compact = false }: Props) {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hydrated, setHydrated] = useState(false);
@@ -67,9 +67,9 @@ export default function ShortlistButton({ universityId, compact = false }: Props
 
   if (!hydrated) {
     if (compact) {
-      return <div className="w-8 h-8 rounded-xl bg-border/20 animate-pulse" />;
+      return <div className="w-9 h-9 rounded-xl bg-border/20 animate-pulse" />;
     }
-    return <div className="w-36 h-9 rounded-xl bg-border/20 animate-pulse" />;
+    return <div className="w-36 h-10 rounded-xl bg-border/20 animate-pulse" />;
   }
 
   if (compact) {
@@ -78,13 +78,13 @@ export default function ShortlistButton({ universityId, compact = false }: Props
         onClick={toggle}
         disabled={loading}
         title={saved ? "إزالة من القائمة" : "حفظ في القائمة"}
-        className={`flex items-center justify-center w-8 h-8 rounded-xl border transition-all disabled:opacity-50 ${
+        className={`flex items-center justify-center w-9 h-9 rounded-xl border-2 transition-all duration-300 disabled:opacity-50 ${
           saved
-            ? "border-amber bg-amber/10 text-amber"
-            : "border-border bg-card-bg text-text-secondary/60 hover:border-amber/50 hover:text-amber"
+            ? "border-amber bg-amber/10 text-amber shadow-[0_0_12px_rgba(212,168,67,0.25)]"
+            : "border-border bg-card-bg text-text-secondary/60 hover:border-amber/50 hover:text-amber hover:shadow-md"
         }`}
       >
-        {loading ? <Loader2 size={14} className="animate-spin" /> : (saved ? <BookmarkCheck size={15} /> : <Bookmark size={15} />)}
+        {loading ? <Loader2 size={16} className="animate-spin" /> : (saved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />)}
       </button>
     );
   }
@@ -93,10 +93,10 @@ export default function ShortlistButton({ universityId, compact = false }: Props
     <button
       onClick={toggle}
       disabled={loading}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold font-cairo transition-all disabled:opacity-50 ${
+      className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 text-sm font-semibold font-cairo transition-all duration-300 disabled:opacity-50 ${
         saved
-          ? "border-amber bg-amber/10 text-amber"
-          : "border-border bg-card-bg text-text-primary dark:text-text-secondary hover:border-amber/50 hover:text-amber"
+          ? "border-amber bg-amber/10 text-amber shadow-[0_0_16px_rgba(212,168,67,0.2)]"
+          : "border-border bg-card-bg text-text-primary hover:border-amber/50 hover:text-amber hover:shadow-md"
       }`}
     >
       {loading ? <Loader2 size={16} className="animate-spin" /> : (saved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />)}
