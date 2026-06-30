@@ -50,7 +50,8 @@ function MatchScoreRing({ score }: { score: number }) {
 }
 
 export default function UniversityCard({ university, recommendation }: Props) {
-  const { isAr, isRtl } = useLanguage();
+  const { t, language, isRtl } = useLanguage();
+  const isAr = language === "ar";
   const searchParams = useSearchParams();
   const selectedTrack = searchParams.get("track");
   const config = typeConfig[university.type] ?? typeConfig.public;

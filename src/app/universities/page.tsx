@@ -77,17 +77,17 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
             <Search size={28} className="text-text-secondary" />
           </div>
           <p className="text-lg font-bold text-text-primary font-cairo mb-2">
-            <LocalizedText tKey="uni.noMatch" fallback="No personalized matches found" />
+            <LocalizedText tKey="uni.noMatch" />
           </p>
           <p className="text-sm text-text-secondary font-cairo max-w-md mx-auto mb-6">
-            <LocalizedText tKey="uni.noMatchDesc" fallback="No strong personalized matches were found with the current criteria. Try adjusting your profile settings." />
+            <LocalizedText tKey="uni.noMatchDesc" />
           </p>
           <Link
             href="/onboarding"
             className="inline-flex items-center gap-2 bg-blue dark:bg-amber text-white dark:text-blue-dark text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-light dark:hover:bg-amber-dark transition-colors font-cairo"
           >
             <SlidersHorizontal size={14} />
-            <LocalizedText tKey="uni.editProfile" fallback="Edit Matching Profile" />
+            <LocalizedText tKey="uni.editProfile" />
           </Link>
         </div>
       );
@@ -103,10 +103,10 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
             </div>
             <div>
               <p className="text-sm font-bold text-text-primary font-cairo">
-                {recommendations.length} <LocalizedText tKey="uni.matchesCount" fallback="personalized matches for you" />
+                {recommendations.length} <LocalizedText tKey="uni.matchesCount" />
               </p>
               <p className="text-xs text-text-secondary font-cairo">
-                <LocalizedText tKey="uni.matchesDesc" fallback="Ranked by score, budget, location & interests" />
+                <LocalizedText tKey="uni.matchesDesc" />
               </p>
             </div>
           </div>
@@ -115,7 +115,7 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-dark dark:text-amber hover:text-amber transition-colors font-cairo"
           >
             <SlidersHorizontal size={12} />
-            <LocalizedText tKey="uni.editProfileSmall" fallback="Edit Profile" />
+            <LocalizedText tKey="uni.editProfileSmall" />
           </Link>
         </div>
 
@@ -148,10 +148,10 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
           <GraduationCap size={28} className="text-text-secondary" />
         </div>
         <p className="text-lg font-bold text-text-primary font-cairo mb-2">
-          <LocalizedText tKey="uni.noResults" fallback="No universities found" />
+          <LocalizedText tKey="uni.noResults" />
         </p>
         <p className="text-sm text-text-secondary font-cairo mb-6">
-          <LocalizedText tKey="uni.noResultsDesc" fallback="No universities match the current filters. Try removing some filters." />
+          <LocalizedText tKey="uni.noResultsDesc" />
         </p>
       </div>
     );
@@ -162,8 +162,8 @@ async function UniversitiesGrid({ searchParams }: { searchParams: SearchParams }
   return (
     <>
       <p className="text-sm text-text-secondary font-cairo mb-5">
-        {count} <LocalizedText tKey="uni.universities" fallback="Universities" />
-        {searchParams.search && <span className="text-text-secondary/70"> — <LocalizedText tKey="uni.searchFor" fallback="Search results for" /> &quot;{searchParams.search}&quot;</span>}
+        {count} <LocalizedText tKey="uni.universities" />
+        {searchParams.search && <span className="text-text-secondary/70"> — <LocalizedText tKey="uni.searchFor" /> &quot;{searchParams.search}&quot;</span>}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -229,12 +229,12 @@ export default async function UniversitiesPage({
                   {matchingMode ? (
                     <>
                       <Sparkles size={12} className="text-amber" />
-                      <LocalizedText tKey="uni.personalizedTag" fallback="Personalized recommendations powered by your profile" />
+                      <LocalizedText tKey="uni.personalizedTag" />
                     </>
                   ) : (
                     <>
                       <GraduationCap size={12} className="text-blue dark:text-amber" />
-                      <LocalizedText tKey="uni.browseTag" fallback="Browse all Egyptian universities in one place" />
+                      <LocalizedText tKey="uni.browseTag" />
                     </>
                   )}
                 </div>
@@ -254,7 +254,7 @@ export default async function UniversitiesPage({
                   className="inline-flex items-center gap-2 bg-blue dark:bg-amber text-white dark:text-blue-dark text-sm font-bold px-5 py-3 rounded-xl hover:bg-blue-light dark:hover:bg-amber-dark transition-colors font-cairo shadow-sm"
                 >
                   <Sparkles size={14} />
-                  <LocalizedText tKey="uni.tryMatch" fallback="Try Personalized Matching" />
+                  <LocalizedText tKey="uni.tryMatch" />
                 </Link>
               )}
             </div>

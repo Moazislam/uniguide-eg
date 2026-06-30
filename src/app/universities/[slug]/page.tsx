@@ -123,9 +123,9 @@ export default async function UniversityPage({
   const typeConfig = typeLabels[university.type] ?? typeLabels.public;
 
   const admissionEntries = [
-    { label: <LocalizedText tKey="details.thanaweya" fallback="الثانوية العامة / Thanaweya" />, content: university.admission_national ?? "يُقبل طلاب الثانوية العامة المصرية وفق تنسيق الوزارة." },
-    university.admission_ig ? { label: <LocalizedText tKey="details.ig" fallback="IG / IGCSE Requirements" />, content: university.admission_ig } : null,
-    university.admission_american ? { label: <LocalizedText tKey="details.american" fallback="American / SAT Requirements" />, content: university.admission_american } : null,
+    { label: <LocalizedText tKey="details.thanaweya" />, content: university.admission_national ?? "يُقبل طلاب الثانوية العامة المصرية وفق تنسيق الوزارة." },
+    university.admission_ig ? { label: <LocalizedText tKey="details.ig" />, content: university.admission_ig } : null,
+    university.admission_american ? { label: <LocalizedText tKey="details.american" />, content: university.admission_american } : null,
     university.admission_french ? { label: "French Baccalaureate", content: university.admission_french } : null,
     university.admission_german ? { label: "German Abitur", content: university.admission_german } : null,
   ].filter(Boolean) as { label: React.ReactNode; content: string }[];
@@ -175,7 +175,6 @@ export default async function UniversityPage({
                 { label: "الجامعات / Universities", href: "/universities" },
                 { label: university.name_ar }
               ]} 
-              className="text-white/60 mb-6"
             />
 
             <div className="flex items-start gap-5">
@@ -361,7 +360,7 @@ export default async function UniversityPage({
                         <div className="text-right flex-shrink-0 ml-3">
                           {um.tuition_per_year != null && (
                             <p className="text-xs font-black text-amber font-cairo">
-                              {um.tuition_per_year === 0 ? <LocalizedText tKey="details.free" fallback="Free" /> : `${um.tuition_per_year.toLocaleString()} ${um.currency ?? "EGP"}`}
+                              {um.tuition_per_year === 0 ? <LocalizedText tKey="details.free" /> : `${um.tuition_per_year.toLocaleString()} ${um.currency ?? "EGP"}`}
                             </p>
                           )}
                           {um.min_score != null && (
@@ -501,7 +500,7 @@ export default async function UniversityPage({
                   href="/compare"
                   className="block text-center bg-blue dark:bg-amber text-white dark:text-blue-dark text-sm font-bold py-3 rounded-xl hover:bg-blue-light dark:hover:bg-amber-dark transition-colors font-cairo shadow-sm"
                 >
-                  <LocalizedText tKey="details.goToCompare" fallback="Go to Compare" /> →
+                  <LocalizedText tKey="details.goToCompare" /> →
                 </Link>
               </div>
             </div>
